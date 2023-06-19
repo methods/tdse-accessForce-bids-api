@@ -132,3 +132,11 @@ What intend to build is an API that can store tender/bid information in a struct
 Return to the [internal projects](https://github.com/methods/tdse-projects/blob/main/internal/README.md) for additional options and information.
 
 --------------
+
+### Contributing to this project
+
+See [CONTRIBUTING](https://github.com/methods/tdse-accessForce-bids-api/main/CONTRIBUTING.md) for details
+
+### License
+
+See [LICENSE](https://github.com/methods/tdse-accessForce-bids-api/main/LICENSE.md) for details
