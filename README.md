@@ -57,9 +57,9 @@ Next steps: Statement of Work (SoW, the contract) is put together by the client,
 
 ## Brief
 
-Currently Methods store all the information for tenders and bids in Sharepoint, the way the documents are stored and the information available can vary quite a lot making it hard for the bid team to find good answers to questions and successful bids for reuse. We currently do not store who helped answering questions against a bid and in some cases where Methods have done so it only informs us of their initials.
+Currently, Methods store all the information for tenders and bids in Sharepoint, the way the documents are stored and the information available can vary quite a lot making it hard for the bid team to find good answers to questions and successful bids for reuse. We currently do not store who helped answer questions against a bid and in some cases where Methods have done so it only informs us of their initials.
 
-What intend to build is an API that can store tender/bid information in a structured way to facilitate finding successful bids and high scoring questions.
+What intend to build is an API that can store tender/bid information in a structured way to facilitate finding successful bids and high-scoring questions.
 
 ### Acceptance Criteria
 
