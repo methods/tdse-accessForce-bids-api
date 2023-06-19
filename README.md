@@ -135,7 +135,7 @@ Return to the [internal projects](https://github.com/methods/tdse-projects/blob/
 
 ### Contributing to this project
 
-See [CONTRIBUTING](https://github.com/methods/tdse-accessForce-bids-api/main/CONTRIBUTING.md) for details
+See [CONTRIBUTING](https://github.com/methods/tdse-accessForce-bids-api/blob/main/CONTRIBUTING.md) for details
 
 ### License
 
