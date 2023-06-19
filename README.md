@@ -139,4 +139,4 @@ See [CONTRIBUTING](https://github.com/methods/tdse-accessForce-bids-api/main/CON
 
 ### License
 
-See [LICENSE](https://github.com/methods/tdse-accessForce-bids-api/main/LICENSE.md) for details
+See [LICENSE](https://github.com/methods/tdse-accessForce-bids-api/blob/main/LICENSE) for details
