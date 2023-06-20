@@ -23,24 +23,29 @@ This API provides a simple "Hello World" message.
 3. Install python 3.x if not already installed. You can check if it is installed by running the following command:
 
       ```bash
-      python --version
+      python3 --version
       ```
-4. Run the virtual environment by running the following command:
+4. Create the virtual environment by running the following command:
+
+      ```
+      python3 -m venv .venv
+      ```
+5. Run the virtual environment by running the following command:
 
       ```bash
-      source venv/bin/activate
-      ```
-5. Install the required dependencies by running the following command:
+      source .venv/bin/activate
+      ``` 
+6. Install the required dependencies by running the following command:
 
       ```bash
       pip install -r requirements.txt
       ```
-6. Run the following command to start the API:
+7. Run the following command to start the API:
 
       ```bash
-      python app.py
+      python app/app.py
       ```
-7. The API will be available at http://localhost:5000
+8. The API will be available at http://localhost:3000
 
 
 ### Iterations
