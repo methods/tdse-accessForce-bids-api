@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-from controllers.hello_controller import hello_world
+from api.models.hello_controller import hello_world
 
 hello = Blueprint('hello', __name__)
 
