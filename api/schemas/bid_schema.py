@@ -7,7 +7,7 @@ class BidSchema:
         self.alias = alias
         self.bid_date = bid_date
         self.bid_folder_url = bid_folder_url
-        self.status = status
+        self.status = status # enum: "deleted", "in-progress" or "completed"
         self.links = links
         self.was_successful = was_successful
         self.success = success
@@ -23,8 +23,8 @@ class BidSchema:
             "alias": self.alias,
             "bid_date": self.bid_date,
             "bid_folder_url": self.bid_folder_url,
-            "status": self.status,
-            "links": self.links,
+            "status": self.status, 
+            "links": self.links,  
             "was_successful": self.was_successful,
             "success": self.success,
             "failed": self.failed,
