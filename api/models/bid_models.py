@@ -1,11 +1,11 @@
 from flask import request, jsonify
-from api.schemas.bid_schema import BidSchema, PhaseInfo
+from api.schemas.bid_schema import BidSchema, Status
 
 def get_test():
     return 'test', 200
 
 def create_bid():
-    mandatory_fields = ['tender', 'client', 'bid_date', 'status']
+    mandatory_fields = ['tender', 'client', 'bid_date']
     if not request.is_json:
         return jsonify({'error': 'Invalid JSON'}), 400
     
@@ -20,14 +20,15 @@ def create_bid():
         alias=request.json.get('alias', ''),
         bid_date=request.json['bid_date'],
         bid_folder_url=request.json.get('bid_folder_url', ''),
-        status='in-progress',
-        
-        failed=request.json.get('failed', {}),
-        feedback=request.json.get('feedback', {})
+        feedback_description=request.json.get('feedback_description', ''),
+        feedback_url=request.json.get('feedback_url', '')
     )
-    success_phase =  PhaseInfo()
-    bid_schema.success.append(success_phase(1, True, 2, 3))
-    bid_schema.was_successful = bid_schema.failed == {} 
+    # Append phase information to the success list
+    bid_schema.addSuccessPhase(phase=2, has_score=True, score=80, out_of=100)
+    # Set failed phase info
+    # bid_schema.setFailedPhase(phase=3, has_score=True, score=50, out_of=100)
+    # Change status
+    # bid_schema.setStatus('deleted')
     # Convert the mock BidSchema object to a dictionary
     bid_json = bid_schema.toDbCollection()
     

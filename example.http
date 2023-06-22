@@ -6,10 +6,7 @@ Content-Type: application/json
   "client": "test_client",
   "alias": "test_alias",
   "bid_date": "21-06-2023",
-  "bid_folder_url": "test_folder_url",
-  "status": "in-progress",  
-  "feedback": {
-    "description": "test_description",
-    "url": "test_url"
-  }
+  "bid_folder_url": "test_folder_url", 
+  "feedback_description": "test_description",
+  "feedback_url": "test_url"
 }

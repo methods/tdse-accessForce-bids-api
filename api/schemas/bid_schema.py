@@ -1,47 +1,45 @@
 from uuid import uuid4
 from datetime import datetime
+from .phase_schema import PhaseInfo
+from .status_schema import Status
 
 # Description: Schema for the bid object
 class BidSchema:
-    def __init__(self, tender, client, bid_date, alias='', bid_folder_url='', status='in-progress', was_successful=False, failed=None, feedback=None):
+    def __init__(self, tender, client, bid_date, alias='', bid_folder_url='', status='in_progress', was_successful=True,success=[], failed={}, feedback_description=None, feedback_url=None):
         self.id = uuid4()
         self.tender = tender
         self.client = client
         self.alias = alias
         self.bid_date = datetime.strptime(bid_date, '%d-%m-%Y').isoformat() # DD-MM-YYYY
         self.bid_folder_url = bid_folder_url
-        self.status = status # enum: "deleted", "in-progress" or "completed"
+        self.status = status # enum: "deleted", "in_progress" or "completed"
         self.links = {
             'self': f"/bids/{self.id}",
             'questions': f"/bids/{self.id}/questions"
         }
         self.was_successful = was_successful
-        self.success = [] 
+        self.success = success 
         self.failed = failed
-        self.feedback = feedback
+        self.feedback = {"description": feedback_description,
+                         "url": feedback_url}
         self.last_updated = datetime.now().isoformat()
 
+    def addSuccessPhase(self, phase, has_score, score=None, out_of=None):
+        phase_info = PhaseInfo(phase=phase, has_score=has_score, score=score, out_of=out_of)
+        self.success.append(phase_info)
+
+    def setFailedPhase(self, phase, has_score, score=None, out_of=None):
+         self.was_successful = False
+         self.failed = PhaseInfo(phase=phase, has_score=has_score, score=score, out_of=out_of)
+
+    def setStatus(self, status):
+        if hasattr(Status, status):
+            self.status = status
+        else:
+            raise ValueError("Invalid status. Please provide a valid Status enum value")
+
     def toDbCollection(self):
-        return {
-            "id": self.id,
-            "tender": self.tender,
-            "client": self.client,
-            "alias": self.alias,
-            "bid_date": self.bid_date,
-            "bid_folder_url": self.bid_folder_url,
-            "status": self.status, 
-            "links": self.links,  
-            "was_successful": self.was_successful,
-            "success": [s.__dict__ for s in self.success] if self.success else None,
-            "failed": self.failed,
-            "feedback": self.feedback,
-            "last_updated": self.last_updated
-        }
-    
-# Schema for phaseInfo object
-class PhaseInfo:
-    def __init__(self, phase, has_score, score=None, out_of=None):
-            self.phase = phase
-            self.has_score = has_score
-            self.score = score
-            self.out_of = out_of
+         self.success = [s.__dict__ for s in self.success] if self.success else []
+         self.failed = self.failed.__dict__ if self.failed else {}
+         return self.__dict__
+
