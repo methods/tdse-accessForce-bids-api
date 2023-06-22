@@ -1,10 +1,10 @@
 from flask import Flask
 
-from routes.hello_route import hello
+from api.routes.bid_route import bid
 
 app = Flask(__name__)
 
-app.register_blueprint(hello, url_prefix='/api')
+app.register_blueprint(bid, url_prefix='/api')
 
 
 if __name__ == '__main__':

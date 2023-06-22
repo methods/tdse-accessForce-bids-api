@@ -45,22 +45,8 @@ This API provides a simple "Hello World" message.
       ```bash
       python app/app.py
       ```
-8. The API will be available at http://localhost:3000
+8. The API will be available at http://localhost:3000/api/bids
 
-
-### Iterations
-
-**Iteration 1** Build API and initial storage system to find, add, update and remove. Steps 1 to 8 from Must section
-
-**Iteration 2** Secure the API to users who need access, based on the "Principle least priviledge principle. Step 9 from Must section
-
-**Iteration 3** Build search engine to allow for a more sophisticated way of finding questions and bids related to your needs. Steps 1 and 2 from Should section
-
-**Iteration 4** Expand on access control to bid library based on roles, users and teams where necessary. Step 1 of Could section
-
-**Iteration 5** Host the bid library to be accessed by users across the country. Step 2 of Could section
-
-**Iteration 6** Build a web app to integrate with the bids API, create user journeys that allow users to find, add and update bid content
 
 --------------
 
