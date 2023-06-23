@@ -2,7 +2,7 @@ from flask import Flask
 from datetime import datetime
 import pytest
 
-from api.routes.bid_route import bid
+from api.controllers.bid_controller import bid
 
 
 @pytest.fixture   

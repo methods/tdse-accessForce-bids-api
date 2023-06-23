@@ -33,7 +33,7 @@ def create_bid():
     bid_json = bid_schema.toDbCollection()
     
     # Save data in memory
-    f=open('./test.txt','a')
+    f=open('./db.txt','a')
     f.write(str(bid_json))
     f.close
 
