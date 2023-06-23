@@ -1,6 +1,6 @@
 from flask import Flask
 
-from api.routes.bid_route import bid
+from api.controllers.bid_controller import bid
 
 app = Flask(__name__)
 
