@@ -1,0 +1,178 @@
+---
+openapi: 3.0.3
+# --------------------------------------------
+# Info
+info:
+  title: "Bids API"
+  description: "
+    This is a API for the Bids API.
+    You can find out more about
+    this API at [GitHub](https://github.com/methods/tdse-accessForce-bids-api).
+    You can now help us improve the API whether it's by making changes to the definition itself or to the code.
+    That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
+    Some useful links:
+    - [API repository](https://github.com/methods/tdse-accessForce-bids-api)"
+  version: "1.0.0"
+  termsOfService: "https://github.com/methods/tdse-accessForce-bids-api"
+  contact:
+    email: "accessForce@example.com"
+  license:
+    name: "MIT License"
+    url: "https://github.com/methods/tdse-accessForce-bids-api/blob/develop/LICENSE.md"
+# --------------------------------------------
+# Server
+servers:
+  - url: http://127.0.0.1:3000/api/
+    description: "Local server"
+# --------------------------------------------
+# Tags
+tags:
+  - name: "bids"
+    description: "Everything about BIDS"
+    externalDocs:
+      description: Find out more
+      url: "example.com"
+  - name: "questions"
+    description: "Everything about QUESTIONS"
+    externalDocs:
+      description: "Find out more"
+      url: "example.com"
+# --------------------------------------------
+paths:
+  /bids:
+    get:
+      tags:
+        - "bids"
+      summary: Returns a test string
+      description: Returns a test string
+      responses:
+        '200':    # status code
+          description: OK
+          content:  # Response body
+            text/plain:  # Media type
+              schema:          # Must-have
+                type: string   # Data type
+    post:
+      tags:
+        - "bids"
+      summary: "Create a new bid"
+      description: "Create a new bid"
+      operationId: "post_bid"
+      requestBody:
+        description: Create a new bid in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/bid_body'
+            examples:
+              "201: Successful request":
+                value: "{\n  \"tender\": \"test_tender\",\n  \"client\": \"test_client\",\n  \"alias\": \"test_alias\",\n  \"bid_date\": \"21-06-2023\",\n  \"bid_folder_url\": \"test_folder_url\", \n  \"feedback_description\": \"test_description\",\n  \"feedback_url\": \"test_url\"\n}"
+              "400: Missing mandatory field":
+                value: "{\n  \"client\": \"test_clien2\",\n  \"alias\": \"test_alias2\",\n  \"bid_date\": \"21-06-2023\",\n  \"bid_folder_url\": \"test_folder_url\", \n  \"feedback_description\": \"test_description\",\n  \"feedback_url\": \"test_url\"\n}"
+        required: true
+      responses:
+        "201":
+          description: Successful operation - returns the created bid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_201"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error_response"
+              examples:
+                "Invalid JSON":
+                  value: {"error": Invalid JSON}
+                "Missing mandatory field":
+                  value: {"error": "Missing mandatory field: {field}"}
+        "409":
+          description: Bid already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error_response"
+              example:
+                {"error": Bid for this url already exists}
+      security:
+        - bids_auth:
+            - write:bids
+            - read:bids
+components:
+  schemas:
+    bid_body:
+      type: object
+      properties:
+        tender:
+          type: string
+        bid_folder_url:
+          type: string
+        feedback_url:
+          type: string
+        feedback_description:
+          type: string
+        client:
+          type: string
+        alias:
+          type: string
+        bid_date:
+          type: string
+    inline_response_201:
+      type: object
+      properties:
+        tender:
+          type: string
+        last_updated:
+          type: string
+        failed:
+          type: object
+          properties: {}
+        feedback:
+          type: object
+          properties:
+            description:
+              type: string
+            url:
+              type: string
+        bid_folder_url:
+          type: string
+        success:
+          type: array
+          items:
+            type: object
+            properties:
+              phase:
+                type: integer
+              score:
+                type: integer
+              has_score:
+                type: boolean
+              out_of:
+                type: integer
+        alias:
+          type: string
+        client:
+          type: string
+        links:
+          type: object
+          properties:
+            questions:
+              type: string
+            self:
+              type: string
+        id:
+          type: string
+        bid_date:
+          type: string
+        status:
+          type: string
+        was_successful:
+          type: boolean
+    error_response:
+      type: object
+      properties:
+        error:
+          type: string
+          
