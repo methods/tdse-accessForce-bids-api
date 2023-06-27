@@ -33,8 +33,8 @@ class BidSchema:
          self.failed = PhaseInfo(phase=phase, has_score=has_score, score=score, out_of=out_of)
 
     def setStatus(self, status):
-        if hasattr(Status, status):
-            self.status = status
+        if isinstance(status, Status):
+            self.status = status.name.lower()
         else:
             raise ValueError("Invalid status. Please provide a valid Status enum value")
 

@@ -32,7 +32,7 @@ def create_bid():
     # Set failed phase info
     # bid_schema.setFailedPhase(phase=3, has_score=True, score=50, out_of=100)
     # Change status
-    # bid_schema.setStatus('deleted')
+    bid_schema.setStatus(Status.DELETED)
     # Convert the mock BidSchema object to a dictionary
     bid_json = bid_schema.toDbCollection()
     
