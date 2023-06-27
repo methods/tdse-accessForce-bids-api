@@ -1,12 +1,12 @@
 
 from flask import Blueprint
-from api.models.bid_models import get_test, create_bid
+from api.models.bid_models import get_bids, create_bid
 
 bid = Blueprint('bid', __name__)
 
 @bid.route("/bids", methods=["GET"])
-def get_tested():
-    response = get_test()
+def get_all_bids():
+    response = get_bids()
     return response
 
 @bid.route("/bids", methods=["POST"])
