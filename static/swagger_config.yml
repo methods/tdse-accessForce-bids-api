@@ -1,48 +1,50 @@
----
+# ---
 openapi: 3.0.3
 # --------------------------------------------
 # Info
 info:
-  title: "Bids API"
-  description: "
+  title: Bids API
+  description: | 
     This is a API for the Bids API.
     You can find out more about
     this API at [GitHub](https://github.com/methods/tdse-accessForce-bids-api).
     You can now help us improve the API whether it's by making changes to the definition itself or to the code.
     That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
     Some useful links:
-    - [API repository](https://github.com/methods/tdse-accessForce-bids-api)"
-  version: "1.0.0"
-  termsOfService: "https://github.com/methods/tdse-accessForce-bids-api"
+    - [API repository](https://github.com/methods/tdse-accessForce-bids-api)
+  version: 1.0.0
+  termsOfService: 'https://github.com/methods/tdse-accessForce-bids-api'
   contact:
-    email: "accessForce@example.com"
+    email: accessForce@example.com
   license:
-    name: "MIT License"
-    url: "https://github.com/methods/tdse-accessForce-bids-api/blob/develop/LICENSE.md"
+    name: MIT License
+    url: 'https://github.com/methods/tdse-accessForce-bids-api/blob/develop/LICENSE.md'
 # --------------------------------------------
 # Server
 servers:
-  - url: http://localhost:3000/api/
-    description: "Local server"
+  - url: 'http://localhost:3000/api/'
+    description: Local server
 # --------------------------------------------
 # Tags
 tags:
-  - name: "bids"
-    description: "Everything about BIDS"
+  - name: bids
+    description: Everything about BIDS
     externalDocs:
       description: Find out more
-      url: "example.com"
-  - name: "questions"
-    description: "Everything about QUESTIONS"
+      url: example.com
+  - name: questions
+    description: Everything about QUESTIONS
     externalDocs:
-      description: "Find out more"
-      url: "example.com"
+      description: Find out more
+      url: example.com
 # --------------------------------------------
+# # Paths
 paths:
   /bids:
+# --------------------------------------------
     get:
       tags:
-        - "bids"
+        - bids
       summary: Returns all bids
       description: Returns all bids
       responses:
@@ -54,18 +56,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/inline_response_201'
+# --------------------------------------------
     post:
       tags:
-        - "bids"
-      summary: "Create a new bid"
-      description: "Create a new bid"
-      operationId: "post_bid"
+        - bids
+      summary: Create a new bid
+      description: Create a new bid
+      operationId: post_bid
       requestBody:
         description: Create a new bid in the store
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/bid_body'
+              $ref: '#/components/schemas/Bid'
             examples:
               "201: Successful request":
                 value: "{\n  \"tender\": \"test_tender\",\n  \"client\": \"test_client\",\n  \"alias\": \"test_alias\",\n  \"bid_date\": \"21-06-2023\",\n  \"bid_folder_url\": \"test_folder_url\", \n  \"feedback_description\": \"test_description\",\n  \"feedback_url\": \"test_url\"\n}"
@@ -73,54 +76,71 @@ paths:
                 value: "{\n  \"client\": \"test_clien2\",\n  \"alias\": \"test_alias2\",\n  \"bid_date\": \"21-06-2023\",\n  \"bid_folder_url\": \"test_folder_url\", \n  \"feedback_description\": \"test_description\",\n  \"feedback_url\": \"test_url\"\n}"
         required: true
       responses:
-        "201":
+        '201':
           description: Successful operation - returns the created bid
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/inline_response_201"
-        "400":
+                $ref: '#/components/schemas/inline_response_201'
+        '400':
           description: Invalid input
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error_response"
+                $ref: '#/components/schemas/error_response'
               examples:
-                "Invalid JSON":
-                  value: {"error": Invalid JSON}
-                "Missing mandatory field":
-                  value: {"error": "Missing mandatory field: {field}"}
-        "409":
+                Invalid JSON:
+                  value: {error: Invalid JSON}
+                Missing mandatory field:
+                  value: {error: 'Missing mandatory field: {field}'}
+        '409':
           description: Bid already exists
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error_response"
+                $ref: '#/components/schemas/error_response'
               example:
-                {"error": Bid for this url already exists}
+                {error: Bid for this url already exists}
       security:
         - bids_auth:
             - write:bids
             - read:bids
+# --------------------------------------------
+
 components:
+# --------------------------------------------
+# schemas
   schemas:
-    bid_body:
+    Bid:
       type: object
+      required:
+        - tender
+        - client
+        - bid_date
       properties:
         tender:
-          type: string
+          description: Name of tender for which bid is made
+          type: string          
         bid_folder_url:
-          type: string
+          description: Link to where bid info is stored on Sharepoint
+          type: string        
         feedback_url:
-          type: string
+          description: Link to where feedback on the bid is stored on Sharepoint (if exists)
+          type: string     
         feedback_description:
-          type: string
+          description: Summary of feedback on the bid (if exists)
+          type: string          
         client:
+          description: Name of client tendering
           type: string
         alias:
+          description: Acronym/abbreviation of client name
           type: string
         bid_date:
+          description: Date when bid was submitted
           type: string
+# --------------------------------------------
+# Responses
     inline_response_201:
       type: object
       properties:
@@ -177,4 +197,5 @@ components:
       properties:
         error:
           type: string
-          
+# --------------------------------------------
+
