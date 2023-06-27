@@ -22,7 +22,7 @@ info:
 # --------------------------------------------
 # Server
 servers:
-  - url: http://127.0.0.1:3000/api/
+  - url: http://localhost:3000/api/
     description: "Local server"
 # --------------------------------------------
 # Tags
@@ -43,15 +43,17 @@ paths:
     get:
       tags:
         - "bids"
-      summary: Returns a test string
-      description: Returns a test string
+      summary: Returns all bids
+      description: Returns all bids
       responses:
         '200':    # status code
-          description: OK
-          content:  # Response body
-            text/plain:  # Media type
-              schema:          # Must-have
-                type: string   # Data type
+          description: A JSON array of bids
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_201'
     post:
       tags:
         - "bids"

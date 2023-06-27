@@ -1,8 +1,12 @@
 from flask import request, jsonify
 from api.schemas.bid_schema import BidSchema, Status
 
-def get_test():
-    return 'test', 200
+def get_bids():
+    f = open('./db.txt','r')
+    bids = f.read()
+    f.close()
+    return bids, 200
+    
 
 def create_bid():
     mandatory_fields = ['tender', 'client', 'bid_date']
