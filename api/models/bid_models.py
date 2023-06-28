@@ -1,5 +1,6 @@
 from flask import request, jsonify
 from api.schemas.bid_schema import BidSchema, Status
+from api.schemas.phase_schema import PhaseInfo
 
 def get_bids():
     f = open('./db.txt','r')
@@ -19,20 +20,21 @@ def create_bid():
         
     # BidSchema object   
     bid_schema = BidSchema(
-        tender=request.json['tender'],
-        client=request.json['client'],
-        alias=request.json.get('alias', ''),
-        bid_date=request.json['bid_date'],
-        bid_folder_url=request.json.get('bid_folder_url', ''),
-        feedback_description=request.json.get('feedback_description', ''),
-        feedback_url=request.json.get('feedback_url', '')
+        tender= request.json['tender'],
+        client= request.json['client'],
+        alias= request.json.get('alias', ''),
+        bid_date= request.json['bid_date'],
+        bid_folder_url= request.json.get('bid_folder_url', ''),
+        feedback= request.json.get('feedback', '')
     )
     # Append phase information to the success list
-    bid_schema.addSuccessPhase(phase=2, has_score=True, score=80, out_of=100)
+    successPhases= [PhaseInfo(phase=3, has_score=True, score=50, out_of=100), PhaseInfo(phase=4, has_score=True, score=50, out_of=100)]
+    for phase in successPhases:
+        bid_schema.addSuccessPhase(phase)
+            
     # Set failed phase info
-    # bid_schema.setFailedPhase(phase=3, has_score=True, score=50, out_of=100)
-    # Change status
-    bid_schema.setStatus(Status.DELETED)
+    failedPhase = bid_schema.setFailedPhase(PhaseInfo(phase=3, has_score=True, score=50, out_of=100))
+    
     # Convert the mock BidSchema object to a dictionary
     bid_json = bid_schema.toDbCollection()
     

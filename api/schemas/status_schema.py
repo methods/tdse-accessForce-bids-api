@@ -2,6 +2,6 @@ from enum import Enum
 
 # Enum for status
 class Status(Enum):
-    DELETED = 1
-    IN_PROGRESS = 2
-    COMPLETED = 3
+    DELETED = "deleted"
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
