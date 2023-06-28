@@ -80,8 +80,8 @@ paths:
 # --------------------------------------------
 # Components
 components:
-  # --------------------------------------------
-  # Schemas
+# --------------------------------------------
+# Schemas
   schemas:
     Bid:
       description: Bid document
@@ -114,11 +114,11 @@ components:
             type: object
             $ref: '#/components/schemas/Phase'
         alias:
+          type: string
           example: 'ONS'
-          type: string
         client:
-          example: 'Office for National Statistics'
           type: string
+          example: 'Office for National Statistics'
         links:
           type: object
           required:
@@ -130,13 +130,13 @@ components:
             self:
               $ref: '#/components/schemas/SelfLink'
         id:
+          type: string
           format: uuid
           example: "UUID('471fea1f-705c-4851-9a5b-df7bc2651428')"
-          type: string
         bid_date:
+          type: string
           format: ISO-8601
           example: '2023-06-21T00:00:00'
-          type: string
         status:
           type: string
           description: Bid Status
@@ -146,8 +146,8 @@ components:
             - DELETED
             - COMPLETED
         was_successful:
-          example: true
           type: boolean
+          example: true
 # --------------------------------------------
     Phase:
       description: Phase information
@@ -229,8 +229,13 @@ components:
           description: Failed phase info
           type: object
           $ref: '#/components/schemas/Phase'
-  # --------------------------------------------
-  # Request bodies
+        success_list:
+          description: List of successful phases
+          type: array
+          items:
+            $ref: '#/components/schemas/Phase'
+# --------------------------------------------
+# Request bodies
   requestBodies:
     Bid:
       description: Bid object to be added to collection
@@ -260,8 +265,8 @@ components:
                 client: 'Office for National Statistics'
                 alias: 'ONS'
                 bid_date: '21-06-2023'
-  # --------------------------------------------
-  # Error responses
+# --------------------------------------------
+# Error responses
   responses:
     BadRequest:
       description: Bad Request Error
