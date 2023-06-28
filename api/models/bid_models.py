@@ -1,8 +1,12 @@
 from flask import request, jsonify
 from api.schemas.bid_schema import BidSchema, Status
 
-def get_test():
-    return 'test', 200
+def get_bids():
+    f = open('./db.txt','r')
+    bids = f.read()
+    f.close()
+    return bids, 200
+    
 
 def create_bid():
     mandatory_fields = ['tender', 'client', 'bid_date']
@@ -28,7 +32,7 @@ def create_bid():
     # Set failed phase info
     # bid_schema.setFailedPhase(phase=3, has_score=True, score=50, out_of=100)
     # Change status
-    # bid_schema.setStatus('deleted')
+    bid_schema.setStatus(Status.DELETED)
     # Convert the mock BidSchema object to a dictionary
     bid_json = bid_schema.toDbCollection()
     
