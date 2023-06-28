@@ -6,7 +6,7 @@ from .feedback_schema import Feedback
 
 # Description: Schema for the bid object
 class BidSchema:
-    def __init__(self, tender, client, bid_date, alias='', bid_folder_url='', feedback='', failed={}, was_successful=False, success=[]):
+    def __init__(self, tender, client, bid_date, alias=None, bid_folder_url=None, feedback=None, failed=None, was_successful=False, success=[]):
         self.id = uuid4()
         self.tender = tender
         self.client = client
@@ -25,11 +25,14 @@ class BidSchema:
         self.last_updated = datetime.now().isoformat()
 
     def addSuccessPhase(self, phase_info):
-        self.success.append(phase_info)
+        self.success.append(phase_info.__dict__)
 
     def setFailedPhase(self, phase_info):
         self.was_successful = False
-        self.failed = phase_info
+        self.failed = phase_info.__dict__
+
+    def addFeedback(self, feedback):
+        self.feedback = feedback.__dict__
 
     def setStatus(self, status):
         if isinstance(status, Status):
@@ -38,7 +41,5 @@ class BidSchema:
             raise ValueError("Invalid status. Please provide a valid Status enum value")
         
     def toDbCollection(self):
-         self.success = [s.__dict__ for s in self.success] if self.success else []
-         self.failed = self.failed.__dict__ if self.failed else None
          return self.__dict__
 
