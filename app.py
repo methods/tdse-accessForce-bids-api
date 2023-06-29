@@ -5,15 +5,15 @@ from api.controllers.bid_controller import bid
 
 app = Flask(__name__)
 
-SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI (without trailing '/')
-API_URL = '/static/swagger_config.yml'  # Our API url (can of course be a local resource)
+SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI
+API_URL = '/static/swagger_config.yml'  # Our API url
 
 # Call factory function to create our blueprint
 swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,  # Swagger UI static files will be mapped to '{SWAGGER_URL}/dist/'
     API_URL,
     config={  # Swagger UI config overrides
-        'app_name': "Test application"
+        'app_name': "Bids API Swagger"
     })
 
 app.register_blueprint(swaggerui_blueprint)
