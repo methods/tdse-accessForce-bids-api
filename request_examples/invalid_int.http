@@ -1,0 +1,32 @@
+POST http://localhost:3000/api/bids HTTP/1.1
+Content-Type: application/json
+
+{
+  "tender": "Business Intelligence and Data Warehousing",
+  "client": "Office for National Statistics",
+  "bid_date": "21-06-2023",
+  "alias": "ONS",
+  "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+  "feedback": {
+    "description": "Feedback from client in detail",
+    "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
+  },
+  "success": [
+    {
+      "phase": "ONE",
+      "has_score": true,
+      "score": 28,
+      "out_of": 36
+    },
+    {
+      "phase": 2,
+      "has_score": false
+    }
+  ],
+  "failed": {
+      "phase": 3,
+      "has_score": true,
+      "score": 20,
+      "out_of": 36
+    }
+}

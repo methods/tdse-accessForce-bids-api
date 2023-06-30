@@ -9,7 +9,7 @@ class PhaseModel:
             self.out_of = out_of
 
 class PhaseSchema(Schema):
-      phase = fields.Int(required=True)
+      phase = fields.Int(required=True, strict=True)
       has_score = fields.Bool(required=True)
       score = fields.Int(strict=True)
       out_of = fields.Int(strict=True)

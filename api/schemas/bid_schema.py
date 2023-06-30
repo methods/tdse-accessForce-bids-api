@@ -1,5 +1,5 @@
 from uuid import uuid4
-from datetime import datetime
+from datetime import datetime, date
 from marshmallow import Schema, fields, post_load
 from .links_schema import LinksModel, LinksSchema
 from .phase_schema import PhaseModel, PhaseSchema
@@ -13,7 +13,7 @@ class BidModel():
         self.tender = tender
         self.client = client
         self.alias = alias
-        self.bid_date = datetime.strptime(bid_date, '%d-%m-%Y') # DD-MM-YYYY
+        self.bid_date = bid_date
         self.bid_folder_url = bid_folder_url
         self.status = Status.IN_PROGRESS # enum: "deleted", "in_progress" or "completed"
         self.links = LinksModel(self.id)

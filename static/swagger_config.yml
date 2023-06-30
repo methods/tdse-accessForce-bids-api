@@ -180,14 +180,14 @@ components:
       description: Feedback from client (if provided)
       type: object
       required:
-        - feedback_url
-        - feedback_description
+        - url
+        - description
       properties:
-        feedback_url:
+        url:
           description: Link to feedback
           type: string
           example: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
-        feedback_description:
+        description:
           description: Summary of feedback
           type: string
           example: 'Feedback from client in detail'
@@ -253,8 +253,8 @@ components:
                 tender: 'Business Intelligence and Data Warehousing'
                 bid_folder_url: 'https://organisation.sharepoint.com/Docs/dummyfolder'
                 feedback:
-                  feedback_url: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
-                  feedback_description: 'Feedback from client in detail'
+                  url: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
+                  description: 'Feedback from client in detail'
                 client: 'Office for National Statistics'
                 alias: 'ONS'
                 bid_date: '21-06-2023'
@@ -263,8 +263,8 @@ components:
               value:
                 bid_folder_url: 'https://organisation.sharepoint.com/Docs/dummyfolder'
                 feedback:
-                  feedback_url: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
-                  feedback_description: 'Feedback from client in detail'
+                  url: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
+                  description: 'Feedback from client in detail'
                 client: 'Office for National Statistics'
                 alias: 'ONS'
                 bid_date: '21-06-2023'
