@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields
 
 # Schema for Feedback object
-class Feedback:
+class FeedbackModel:
     def __init__(self,description, url):
         self.description = description
         self.url = url

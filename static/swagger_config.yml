@@ -98,6 +98,9 @@ components:
         tender:
           type: string
           example: 'Business Intelligence and Data Warehousing'
+        bid_folder_url:
+          type: string
+          example: 'https://organisation.sharepoint.com/Docs/dummyfolder'
         last_updated:
           type: string
           example: "2023-06-27T14:05:17.623827"
