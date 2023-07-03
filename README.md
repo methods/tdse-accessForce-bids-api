@@ -77,34 +77,29 @@ This API provides an endpoint to post a new bid document.
       brew tap mongodb/brew
       brew install mongodb-community
       ```
-3. Create the data directory by running the following command:
-
-      ```bash
-      mkdir -p /data/db
-      ```
-4. To run MongoDB (i.e. the mongod process) as a macOS service, run:
+3. To run MongoDB (i.e. the mongod process) as a macOS service, run:
 
       ```bash
       brew services start mongodb-community@6.0
       ```
-5. Run the following command to stop the MongoDB instance, as needed:
+4. Run the following command to stop the MongoDB instance, as needed:
 
       ```bash
       brew services stop mongodb-community@6.0
       ```
-6. To verify that MongoDB is running, run:
+5. To verify that MongoDB is running, run:
 
       ```bash
       brew services list
       ```
-You should see the service `mongodb-community` listed as `started`.
+   You should see the service `mongodb-community` listed as `started`.
 
-7. To begin using MongoDB, connect mongosh to the running instance. From a new terminal, issue the following:
+6. To begin using MongoDB, connect mongosh to the running instance. From a new terminal, issue the following:
 
       ```bash
       mongosh
       ```
-8. Run the following command to exit the MongoDB shell:
+7. Run the following command to exit the MongoDB shell:
 
       ```bash
       exit
