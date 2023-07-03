@@ -1,0 +1,1 @@
+- SWAGGER: how to do multiple examples of 400 response

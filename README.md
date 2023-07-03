@@ -45,7 +45,7 @@ This API provides a simple "Hello World" message.
       ```bash
       python app/app.py
       ```
-8. The API will be available at http://localhost:3000/api/bids
+8. The API will be available at http://localhost:8080/api/bids
 
 
 --------------

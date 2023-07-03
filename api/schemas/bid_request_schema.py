@@ -1,9 +1,9 @@
 from marshmallow import Schema, fields, post_load
-from .bid_schema import BidModel
+from api.models.bid_model import BidModel
 from .links_schema import LinksSchema
 from .phase_schema import PhaseSchema
 from .feedback_schema import FeedbackSchema
-from .status_enum import Status
+from ..models.status_enum import Status
 
 # Marshmallow schema for request body
 class BidRequestSchema(Schema):
