@@ -6,6 +6,10 @@ from helpers.helpers import save_in_memory
 
 bid = Blueprint('bid', __name__)
 
+@bid.route("/bids", methods=["GET"])
+def get_bids():
+    return "Under construction", 200
+
 @bid.route("/bids", methods=["POST"])
 def post_bid():
     # Create bid document and return error if input validation fails

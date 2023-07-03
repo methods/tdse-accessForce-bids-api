@@ -1,7 +1,7 @@
 # tdse-accessForce-bids-api
 # API Documentation
 
-This API provides a simple "Hello World" message.
+This API provides an endpoint to post a new bid document.
 
 ## Prerequisites
 
@@ -47,16 +47,17 @@ This API provides a simple "Hello World" message.
       ```
 8. The API will be available at http://localhost:8080/api/bids
 
-
 --------------
 
-**Note:** If this is part of your training, you should look for guidance by your mentor of how to progress this project. Your coach can use the [generic project rest API doc](/training/generic-projects/rest-api/README.md) to setup your initial project that will cover iteration 1.
+## Accessing API Documentation (Swagger Specification)
 
---------------
+1. Run the following command to start the API:
 
-Return to the [internal projects](https://github.com/methods/tdse-projects/blob/main/internal/README.md) for additional options and information.
+      ```bash
+      python app/app.py
+      ```
+2. The Swagger Specification will be available at http://localhost:8080/api/docs
 
---------------
 
 ### Contributing to this project
 
