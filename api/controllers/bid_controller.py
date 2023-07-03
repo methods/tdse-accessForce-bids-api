@@ -1,16 +1,24 @@
-
-from flask import Blueprint
-from api.models.bid_models import get_bids, create_bid
+from flask import Blueprint, jsonify, request
+from marshmallow import ValidationError
+from api.schemas.bid_schema import BidSchema
+from api.schemas.bid_request_schema import BidRequestSchema
+from helpers.helpers import save_in_memory
 
 bid = Blueprint('bid', __name__)
 
 @bid.route("/bids", methods=["GET"])
-def get_all_bids():
-    response = get_bids()
-    return response
+def get_bids():
+    return "Under construction", 200
 
 @bid.route("/bids", methods=["POST"])
 def post_bid():
-    response = create_bid()
-    return response
-
+    # Create bid document and return error if input validation fails
+    try:
+        bid_document = BidRequestSchema().load(request.json)
+    except ValidationError as e:
+        return jsonify({"Error": str(e)}), 400
+    
+    # Serialize to a JSON-encoded string
+    data = BidSchema().dump(bid_document)
+    save_in_memory('./db.txt', data)
+    return data, 201

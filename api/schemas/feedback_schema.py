@@ -1,5 +1,5 @@
-# Schema for Feedback object
-class Feedback:
-    def __init__(self,description, url):
-        self.description = description
-        self.url = url
+from marshmallow import Schema, fields
+
+class FeedbackSchema(Schema):
+    description = fields.Str(required=True)
+    url = fields.Str(required=True)

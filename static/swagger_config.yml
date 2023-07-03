@@ -22,7 +22,7 @@ info:
 # --------------------------------------------
 # Server
 servers:
-  - url: 'http://localhost:3000/api/'
+  - url: 'http://localhost:8080/api/'
     description: Local server
 # --------------------------------------------
 # Tags
@@ -98,6 +98,9 @@ components:
         tender:
           type: string
           example: 'Business Intelligence and Data Warehousing'
+        bid_folder_url:
+          type: string
+          example: 'https://organisation.sharepoint.com/Docs/dummyfolder'
         last_updated:
           type: string
           example: "2023-06-27T14:05:17.623827"
@@ -177,14 +180,14 @@ components:
       description: Feedback from client (if provided)
       type: object
       required:
-        - feedback_url
-        - feedback_description
+        - url
+        - description
       properties:
-        feedback_url:
+        url:
           description: Link to feedback
           type: string
           example: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
-        feedback_description:
+        description:
           description: Summary of feedback
           type: string
           example: 'Feedback from client in detail'
@@ -192,12 +195,12 @@ components:
     QuestionsLink:
       description: A link to a collection of questions for a bid
       type: string
-      example: 'https://localhost:3000/api//bids/96d69775-29af-46b1-aaf4-bfbdb1543412/questions'
+      example: 'https://localhost:8080/api//bids/96d69775-29af-46b1-aaf4-bfbdb1543412/questions'
 # --------------------------------------------
     SelfLink:
       description: A link to the current resource
       type: string
-      example: 'https://localhost:3000/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428'
+      example: 'https://localhost:8080/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428'
 # --------------------------------------------
     BidRequestBody:
       type: object
@@ -250,18 +253,37 @@ components:
                 tender: 'Business Intelligence and Data Warehousing'
                 bid_folder_url: 'https://organisation.sharepoint.com/Docs/dummyfolder'
                 feedback:
-                  feedback_url: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
-                  feedback_description: 'Feedback from client in detail'
+                  url: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
+                  description: 'Feedback from client in detail'
                 client: 'Office for National Statistics'
                 alias: 'ONS'
                 bid_date: '21-06-2023'
+                success: [
+                  {
+                    "phase": 1,
+                    "has_score": true,
+                    "score": 28,
+                    "out_of": 36
+                  },
+                  {
+                    "phase": 2,
+                    "has_score": false
+                  }
+                ]
+                failed: {
+                  "phase": 3,
+                  "has_score": true,
+                  "score": 20,
+                  "out_of": 36
+                }
+                was_successful: false
             400 Bad Request:
               summary: 400 Bad Request
               value:
                 bid_folder_url: 'https://organisation.sharepoint.com/Docs/dummyfolder'
                 feedback:
-                  feedback_url: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
-                  feedback_description: 'Feedback from client in detail'
+                  url: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
+                  description: 'Feedback from client in detail'
                 client: 'Office for National Statistics'
                 alias: 'ONS'
                 bid_date: '21-06-2023'
@@ -271,15 +293,19 @@ components:
     BadRequest:
       description: Bad Request Error
       content:
-        text/plain:
+        application/json:
           schema:
-            type: string
-            example: Missing mandatory field
+            type: object
+            example: {
+              "Error": "{'<field>': ['<message>']}"
+            }
     InternalServerError:
       description: Internal Server Error
       content:
-        text/plain:
+        application/json:
           schema:
-            type: string
-            example: Could not connect to a database
+            type: object
+            example: {
+              "Error": "{'<field>': ['<message>']}"
+            }
 # --------------------------------------------
