@@ -82,24 +82,28 @@ This API provides an endpoint to post a new bid document.
       ```bash
       brew services start mongodb-community@6.0
       ```
-4. Run the following command to stop the MongoDB instance, as needed:
-
-      ```bash
-      brew services stop mongodb-community@6.0
-      ```
-5. To verify that MongoDB is running, run:
+4. To verify that MongoDB is running, run:
 
       ```bash
       brew services list
       ```
    You should see the service `mongodb-community` listed as `started`.
+5. Run the following command to stop the MongoDB instance, as needed:
 
-6. To begin using MongoDB, connect mongosh to the running instance. From a new terminal, issue the following:
+      ```bash
+      brew services stop mongodb-community@6.0
+      ```
+6. To begin using MongoDB, connect the MongoDB shell (mongosh) to the running instance. From a new terminal, issue the following:
 
       ```bash
       mongosh
       ```
-7. To exit the MongoDB shell, run the following command:
+7. To create a new database called `bidsAPI`, run:
+
+      ```bash
+      use bidsAPI
+      ```
+8. To exit the MongoDB shell, run the following command:
 
       ```bash
       exit

@@ -306,6 +306,6 @@ components:
           schema:
             type: object
             example: {
-              "Error": "{'<field>': ['<message>']}"
+              "Error": "Could not connect to database"
             }
 # --------------------------------------------
