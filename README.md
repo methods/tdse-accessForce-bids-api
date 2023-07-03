@@ -99,7 +99,7 @@ This API provides an endpoint to post a new bid document.
       ```bash
       mongosh
       ```
-7. Run the following command to exit the MongoDB shell:
+7. To exit the MongoDB shell, run the following command:
 
       ```bash
       exit
