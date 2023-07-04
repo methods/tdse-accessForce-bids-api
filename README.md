@@ -7,6 +7,7 @@ This API provides an endpoint to post a new bid document.
 
 - Python 3.x
 - Flask
+- Homebrew
 
 ## Running the API
 
@@ -58,6 +59,58 @@ This API provides an endpoint to post a new bid document.
       ```
 2. The Swagger Specification will be available at http://localhost:8080/api/docs
 
+
+--------------
+
+## Installing and running an instance of MongoDB on your local machine (MacOS)
+
+### To install on Windows please see [here](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/)
+
+1. Install Homebrew if not already installed. You can check if it is installed by running the following command:
+
+      ```bash
+      brew --version
+      ```
+2. Install MongoDB by running the following commands:
+
+      ```bash
+      brew tap mongodb/brew
+      brew install mongodb-community
+      ```
+3. To run MongoDB (i.e. the mongod process) as a macOS service, run:
+
+      ```bash
+      brew services start mongodb-community@6.0
+      ```
+4. To verify that MongoDB is running, run:
+
+      ```bash
+      brew services list
+      ```
+   You should see the service `mongodb-community` listed as `started`.
+5. Run the following command to stop the MongoDB instance, as needed:
+
+      ```bash
+      brew services stop mongodb-community@6.0
+      ```
+6. To begin using MongoDB, connect the MongoDB shell (mongosh) to the running instance. From a new terminal, issue the following:
+
+      ```bash
+      mongosh
+      ```
+7. To create a new database called `bidsAPI`, run:
+
+      ```bash
+      use bidsAPI
+      ```
+8. To exit the MongoDB shell, run the following command:
+
+      ```bash
+      exit
+      ``` 
+OPTIONAL - Download MongoDB Compass to view the database in a GUI. You can download it from [here](https://www.mongodb.com/try/download/compass)
+
+--------------
 
 ### Contributing to this project
 

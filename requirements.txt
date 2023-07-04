@@ -9,3 +9,5 @@ pip==23.1.2
 pytest==7.3.2
 flask_swagger_ui==4.11.1
 marshmallow
+pymongo
+certifi

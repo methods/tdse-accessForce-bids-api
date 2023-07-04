@@ -1,5 +1,4 @@
-# Save data in memory
-def save_in_memory(file, document):
-    f=open(file,'a')
-    f.write(str(document))
-    f.close
+from flask import jsonify
+
+def showConnectionError():
+    return jsonify({"Error": "Could not connect to database"}), 500

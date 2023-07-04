@@ -6,7 +6,7 @@ from ..models.status_enum import Status
 
 # Marshmallow schema
 class BidSchema(Schema):
-    id = fields.UUID(required=True)
+    _id = fields.UUID(required=True)
     tender = fields.Str(required=True)
     client = fields.Str(required=True)
     alias = fields.Str()

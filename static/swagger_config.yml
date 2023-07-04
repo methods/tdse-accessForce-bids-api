@@ -87,7 +87,7 @@ components:
       description: Bid document
       type: object
       required:
-        - id
+        - _id
         - tender
         - client
         - bid_date
@@ -132,7 +132,7 @@ components:
               $ref: '#/components/schemas/QuestionsLink'
             self:
               $ref: '#/components/schemas/SelfLink'
-        id:
+        _id:
           type: string
           format: uuid
           example: "UUID('471fea1f-705c-4851-9a5b-df7bc2651428')"
@@ -306,6 +306,6 @@ components:
           schema:
             type: object
             example: {
-              "Error": "{'<field>': ['<message>']}"
+              "Error": "Could not connect to database"
             }
 # --------------------------------------------
