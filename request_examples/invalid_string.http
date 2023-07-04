@@ -17,14 +17,10 @@ Content-Type: application/json
       "has_score": true,
       "score": 28,
       "out_of": 36
-    },
-    {
-      "phase": 2,
-      "has_score": false
     }
   ],
   "failed": {
-      "phase": 3,
+      "phase": 2,
       "has_score": true,
       "score": 20,
       "out_of": 36
