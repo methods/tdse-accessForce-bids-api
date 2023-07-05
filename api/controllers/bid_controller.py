@@ -15,11 +15,10 @@ def get_bids():
     try:
         db = dbConnection()
         bids = list(db['bids'].find({}))
-        return {'total_count': len(bids), 'items': bids}, 200
-       
+        return {'total_count': len(bids), 'items': bids}, 200  
     except ConnectionFailure:
         return showConnectionError()
-
+    
 @bid.route("/bids", methods=["POST"])
 def post_bid():
     # Create bid document and return error if input validation fails
