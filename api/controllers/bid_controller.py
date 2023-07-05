@@ -11,7 +11,15 @@ bid = Blueprint('bid', __name__)
 
 @bid.route("/bids", methods=["GET"])
 def get_bids():
-    return "Under construction", 200
+    # Get all bids from database collection
+    try:
+        db = dbConnection()
+        bids = list(db['bids'].find({}))
+        # Serialize to a JSON-encoded string
+        return jsonify(bids), 200
+       
+    except ConnectionFailure:
+        return showConnectionError()
 
 @bid.route("/bids", methods=["POST"])
 def post_bid():
@@ -29,5 +37,3 @@ def post_bid():
         return jsonify({"Error": str(e)}), 400
     except ConnectionFailure:
         return showConnectionError()
-
-
