@@ -7,19 +7,15 @@ from ..models.status_enum import Status
 
 # Marshmallow schema for request body
 class BidRequestSchema(Schema):
-    _id = fields.UUID()
     tender = fields.Str(required=True, error_messages={"required": {"message": "Missing mandatory field"}})
     client = fields.Str(required=True, error_messages={"required": {"message": "Missing mandatory field"}})
     alias = fields.Str()
     bid_date = fields.Date(format='%d-%m-%Y', required=True, error_messages={"required": {"message": "Missing mandatory field"}})
     bid_folder_url = fields.URL()
-    status = fields.Enum(Status, by_value=True)
-    links = fields.Nested(LinksSchema)
     was_successful = fields.Boolean()
     success = fields.List(fields.Nested(PhaseSchema))
     failed = fields.Nested(PhaseSchema)
     feedback = fields.Nested(FeedbackSchema)
-    last_updated = fields.DateTime()
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
