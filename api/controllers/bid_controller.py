@@ -3,8 +3,8 @@ from marshmallow import ValidationError
 from api.schemas.bid_schema import BidSchema
 from api.schemas.bid_request_schema import BidRequestSchema
 from dbconfig.mongo_setup import dbConnection
-from pymongo.errors import ConnectionFailure
-from helpers.helpers import showConnectionError
+from pymongo.errors import ConnectionFailure, PyMongoError
+from helpers.helpers import showConnectionError, showNotFoundError
 
 
 bid = Blueprint('bid', __name__)
@@ -12,6 +12,17 @@ bid = Blueprint('bid', __name__)
 @bid.route("/bids", methods=["GET"])
 def get_bids():
     return "Under construction", 200
+
+@bid.route("/bids/<bid_id>", methods=["GET"])
+def get_bid_by_id(bid_id):
+    try:
+        db = dbConnection()
+        data = db['bids'].find_one({"_id": bid_id})
+        if data is None:
+            return showNotFoundError()
+        return data, 200
+    except ConnectionFailure:
+        return showConnectionError()
 
 @bid.route("/bids", methods=["POST"])
 def post_bid():
