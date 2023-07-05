@@ -15,8 +15,7 @@ def get_bids():
     try:
         db = dbConnection()
         bids = list(db['bids'].find({}))
-        # Serialize to a JSON-encoded string
-        return jsonify(bids), 200
+        return {'total_count': len(bids), 'items': bids}, 200
        
     except ConnectionFailure:
         return showConnectionError()
