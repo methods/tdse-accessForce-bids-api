@@ -65,10 +65,10 @@ paths:
         '500':
           description: Internal server error
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: Internal server error
+                type: object
+                example: {"Error": "Could not connect to database"}
 # --------------------------------------------
     post:
       tags:

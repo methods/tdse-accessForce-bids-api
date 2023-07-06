@@ -12,8 +12,16 @@ bid = Blueprint('bid', __name__)
 
 @bid.route("/bids", methods=["GET"])
 def get_bids():
-    return "Under construction", 200
-
+    # Get all bids from database collection
+    try:
+        db = dbConnection()
+        bids = list(db['bids'].find({}))
+        return {'total_count': len(bids), 'items': bids}, 200  
+    except ConnectionFailure:
+        return showConnectionError()
+    except Exception:
+        return jsonify({"Error": "Could not retrieve bids"}), 500
+    
 @bid.route("/bids/<bid_id>", methods=["GET"])
 def get_bid_by_id(bid_id):
     # Validates query param
@@ -54,5 +62,3 @@ def post_bid():
     # Return 500 response in case of connection failure
     except ConnectionFailure:
         return showConnectionError()
-
-
