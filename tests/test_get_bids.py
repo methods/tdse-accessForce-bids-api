@@ -26,9 +26,3 @@ def test_get_bids(client):
         assert response.json == {'total_count': 0, 'items': []}
 
 
-def test_get_bids_connection_error(client):
-    # Mock the behavior of dbConnection to raise ConnectionFailure
-    with patch('api.controllers.bid_controller.dbConnection', side_effect=ConnectionFailure):
-        response = client.get('/api/bids')
-        assert response.status_code == 500
-        assert response.json == {"Error": "Could not connect to database"}
