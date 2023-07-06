@@ -18,6 +18,8 @@ def get_bids():
         return {'total_count': len(bids), 'items': bids}, 200  
     except ConnectionFailure:
         return showConnectionError()
+    except Exception:
+        return jsonify({"Error": "Could not retrieve bids"}), 500
     
 @bid.route("/bids", methods=["POST"])
 def post_bid():
