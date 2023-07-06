@@ -84,20 +84,20 @@ def test_get_bid_by_id_not_found(client):
     assert response.status_code == 404
     assert response.json == {"Error": "Not found"}
 
-# # Case 4: Validation error
-# def test_get_bid_by_id_validation_error(client):
-#     # Create a MagicMock object for mocking the valid_bid_id_schema object
-#     mock_valid_bid_id_schema = MagicMock()
+# Case 4: Validation error
+def test_get_bid_by_id_validation_error(client):
+    # Create a MagicMock object for mocking the valid_bid_id_schema object
+    mock_valid_bid_id_schema = MagicMock()
 
-#     # Set up the side effect of valid_bid_id_schema.load to raise a ValidationError
-#     mock_valid_bid_id_schema.load.side_effect = ValidationError('Bid ID must not be empty')
+    # Set up the side effect of valid_bid_id_schema.load to raise a ValidationError
+    mock_valid_bid_id_schema.load.side_effect = ValidationError('Invalid Bid ID')
 
-#     # Patch the necessary functions and objects with the MagicMock object
-#     with patch('api.controllers.bid_controller.valid_bid_id_schema', mock_valid_bid_id_schema):
-#         # Call the endpoint with the desired URL
-#         response = client.get('/api/bids/')
+    # Patch the necessary functions and objects with the MagicMock object
+    with patch('api.controllers.bid_controller.valid_bid_id_schema', mock_valid_bid_id_schema):
+        # Call the endpoint with the desired URL
+        response = client.get('/api/bids/invalid_bid_id')
 
-#     # Assertions
-#     mock_valid_bid_id_schema.load.assert_called_once_with({'bid_id': ''})
-#     assert response.status_code == 400
-#     assert response.json == {"Error": "Bid ID must not be empty"}
+    # Assertions
+    mock_valid_bid_id_schema.load.assert_called_once_with({'bid_id': 'invalid_bid_id'})
+    assert response.status_code == 400
+    assert response.json == {"Error": "Invalid Bid ID"}
