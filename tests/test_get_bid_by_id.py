@@ -4,7 +4,6 @@ from api.controllers.bid_controller import bid
 from pymongo.errors import ConnectionFailure
 from unittest.mock import patch, MagicMock
 from marshmallow import ValidationError
-from api.schemas.valid_bid_id_schema import valid_bid_id_schema
 
 
 @pytest.fixture
