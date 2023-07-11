@@ -4,7 +4,7 @@ Content-Type: application/json
 {
   "tender": "Business Intelligence and Data Warehousing",
   "client": "Office for National Statistics",
-  "bid_date": "21-06-2023",
+  "bid_date": "2023-06-23",
   "alias": "ONS",
   "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
   "feedback": {
