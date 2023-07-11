@@ -24,9 +24,10 @@ def get_bids():
     
 @bid.route("/bids/<bid_id>", methods=["GET"])
 def get_bid_by_id(bid_id):
+    print("bid_id", bid_id)
     # Validates query param
     try:
-        valid_bid_id = valid_bid_id_schema.load({"bid_id": bid_id})
+        valid_bid_id = valid_bid_id_schema().load({"bid_id": bid_id})
         bid_id = valid_bid_id["bid_id"]
     except ValidationError as e:
         return jsonify({"Error": str(e)}), 400
