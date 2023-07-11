@@ -125,6 +125,39 @@ paths:
                 }
         '500':
           $ref: '#/components/responses/InternalServerError'
+  # --------------------------------------------
+    put:
+      tags:
+        - bids
+      summary: Soft delete a bid
+      description: Soft delete a bid
+      operationId: delete_bid
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to delete
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        # return 204 (No Content)
+        '204':
+          description: Bid deleted
+          content:
+            noContent: {}
+
+        '404':
+          description: Bid not found
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {
+                  "Error": "Not found"
+                }
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 # --------------------------------------------
 # Components
 components:
