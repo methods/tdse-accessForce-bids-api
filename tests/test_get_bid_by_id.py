@@ -21,7 +21,7 @@ def test_get_bid_by_id_success(client):
     mock_valid_bid_id_schema = MagicMock()  # Mock the valid_bid_id_schema object
 
     # Set up the return value of valid_bid_id_schema.load
-    mock_valid_bid_id_schema.load.return_value = {'bid_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9'}
+    mock_valid_bid_id_schema().load.return_value = {'bid_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9'}
 
     # Create a MagicMock object for the find_one method and assign it to the appropriate attribute
     mock_find_one = MagicMock(return_value={'_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9', 'tender': 'Business Intelligence and Data Warehousing'})
@@ -35,7 +35,7 @@ def test_get_bid_by_id_success(client):
         response = client.get('/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9')
 
     # Assertions
-    mock_valid_bid_id_schema.load.assert_called_once_with({'bid_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9'})
+    mock_valid_bid_id_schema().load.assert_called_once_with({'bid_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9'})
     mock_dbConnection.assert_called_once()
     mock_db['bids'].find_one.assert_called_once_with({'_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9'})
     assert response.status_code == 200
@@ -64,7 +64,7 @@ def test_get_bid_by_id_not_found(client):
     mock_valid_bid_id_schema = MagicMock()  # Mock the valid_bid_id_schema object
 
     # Set up the return value of valid_bid_id_schema.load
-    mock_valid_bid_id_schema.load.return_value = {'bid_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9'}
+    mock_valid_bid_id_schema().load.return_value = {'bid_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9'}
 
     # Create a MagicMock object for the find_one method and assign it to the appropriate attribute
     mock_find_one = MagicMock(return_value=None)  # Simulate not finding the bid
@@ -78,7 +78,7 @@ def test_get_bid_by_id_not_found(client):
         response = client.get('/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9')
 
     # Assertions
-    mock_valid_bid_id_schema.load.assert_called_once_with({'bid_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9'})
+    mock_valid_bid_id_schema().load.assert_called_once_with({'bid_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9'})
     mock_dbConnection.assert_called_once()
     mock_db['bids'].find_one.assert_called_once_with({'_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9'})
     assert response.status_code == 404
@@ -90,7 +90,7 @@ def test_get_bid_by_id_validation_error(client):
     mock_valid_bid_id_schema = MagicMock()
 
     # Set up the side effect of valid_bid_id_schema.load to raise a ValidationError
-    mock_valid_bid_id_schema.load.side_effect = ValidationError('Invalid Bid ID')
+    mock_valid_bid_id_schema().load.side_effect = ValidationError('Invalid Bid ID')
 
     # Patch the necessary functions and objects with the MagicMock object
     with patch('api.controllers.bid_controller.valid_bid_id_schema', mock_valid_bid_id_schema):
@@ -98,6 +98,6 @@ def test_get_bid_by_id_validation_error(client):
         response = client.get('/api/bids/invalid_bid_id')
 
     # Assertions
-    mock_valid_bid_id_schema.load.assert_called_once_with({'bid_id': 'invalid_bid_id'})
+    mock_valid_bid_id_schema().load.assert_called_once_with({'bid_id': 'invalid_bid_id'})
     assert response.status_code == 400
     assert response.json == {"Error": "Invalid Bid ID"}
