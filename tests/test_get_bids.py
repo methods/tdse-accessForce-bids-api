@@ -23,7 +23,7 @@ def test_get_bids(client):
 
         response = client.get('/api/bids')
         assert response.status_code == 200
-        assert response.json == {'total_count': 0, 'items': []}
+        assert response.get_json() == {'total_count': 0, 'items': []}
 
 # Case 2: Connection error
 def test_get_bids_connection_error(client):
@@ -31,7 +31,7 @@ def test_get_bids_connection_error(client):
     with patch('api.controllers.bid_controller.dbConnection', side_effect=ConnectionFailure):
         response = client.get('/api/bids')
         assert response.status_code == 500
-        assert response.json == {"Error": "Could not connect to database"}
+        assert response.get_json() == {"Error": "Could not connect to database"}
         
         
 # Case 3: Failed to call db['bids'].find
@@ -45,4 +45,4 @@ def test_get_bids_find_error(client):
 
         response = client.get('/api/bids')
         assert response.status_code == 500
-        assert response.json == {"Error": "Could not retrieve bids"}
+        assert response.get_json() == {"Error": "Could not retrieve bids"}
