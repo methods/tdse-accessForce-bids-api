@@ -39,7 +39,7 @@ def test_get_bid_by_id_success(client):
     mock_dbConnection.assert_called_once()
     mock_db['bids'].find_one.assert_called_once_with({'_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9'})
     assert response.status_code == 200
-    assert response.json == {'_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9', 'tender': 'Business Intelligence and Data Warehousing'}
+    assert response.get_json() == {'_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9', 'tender': 'Business Intelligence and Data Warehousing'}
 
 # Case 2: Connection error
 def test_get_bids_connection_error(client):
@@ -53,7 +53,7 @@ def test_get_bids_connection_error(client):
       patch('api.controllers.bid_controller.valid_bid_id_schema', mock_valid_bid_id_schema):
         response = client.get('/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9')
         assert response.status_code == 500
-        assert response.json == {"Error": "Could not connect to database"}
+        assert response.get_json() == {"Error": "Could not connect to database"}
 
 
 # Case 3: Bid not found
@@ -82,7 +82,7 @@ def test_get_bid_by_id_not_found(client):
     mock_dbConnection.assert_called_once()
     mock_db['bids'].find_one.assert_called_once_with({'_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9'})
     assert response.status_code == 404
-    assert response.json == {"Error": "Not found"}
+    assert response.get_json() == {"Error": "Not found"}
 
 # Case 4: Validation error
 def test_get_bid_by_id_validation_error(client):
@@ -100,4 +100,4 @@ def test_get_bid_by_id_validation_error(client):
     # Assertions
     mock_valid_bid_id_schema().load.assert_called_once_with({'bid_id': 'invalid_bid_id'})
     assert response.status_code == 400
-    assert response.json == {"Error": "Invalid Bid ID"}
+    assert response.get_json() == {"Error": "Invalid Bid ID"}

@@ -39,7 +39,7 @@ def get_bid_by_id(bid_id):
         data = db['bids'].find_one({"_id": bid_id})
         # Return 404 response if not found / returns None
 
-        if data is None or data['status'] == Status.DELETED.value:
+        if data is None:
             return showNotFoundError()
         return data, 200
     # Return 500 response in case of connection failure
@@ -48,7 +48,12 @@ def get_bid_by_id(bid_id):
 
 @bid.route("/bids/<bid_id>", methods=["PUT"])
 def change_status_to_deleted(bid_id):
-    # Validates query param
+     # Validates query param
+    try:
+        valid_bid_id = valid_bid_id_schema().load({"bid_id": bid_id})
+        bid_id = valid_bid_id["bid_id"]
+    except ValidationError as e:
+        return jsonify({"Error": str(e)}), 400
     
     try:
         db = dbConnection()
