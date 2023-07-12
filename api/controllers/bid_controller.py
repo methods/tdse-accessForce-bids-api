@@ -17,7 +17,7 @@ def get_bids():
     # Get all bids from database collection
     try:
         db = dbConnection()
-        data = list(db['bids'].find({}))
+        data = list(db['bids'].find({"status": {"$ne": Status.DELETED.value}}))
         return {'total_count': len(data), 'items': data}, 200  
     except ConnectionFailure:
         return showConnectionError()
