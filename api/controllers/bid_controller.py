@@ -36,9 +36,8 @@ def get_bid_by_id(bid_id):
     # Get bid by id from database collection
     try:
         db = dbConnection()
-        data = db['bids'].find_one({"_id": bid_id})
+        data = db['bids'].find_one({"_id": bid_id , "status": {"$ne": Status.DELETED.value}})
         # Return 404 response if not found / returns None
-
         if data is None:
             return showNotFoundError()
         return data, 200
@@ -57,8 +56,8 @@ def change_status_to_deleted(bid_id):
     
     try:
         db = dbConnection()
-        data = db['bids'].find_one({"_id": bid_id})
-        if data is None or data['status'] == Status.DELETED.value:
+        data = db['bids'].find_one({"_id": bid_id , "status": {"$ne": Status.DELETED.value}})
+        if data is None:
             return showNotFoundError()
         else:
             db['bids'].update_one({"_id": bid_id}, {"$set": {"status": Status.DELETED.value}})
@@ -75,7 +74,6 @@ def post_bid():
     # Create bid document and inserts it into collection
     try:
         db = dbConnection()
-        # Deserialize and validate request against schema
         # Process input and create data model
         bid_document = BidRequestSchema().load(request.get_json())
         # Serialize to a JSON object
