@@ -126,6 +126,34 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   # --------------------------------------------
+    put:
+      tags:
+        - bids
+      summary: Update an existing bid
+      description: Update an existing bid by id
+      operationId: update_bid
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        $ref: '#/components/requestBodies/Bid'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bid'
+        '400':
+          description: Bad request (missing mandatory field/fields)
+          $ref: '#/components/responses/BadRequest'
+  # --------------------------------------------
     delete:
       tags:
         - bids
@@ -331,8 +359,8 @@ components:
           schema:
             $ref: '#/components/schemas/BidRequestBody'
           examples:
-            200 Created:
-              summary: 200 Created
+            200 OK:
+              summary: 200 OK
               value:
                 tender: 'Business Intelligence and Data Warehousing'
                 bid_folder_url: 'https://organisation.sharepoint.com/Docs/dummyfolder'
@@ -377,7 +405,7 @@ components:
           schema:
             type: object
             example: {
-              "Error": "{'<field>': ['<message>']}"
+              "Error": "{'{field}': ['{message}']}"
             }
     InternalServerError:
       description: Internal Server Error

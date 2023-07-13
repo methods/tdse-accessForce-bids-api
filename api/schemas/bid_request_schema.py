@@ -7,6 +7,7 @@ from ..models.status_enum import Status
 
 # Marshmallow schema for request body
 class BidRequestSchema(Schema):
+    _id = fields.UUID()
     tender = fields.Str(required=True, error_messages={"required": {"message": "Missing mandatory field"}})
     client = fields.Str(required=True, error_messages={"required": {"message": "Missing mandatory field"}})
     alias = fields.Str()

@@ -22,7 +22,7 @@ def test_delete_bid_success(client):
        mock_dbConnection.return_value = mock_db
        mock_db['bids'].update_one = MagicMock()
        mock_db['bids'].update_one.return_value = {'_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9', 'status': 'deleted'}
-       response = client.put('/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9')
+       response = client.delete('/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9')
        assert response.status_code == 204
        assert response.get_json() == None
 
@@ -33,7 +33,7 @@ def test_delete_bid_find_error(client):
         mock_db = MagicMock()
         mock_dbConnection.return_value = mock_db
         mock_db['bids'].update_one = MagicMock(side_effect=ConnectionFailure)
-        response = client.put('/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9')
+        response = client.delete('/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9')
         assert response.status_code == 500
         assert response.get_json() == {"Error": "Could not connect to database"}
 
@@ -49,7 +49,7 @@ def test_delete_bid_by_id_validation_error(client):
     # Patch the necessary functions and objects with the MagicMock object
     with patch('api.controllers.bid_controller.valid_bid_id_schema', mock_valid_bid_id_schema):
         # Call the endpoint with the desired URL
-        response = client.get('/api/bids/invalid_bid_id')
+        response = client.delete('/api/bids/invalid_bid_id')
 
     # Assertions
     mock_valid_bid_id_schema().load.assert_called_once_with({'bid_id': 'invalid_bid_id'})
