@@ -77,7 +77,7 @@ paths:
       description: Create a new bid
       operationId: post_bid
       requestBody:
-        $ref: '#/components/requestBodies/Bid'        
+        $ref: '#/components/requestBodies/PostBid'        
         required: true
       responses:
         '201':
@@ -141,7 +141,7 @@ paths:
             type: string
             format: uuid
       requestBody:
-        $ref: '#/components/requestBodies/Bid'
+        $ref: '#/components/requestBodies/UpdateBid'
         required: true
       responses:
         '200':
@@ -352,7 +352,7 @@ components:
 # --------------------------------------------
 # Request bodies
   requestBodies:
-    Bid:
+    PostBid:
       description: Bid object to be added to collection
       content:
         application/json:
@@ -395,6 +395,39 @@ components:
                 client: 'Office for National Statistics'
                 alias: 'ONS'
                 bid_date: '21-06-2023'
+    UpdateBid:
+      description: Bid object to replace bid by Id
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BidRequestBody'
+          examples:
+            200 OK:
+              summary: 200 OK
+              value:
+                tender: 'THIS HAS BEEN UPDATED'
+                bid_folder_url: 'https://organisation.sharepoint.com/Docs/dummyfolder'
+                feedback:
+                  url: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
+                  description: 'Feedback from client in detail'
+                client: 'Office for National Statistics'
+                alias: 'ONS'
+                bid_date: '21-06-2023'
+                success: [
+                  {
+                    "phase": 1,
+                    "has_score": true,
+                    "score": 28,
+                    "out_of": 36
+                  }
+                ]
+                failed: {
+                  "phase": 2,
+                  "has_score": true,
+                  "score": 20,
+                  "out_of": 36
+                }
+                was_successful: false
 # --------------------------------------------
 # Error responses
   responses:
