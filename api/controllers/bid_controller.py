@@ -46,7 +46,7 @@ def get_bid_by_id(bid_id):
     except ConnectionFailure:
         return showConnectionError()
 
-@bid.route("/bids/<bid_id>", methods=["PUT"])
+@bid.route("/bids/<bid_id>", methods=["DELETE"])
 def change_status_to_deleted(bid_id):
      # Validates query param
     try:
