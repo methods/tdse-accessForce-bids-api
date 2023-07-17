@@ -19,20 +19,3 @@ class BidModel():
         self.failed = failed
         self.feedback = feedback
         self.last_updated = datetime.now()
-
-
-    def addSuccessPhase(self, phase):
-        self.success.append(phase)
-
-    def setFailedPhase(self, phase):
-        self.was_successful = False
-        self.failed = phase
-
-    def addFeedback(self, feedback):
-        self.feedback = feedback
-
-    def setStatus(self, status):
-        if isinstance(status, Status):
-            self.status = status.value
-        else:
-            raise ValueError("Invalid status. Please provide a valid Status enum value")

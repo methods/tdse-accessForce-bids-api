@@ -1,6 +1,6 @@
 import pytest
 from flask import Flask
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from pymongo.errors import ConnectionFailure
 
 from api.controllers.bid_controller import bid
@@ -13,8 +13,10 @@ def client():
     with app.test_client() as client:
         yield client
 
+
 # Case 1: Successful post
-def test_post_is_successful(client):
+@patch('api.controllers.bid_controller.dbConnection')
+def test_post_is_successful(mock_dbConnection, client):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
@@ -42,16 +44,17 @@ def test_post_is_successful(client):
     }
 
     # Mock the behavior of dbConnection
-    with patch('api.controllers.bid_controller.dbConnection') as mock_dbConnection:
-        # Create a MagicMock object to simulate the behavior of the insert_one method
-        mock_insert_one = MagicMock()
-        # Set the return value of db['bids'].insert_one to the MagicMock object
-        mock_dbConnection.return_value.__getitem__.return_value.insert_one = mock_insert_one
+    mock_db = mock_dbConnection.return_value
+    mock_db['bids'].insert_one.return_value = data
 
-        response = client.post("api/bids", json=data)
-        assert response.status_code == 201
-        # Check that the insert_one method was called with the correct argument
-        assert response.get_json() == mock_insert_one.call_args[0][0]
+    response = client.post("api/bids", json=data)
+    assert response.status_code == 201
+    assert "_id" in response.get_json() and response.get_json()["_id"] is not None  
+    assert "tender" in response.get_json() and response.get_json()["tender"] == "Business Intelligence and Data Warehousing"
+    assert "client" in response.get_json() and response.get_json()["client"] == "Office for National Statistics"
+    assert "last_updated" in response.get_json() and response.get_json()["last_updated"] is not None
+    assert "bid_date" in response.get_json() and response.get_json()["bid_date"] == "2023-06-21"
+
 
 # Case 2: Missing mandatory fields
 def test_field_missing(client):
@@ -59,23 +62,28 @@ def test_field_missing(client):
         "client": "Sample Client",
         "bid_date": "20-06-2023"
     }
+    
     response = client.post("api/bids", json=data)
-    # Check that the response status code is 400
     assert response.status_code == 400
-    # Check that the response body contains the correct error message with the missing field (tender)
     assert response.get_json() == {
-        'Error': "{'tender': {'message': 'Missing mandatory field'}}"}
+        'Error': "{'tender': {'message': 'Missing mandatory field'}}"
+    }
+
 
 # Case 3: Connection error
-def test_get_bids_connection_error(client):
-    # Mock the behavior of dbConnection to raise ConnectionFailure
-    with patch('api.controllers.bid_controller.dbConnection', side_effect=ConnectionFailure):
-        response = client.get('/api/bids')
-        assert response.status_code == 500
-        assert response.json == {"Error": "Could not connect to database"}
+@patch('api.controllers.bid_controller.dbConnection', side_effect=ConnectionFailure)
+def test_get_bids_connection_error(mock_dbConnection, client):
+     # Mock the behavior of dbConnection
+    mock_db = mock_dbConnection.return_value
+    mock_db['bids'].insert_one.side_effect = Exception
+    response = client.get('/api/bids')
+    assert response.status_code == 500
+    assert response.get_json() == {"Error": "Could not connect to database"}
+
 
 # Case 4: Neither success nor failed fields phase can be more than 2
-def test_phase_greater_than_2(client):
+@patch('api.controllers.bid_controller.dbConnection')
+def test_phase_greater_than_2(mock_dbConnection, client):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
@@ -103,20 +111,19 @@ def test_phase_greater_than_2(client):
     }
 
     # Mock the behavior of dbConnection
-    with patch('api.controllers.bid_controller.dbConnection') as mock_dbConnection:
-        # Create a MagicMock object to simulate the behavior of the insert_one method
-        mock_insert_one = MagicMock()
-        # Set the return value of db['bids'].insert_one to the MagicMock object
-        mock_dbConnection.return_value.__getitem__.return_value.insert_one = mock_insert_one
+    mock_db = mock_dbConnection.return_value
+    mock_db['bids'].insert_one.side_effect = Exception
 
-        response = client.post("api/bids", json=data)
-        assert response.status_code == 400
-        # Check that the insert_one method was called with the correct argument
-        assert response.get_json() == {
-            'Error': "{'failed': {'phase': ['Must be one of: 1, 2.']}}"}
+    response = client.post("api/bids", json=data)
+    assert response.status_code == 400
+    assert response.get_json() == {
+        'Error': "{'failed': {'phase': ['Must be one of: 1, 2.']}}"
+    }
+
 
 # Case 5: Neither success nor failed fields can have the same phase
-def test_same_phase(client):
+@patch('api.controllers.bid_controller.dbConnection')
+def test_same_phase(mock_dbConnection, client):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
@@ -142,21 +149,21 @@ def test_same_phase(client):
             "out_of": 36
         }
     }
+
     # Mock the behavior of dbConnection
-    with patch('api.controllers.bid_controller.dbConnection') as mock_dbConnection:
-        # Create a MagicMock object to simulate the behavior of the insert_one method
-        mock_insert_one = MagicMock()
-        # Set the return value of db['bids'].insert_one to the MagicMock object
-        mock_dbConnection.return_value.__getitem__.return_value.insert_one = mock_insert_one
+    mock_db = mock_dbConnection.return_value
+    mock_db['bids'].insert_one.side_effect = Exception
 
-        response = client.post("api/bids", json=data)
-        assert response.status_code == 400
-        # Check that the insert_one method was called with the correct argument
-        assert response.get_json() == {
-            'Error': '{\'success\': ["Phase value already exists in \'failed\' section and cannot be repeated."]}'}
+    response = client.post("api/bids", json=data)
+    assert response.status_code == 400
+    assert response.get_json() == {
+        'Error': "{'success': [\"Phase value already exists in 'failed' section and cannot be repeated.\"]}"
+    }
 
-# Case 6: Success can not have the same phase in the list
-def test_success_same_phase(client):
+
+# Case 6: Success cannot have the same phase in the list
+@patch('api.controllers.bid_controller.dbConnection')
+def test_success_same_phase(mock_dbConnection, client):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
@@ -184,14 +191,11 @@ def test_success_same_phase(client):
     }
 
     # Mock the behavior of dbConnection
-    with patch('api.controllers.bid_controller.dbConnection') as mock_dbConnection:
-        # Create a MagicMock object to simulate the behavior of the insert_one method
-        mock_insert_one = MagicMock()
-        # Set the return value of db['bids'].insert_one to the MagicMock object
-        mock_dbConnection.return_value.__getitem__.return_value.insert_one = mock_insert_one
+    mock_db = mock_dbConnection.return_value
+    mock_db['bids'].insert_one.side_effect = Exception
 
-        response = client.post("api/bids", json=data)
-        assert response.status_code == 400
-        # Check that the insert_one method was called with the correct argument
-        assert response.get_json() == {
-            'Error': '{\'success\': ["Phase value already exists in \'success\' list and cannot be repeated."]}'}
+    response = client.post("api/bids", json=data)
+    assert response.status_code == 400
+    assert response.get_json() == {
+        'Error': "{'success': [\"Phase value already exists in 'success' list and cannot be repeated.\"]}"
+    }

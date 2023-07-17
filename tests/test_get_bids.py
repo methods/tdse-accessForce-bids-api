@@ -2,7 +2,7 @@ from flask import Flask
 import pytest
 from api.controllers.bid_controller import bid
 from pymongo.errors import ConnectionFailure
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 
 @pytest.fixture
@@ -13,36 +13,28 @@ def client():
         yield client
 
 # Case 1: Successful get
-def test_get_bids(client):
-    # Mock the behavior of dbConnection and find methods
-    with patch('api.controllers.bid_controller.dbConnection') as mock_dbConnection:
-        # Create a MagicMock object to simulate the behavior of the find method
-        mock_find = MagicMock(return_value=[])
-        # Set the return value of db['bids'].find to the MagicMock object
-        mock_dbConnection.return_value.__getitem__.return_value.find = mock_find
+@patch('api.controllers.bid_controller.dbConnection')
+def test_get_bids(mock_dbConnection, client):
+    mock_db = mock_dbConnection.return_value
+    mock_db['bids'].find.return_value = []
 
-        response = client.get('/api/bids')
-        assert response.status_code == 200
-        assert response.get_json() == {'total_count': 0, 'items': []}
+    response = client.get('/api/bids')
+    assert response.status_code == 200
+    assert response.get_json() == {'total_count': 0, 'items': []}
 
 # Case 2: Connection error
-def test_get_bids_connection_error(client):
-    # Mock the behavior of dbConnection to raise ConnectionFailure
-    with patch('api.controllers.bid_controller.dbConnection', side_effect=ConnectionFailure):
-        response = client.get('/api/bids')
-        assert response.status_code == 500
-        assert response.get_json() == {"Error": "Could not connect to database"}
-        
-        
-# Case 3: Failed to call db['bids'].find
-def test_get_bids_find_error(client):
-    # Mock the behavior of dbConnection and find methods
-    with patch('api.controllers.bid_controller.dbConnection') as mock_dbConnection:
-        # Create a MagicMock object to simulate the behavior of the find method
-        mock_find = MagicMock(side_effect=Exception)
-        # Set the return value of db['bids'].find to the MagicMock object
-        mock_dbConnection.return_value.__getitem__.return_value.find = mock_find
+@patch('api.controllers.bid_controller.dbConnection', side_effect=ConnectionFailure)
+def test_get_bids_connection_error(mock_dbConnection, client):
+    response = client.get('/api/bids')
+    assert response.status_code == 500
+    assert response.get_json() == {"Error": "Could not connect to database"}
 
-        response = client.get('/api/bids')
-        assert response.status_code == 500
-        assert response.get_json() == {"Error": "Could not retrieve bids"}
+# Case 3: Failed to call db['bids'].find
+@patch('api.controllers.bid_controller.dbConnection')
+def test_get_bids_find_error(mock_dbConnection, client):
+    mock_db = mock_dbConnection.return_value
+    mock_db['bids'].find.side_effect = Exception
+
+    response = client.get('/api/bids')
+    assert response.status_code == 500
+    assert response.get_json() == {"Error": "Could not retrieve bids"}
