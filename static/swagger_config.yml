@@ -77,7 +77,7 @@ paths:
       description: Create a new bid
       operationId: post_bid
       requestBody:
-        $ref: '#/components/requestBodies/Bid'        
+        $ref: '#/components/requestBodies/PostBid'        
         required: true
       responses:
         '201':
@@ -127,6 +127,34 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   # --------------------------------------------
     put:
+      tags:
+        - bids
+      summary: Update an existing bid
+      description: Update an existing bid by id
+      operationId: update_bid
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateBid'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bid'
+        '400':
+          description: Bad request (missing mandatory field/fields)
+          $ref: '#/components/responses/BadRequest'
+  # --------------------------------------------
+    delete:
       tags:
         - bids
       summary: Soft delete a bid
@@ -324,15 +352,15 @@ components:
 # --------------------------------------------
 # Request bodies
   requestBodies:
-    Bid:
+    PostBid:
       description: Bid object to be added to collection
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/BidRequestBody'
           examples:
-            200 Created:
-              summary: 200 Created
+            200 OK:
+              summary: 200 OK
               value:
                 tender: 'Business Intelligence and Data Warehousing'
                 bid_folder_url: 'https://organisation.sharepoint.com/Docs/dummyfolder'
@@ -367,6 +395,39 @@ components:
                 client: 'Office for National Statistics'
                 alias: 'ONS'
                 bid_date: '21-06-2023'
+    UpdateBid:
+      description: Bid object to replace bid by Id
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BidRequestBody'
+          examples:
+            200 OK:
+              summary: 200 OK
+              value:
+                tender: 'THIS HAS BEEN UPDATED'
+                bid_folder_url: 'https://organisation.sharepoint.com/Docs/dummyfolder'
+                feedback:
+                  url: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
+                  description: 'Feedback from client in detail'
+                client: 'Office for National Statistics'
+                alias: 'ONS'
+                bid_date: '21-06-2023'
+                success: [
+                  {
+                    "phase": 1,
+                    "has_score": true,
+                    "score": 28,
+                    "out_of": 36
+                  }
+                ]
+                failed: {
+                  "phase": 2,
+                  "has_score": true,
+                  "score": 20,
+                  "out_of": 36
+                }
+                was_successful: false
 # --------------------------------------------
 # Error responses
   responses:
@@ -377,7 +438,7 @@ components:
           schema:
             type: object
             example: {
-              "Error": "{'<field>': ['<message>']}"
+              "Error": "{'{field}': ['{message}']}"
             }
     InternalServerError:
       description: Internal Server Error

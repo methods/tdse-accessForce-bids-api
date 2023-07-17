@@ -26,7 +26,7 @@ def get_bids():
     
 @bid.route("/bids/<bid_id>", methods=["GET"])
 def get_bid_by_id(bid_id):
-    # Validates query param
+    # Validates path param
     try:
         valid_bid_id = valid_bid_id_schema().load({"bid_id": bid_id})
         bid_id = valid_bid_id["bid_id"]
@@ -46,8 +46,27 @@ def get_bid_by_id(bid_id):
         return showConnectionError()
 
 @bid.route("/bids/<bid_id>", methods=["PUT"])
+def update_bid_by_id(bid_id):
+    try:
+        # Add id to request body from path param
+        # This allows request to be validated against same schema
+        updated_bid = request.get_json()
+        updated_bid["_id"] = bid_id
+        # Deserialize and validate request against schema
+        # Process input and create data model
+        bid_document = BidRequestSchema().load(updated_bid)
+        # Serialize to a JSON object
+        replacement = BidSchema().dump(bid_document)
+        # Find bid by id and replace with user request body
+        db = dbConnection()
+        db['bids'].find_one_and_replace({"_id": bid_id}, replacement)
+        return replacement, 200
+    except ValidationError as e:
+        return jsonify({"Error": str(e)}), 400
+
+@bid.route("/bids/<bid_id>", methods=["DELETE"])
 def change_status_to_deleted(bid_id):
-     # Validates query param
+    # Validates path param
     try:
         valid_bid_id = valid_bid_id_schema().load({"bid_id": bid_id})
         bid_id = valid_bid_id["bid_id"]
@@ -66,8 +85,6 @@ def change_status_to_deleted(bid_id):
         return showConnectionError()
     except ValidationError as e:
         return jsonify({"Error": str(e)}), 400
-    
-    
 
 @bid.route("/bids", methods=["POST"])
 def post_bid():
