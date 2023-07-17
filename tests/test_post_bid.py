@@ -1,18 +1,5 @@
-import pytest
-from flask import Flask
 from unittest.mock import patch
 from pymongo.errors import ConnectionFailure
-
-from api.controllers.bid_controller import bid
-
-
-@pytest.fixture
-def client():
-    app = Flask(__name__)
-    app.register_blueprint(bid, url_prefix='/api')
-    with app.test_client() as client:
-        yield client
-
 
 # Case 1: Successful post
 @patch('api.controllers.bid_controller.dbConnection')

@@ -6,9 +6,7 @@ from api.schemas.valid_bid_id_schema import valid_bid_id_schema
 from api.models.status_enum import Status
 from dbconfig.mongo_setup import dbConnection
 from pymongo.errors import ConnectionFailure
-from helpers.helpers import showConnectionError, showNotFoundError
-
-
+from helpers.helpers import showConnectionError, showNotFoundError, validate_and_create_data, validate_bid_id_path
 
 bid = Blueprint('bid', __name__)
 
@@ -28,8 +26,7 @@ def get_bids():
 def get_bid_by_id(bid_id):
     # Validates path param
     try:
-        valid_bid_id = valid_bid_id_schema().load({"bid_id": bid_id})
-        bid_id = valid_bid_id["bid_id"]
+        bid_id = validate_bid_id_path(bid_id)
     except ValidationError as e:
         return jsonify({"Error": str(e)}), 400
 
@@ -52,15 +49,12 @@ def update_bid_by_id(bid_id):
         # This allows request to be validated against same schema
         updated_bid = request.get_json()
         updated_bid["_id"] = bid_id
-        # Deserialize and validate request against schema
         # Process input and create data model
-        bid_document = BidRequestSchema().load(updated_bid)
-        # Serialize to a JSON object
-        replacement = BidSchema().dump(bid_document)
+        data = validate_and_create_data(updated_bid)
         # Find bid by id and replace with user request body
         db = dbConnection()
-        db['bids'].find_one_and_replace({"_id": bid_id}, replacement)
-        return replacement, 200
+        db['bids'].find_one_and_replace({"_id": bid_id}, data)
+        return data, 200
     except ValidationError as e:
         return jsonify({"Error": str(e)}), 400
 
@@ -68,8 +62,7 @@ def update_bid_by_id(bid_id):
 def change_status_to_deleted(bid_id):
     # Validates path param
     try:
-        valid_bid_id = valid_bid_id_schema().load({"bid_id": bid_id})
-        bid_id = valid_bid_id["bid_id"]
+        bid_id = validate_bid_id_path(bid_id)
     except ValidationError as e:
         return jsonify({"Error": str(e)}), 400
     
@@ -92,9 +85,7 @@ def post_bid():
     try:
         db = dbConnection()
         # Process input and create data model
-        bid_document = BidRequestSchema().load(request.get_json())
-        # Serialize to a JSON object
-        data = BidSchema().dump(bid_document)
+        data = validate_and_create_data(request.get_json())
         # Insert document into database collection
         db['bids'].insert_one(data)
         return data, 201

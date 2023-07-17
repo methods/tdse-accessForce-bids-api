@@ -1,2 +1,0 @@
-- SWAGGER: how to do multiple examples of 400 response
-- QUESTION: error responses as text/plain or application/json?

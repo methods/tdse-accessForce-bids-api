@@ -1,1 +1,1 @@
-GET   http://localhost:8080/api/bids/3706739b-a88c-4c6c-8b4f-869038d09e4a HTTP/1.1
+DELETE  http://localhost:8080/api/bids/27fc4afb-fcdc-4bf7-9f8f-74f524831da4 HTTP/1.1
