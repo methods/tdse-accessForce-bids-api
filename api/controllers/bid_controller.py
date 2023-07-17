@@ -1,8 +1,5 @@
 from flask import Blueprint, jsonify, request
 from marshmallow import ValidationError
-from api.schemas.bid_schema import BidSchema
-from api.schemas.bid_request_schema import BidRequestSchema
-from api.schemas.valid_bid_id_schema import valid_bid_id_schema
 from api.models.status_enum import Status
 from dbconfig.mongo_setup import dbConnection
 from pymongo.errors import ConnectionFailure
