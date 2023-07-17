@@ -1,1 +1,1 @@
-PUT http://localhost:8080/api/bids/41fdf896-0581-45f0-a71d-430e3d8bd9b1 HTTP/1.1
+GET   http://localhost:8080/api/bids/3706739b-a88c-4c6c-8b4f-869038d09e4a HTTP/1.1
