@@ -12,7 +12,7 @@ def test_delete_bid_success(mock_dbConnection, client):
     }
     response = client.delete('/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9')
     assert response.status_code == 204
-    assert response.body is None
+    assert response.content_length is None
 
 # Case 2: Failed to call database
 @patch('api.controllers.bid_controller.dbConnection')
@@ -26,7 +26,7 @@ def test_delete_bid_find_error(mock_dbConnection, client):
 # Case 3: Validation error
 @patch('api.controllers.bid_controller.dbConnection')
 def test_get_bid_by_id_validation_error(mock_dbConnection, client):
-    mock_dbConnection.side_effect = ValidationError('Invalid Bid ID')
+    mock_dbConnection.side_effect = ValidationError
     response = client.delete('/api/bids/invalid_bid_id')
     assert response.status_code == 400
     assert response.get_json() == {'Error': "{'bid_id': ['Shorter than minimum length 36.']}"}
