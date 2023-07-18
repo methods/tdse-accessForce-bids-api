@@ -6,7 +6,6 @@ This API provides an endpoint to post a new bid document.
 ## Prerequisites
 
 - Python 3.x
-- Flask
 - Homebrew
 
 ## Running the API
@@ -44,7 +43,7 @@ This API provides an endpoint to post a new bid document.
 7. Run the following command to start the API:
 
       ```bash
-      python app/app.py
+      python app.py
       ```
 8. The API will be available at http://localhost:8080/api/bids
 
