@@ -1,4 +1,4 @@
-PUT http://localhost:8080/api/bids/1fb19151-2360-4ad0-86ed-f58ad2cd3b85 HTTP/1.1
+PUT http://localhost:8080/api/bids/1fb19151-2360-4ad0-86ed-f58ad2cd3b86 HTTP/1.1
 Content-Type: application/json
 
 {

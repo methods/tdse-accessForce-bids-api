@@ -21,6 +21,22 @@ def get_bids():
     except Exception:
         return jsonify({"Error": "Could not retrieve bids"}), 500
     
+@bid.route("/bids", methods=["POST"])
+def post_bid():
+    try:
+        db = dbConnection()
+        # Process input and create data model
+        data = validate_and_create_data(request.get_json())
+        # Insert document into database collection
+        db['bids'].insert_one(data)
+        return data, 201
+    # Return 400 response if input validation fails
+    except ValidationError as e:
+        return jsonify({"Error": str(e)}), 400
+    # Return 500 response in case of connection failure
+    except ConnectionFailure:
+        return showConnectionError()
+    
 @bid.route("/bids/<bid_id>", methods=["GET"])
 def get_bid_by_id(bid_id):
     try:
@@ -31,55 +47,42 @@ def get_bid_by_id(bid_id):
         if data is None:
             return showNotFoundError()
         return data, 200
-    # Return 500 response in case of connection failure
-    except ConnectionFailure:
-        return showConnectionError()
     # Return 400 if bid_id is invalid
     except ValidationError as e:
         return jsonify({"Error": str(e)}), 400
+    # Return 500 response in case of connection failure
+    except ConnectionFailure:
+        return showConnectionError()
 
 @bid.route("/bids/<bid_id>", methods=["PUT"])
 def update_bid_by_id(bid_id):
     try:
-        # Add id to request body from path param
-        # This allows request to be validated against same schema
-        user_request = request.get_json()
-        user_request["last_updated"] = datetime.now()
-        # Process input and create data model
-        # data = validate_and_create_data(updated_bid)
-        data = BidSchema().load(user_request, partial=True)
-        # Find bid by id and replace with user request body
+        bid_id = validate_bid_id_path(bid_id)
+        # Validate user input
+        user_request = BidSchema().load(request.get_json(), partial=True)
+        # Updates document where id is equal to bid_id
         db = dbConnection()
-        db['bids'].update_one({"_id": bid_id}, {"$set": data})
+        data = db['bids'].find_one_and_update({"_id": bid_id}, {"$set": user_request}, return_document=True)
+        # Return 404 response if not found / returns None
+        if data is None:
+            return showNotFoundError()
         return data, 200
+    # Return 400 response if input validation fails
     except ValidationError as e:
         return jsonify({"Error": str(e)}), 400
+    # Return 500 response in case of connection failure
+    except ConnectionFailure:
+        return showConnectionError()
 
 @bid.route("/bids/<bid_id>", methods=["DELETE"])
 def change_status_to_deleted(bid_id):
     try:
         bid_id = validate_bid_id_path(bid_id)
         db = dbConnection()
-        data = db['bids'].find_one({"_id": bid_id , "status": {"$ne": Status.DELETED.value}})
+        data = db['bids'].find_one_and_update({"_id": bid_id, "status": {"$ne": Status.DELETED.value}}, {"$set": {"status": Status.DELETED.value, "last_updated": datetime.now().isoformat()}})
         if data is None:
             return showNotFoundError()
-        else:
-            db['bids'].update_one({"_id": bid_id}, {"$set": {"status": Status.DELETED.value}})
         return data, 204
-    except ConnectionFailure:
-        return showConnectionError()
-    except ValidationError as e:
-        return jsonify({"Error": str(e)}), 400
-
-@bid.route("/bids", methods=["POST"])
-def post_bid():
-    try:
-        db = dbConnection()
-        # Process input and create data model
-        data = validate_and_create_data(request.get_json())
-        # Insert document into database collection
-        db['bids'].insert_one(data)
-        return data, 201
     # Return 400 response if input validation fails
     except ValidationError as e:
         return jsonify({"Error": str(e)}), 400
