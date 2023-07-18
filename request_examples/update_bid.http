@@ -1,11 +1,6 @@
-PUT http://localhost:8080/api/bids/a042cccd-ac58-47d8-820c-9704f7011969 HTTP/1.1
+PUT http://localhost:8080/api/bids/1fb19151-2360-4ad0-86ed-f58ad2cd3b85 HTTP/1.1
 Content-Type: application/json
 
 {
-  "tender": "UPDATED TENDER",
-  "alias": "ONS",
-  "bid_date": "21-06-2023",
-  "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
-  "client": "Office for National Statistics",
-  "was_successful": false
+  "tender": "UPDATED yeah"
 }

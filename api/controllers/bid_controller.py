@@ -1,8 +1,10 @@
 from flask import Blueprint, jsonify, request
+from datetime import datetime
 from marshmallow import ValidationError
 from api.models.status_enum import Status
 from dbconfig.mongo_setup import dbConnection
 from pymongo.errors import ConnectionFailure
+from api.schemas.bid_schema import BidSchema
 from helpers.helpers import showConnectionError, showNotFoundError, validate_and_create_data, validate_bid_id_path
 
 bid = Blueprint('bid', __name__)
@@ -41,13 +43,14 @@ def update_bid_by_id(bid_id):
     try:
         # Add id to request body from path param
         # This allows request to be validated against same schema
-        updated_bid = request.get_json()
-        updated_bid["_id"] = bid_id
+        user_request = request.get_json()
+        user_request["last_updated"] = datetime.now()
         # Process input and create data model
-        data = validate_and_create_data(updated_bid)
+        # data = validate_and_create_data(updated_bid)
+        data = BidSchema().load(user_request, partial=True)
         # Find bid by id and replace with user request body
         db = dbConnection()
-        db['bids'].find_one_and_replace({"_id": bid_id}, data)
+        db['bids'].update_one({"_id": bid_id}, {"$set": data})
         return data, 200
     except ValidationError as e:
         return jsonify({"Error": str(e)}), 400
