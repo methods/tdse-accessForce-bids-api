@@ -21,14 +21,8 @@ def get_bids():
     
 @bid.route("/bids/<bid_id>", methods=["GET"])
 def get_bid_by_id(bid_id):
-    # Validates path param
     try:
         bid_id = validate_bid_id_path(bid_id)
-    except ValidationError as e:
-        return jsonify({"Error": str(e)}), 400
-
-    # Get bid by id from database collection
-    try:
         db = dbConnection()
         data = db['bids'].find_one({"_id": bid_id , "status": {"$ne": Status.DELETED.value}})
         # Return 404 response if not found / returns None
@@ -38,6 +32,9 @@ def get_bid_by_id(bid_id):
     # Return 500 response in case of connection failure
     except ConnectionFailure:
         return showConnectionError()
+    # Return 400 if bid_id is invalid
+    except ValidationError as e:
+        return jsonify({"Error": str(e)}), 400
 
 @bid.route("/bids/<bid_id>", methods=["PUT"])
 def update_bid_by_id(bid_id):
@@ -57,13 +54,8 @@ def update_bid_by_id(bid_id):
 
 @bid.route("/bids/<bid_id>", methods=["DELETE"])
 def change_status_to_deleted(bid_id):
-    # Validates path param
     try:
         bid_id = validate_bid_id_path(bid_id)
-    except ValidationError as e:
-        return jsonify({"Error": str(e)}), 400
-    
-    try:
         db = dbConnection()
         data = db['bids'].find_one({"_id": bid_id , "status": {"$ne": Status.DELETED.value}})
         if data is None:
@@ -78,7 +70,6 @@ def change_status_to_deleted(bid_id):
 
 @bid.route("/bids", methods=["POST"])
 def post_bid():
-    # Create bid document and inserts it into collection
     try:
         db = dbConnection()
         # Process input and create data model
