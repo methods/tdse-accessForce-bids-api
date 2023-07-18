@@ -1,29 +1,6 @@
-PUT http://localhost:8080/api/bids/674e1944-7c6b-4e13-9e88-4abc3c1ff8a3 HTTP/1.1
+PUT http://localhost:8080/api/bids/1fb19151-2360-4ad0-86ed-f58ad2cd3b86 HTTP/1.1
 Content-Type: application/json
 
 {
-  "success": [
-    {
-      "phase": 1,
-      "has_score": true,
-      "out_of": 36,
-      "score": 30
-    }
-  ],
-  "was_successful": false,
-  "failed": {
-    "phase": 2,
-    "has_score": true,
-    "out_of": 36,
-    "score": 20
-  },
-  "feedback": {
-    "description": "Feedback from client in detail",
-    "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
-  },
-  "alias": "TEST",
-  "tender": "Updated",
-  "bid_date": "21-06-2023",
-  "client": "Office for National Statistics",
-  "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder"
+  "tender": "UPDATED yeah"
 }

@@ -7,7 +7,6 @@ from ..models.status_enum import Status
 
 # Marshmallow schema for request body
 class BidRequestSchema(Schema):
-    _id = fields.UUID()
     tender = fields.Str(required=True, error_messages={"required": {"message": "Missing mandatory field"}})
     client = fields.Str(required=True, error_messages={"required": {"message": "Missing mandatory field"}})
     alias = fields.Str()
@@ -47,8 +46,6 @@ class BidRequestSchema(Schema):
             if phase_value in failed_phase_values:
                 raise ValidationError("Phase value already exists in 'failed' section and cannot be repeated.")
             success_phase_values.add(phase_value)
-            
-            
             
     # Creates a Bid instance after processing
     @post_load
