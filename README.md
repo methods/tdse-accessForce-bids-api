@@ -26,25 +26,20 @@ This API provides an endpoint to post a new bid document.
       ```bash
       python3 --version
       ```
-4. Create the virtual environment by running the following command:
-
-      ```
-      python3 -m venv .venv
-      ```
-5. Run the virtual environment by running the following command:
+4. Install Makefile if not already installed. You can check if it is installed by running the following command:
 
       ```bash
-      source .venv/bin/activate
-      ``` 
-6. Install the required dependencies by running the following command:
-
-      ```bash
-      pip install -r requirements.txt
+      make --version
       ```
-7. Run the following command to start the API:
+5. Version 3.81 or higher is required. If you do not have Make installed, you can install it with Homebrew:
 
       ```bash
-      python app/app.py
+      brew install make
+      ```
+6. Run the following command to start the API:
+
+      ```bash
+      gmake run
       ```
 8. The API will be available at http://localhost:8080/api/bids
 
