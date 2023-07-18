@@ -36,7 +36,12 @@ This API provides an endpoint to post a new bid document.
       ```bash
       brew install make
       ```
-6. Run the following command to start the API:
+6. Run the following command to have all the commands to use the API with Makefile:
+
+      ```bash
+      gmake help
+      ```
+7. Run the following command to start the API:
 
       ```bash
       gmake run

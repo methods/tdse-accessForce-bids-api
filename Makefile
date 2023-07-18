@@ -18,7 +18,19 @@ run: venv
 test: venv
 	$(PYTHON) -m pytest
 
+# security vulnerability checker
+check:
+	$(PIP) install safety
+	$(PIP) freeze | $(PYTHON) -m safety check --stdin
+
 clean:
 	rm -rf __pycache__
 	rm -rf .venv
 	rm -rf .pytest_cache
+
+help:
+	@echo "make run - run the application"
+	@echo "make test - run the tests"
+	@echo "make clean - remove all generated files"
+	@echo "make check - check for security vulnerabilities"
+	@echo "make help - display this help"
