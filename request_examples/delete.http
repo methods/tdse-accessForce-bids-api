@@ -1,0 +1,1 @@
+DELETE  http://localhost:8080/api/bids/27fc4afb-fcdc-4bf7-9f8f-74f524831da4 HTTP/1.1

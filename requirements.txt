@@ -1,0 +1,12 @@
+blinker
+click
+Flask
+itsdangerous
+Jinja2
+MarkupSafe
+Werkzeug
+pip == 23.2.0
+pytest
+flask_swagger_ui
+marshmallow
+pymongo

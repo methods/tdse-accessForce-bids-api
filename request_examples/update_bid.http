@@ -1,0 +1,6 @@
+PUT http://localhost:8080/api/bids/9f688442-b535-4683-ae1a-a64c1a3b8616 HTTP/1.1
+Content-Type: application/json
+
+{
+  "tender": "UPDATED yeah"
+}
