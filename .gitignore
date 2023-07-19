@@ -2,7 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+commit_message.txt
 # C extensions
 *.so
 

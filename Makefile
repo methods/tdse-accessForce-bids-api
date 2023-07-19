@@ -30,6 +30,7 @@ commit:
 	echo "$${topic}: $${message}" > commit_message.txt; \
 	git add .; \
 	git commit -F  commit_message.txt; \
+	git push; \
 	rm  commit_message.txt
 
 check:
