@@ -2,12 +2,12 @@
 
 .DEFAULT_GOAL := run
 TOPICS := fix - feat - docs - style - refactor - test - chore - build
-COMMIT_MSG := "chore: update"
+
 
 PYTHON = ./.venv/bin/python3
 PIP = ./.venv/bin/pip
 
-.PHONY: run test clean check help
+.PHONY: run test clean check help commit
 
 venv/bin/activate: requirements.txt
 	python3 -m venv .venv
@@ -33,7 +33,7 @@ commit:
 	git push; \
 	rm  commit_message.txt
 
-check:
+check: venv
 	$(PIP) install safety
 	$(PIP) freeze | $(PYTHON) -m safety check --stdin
 
