@@ -29,4 +29,4 @@ def test_get_bid_by_id_validation_error(mock_dbConnection, client):
     mock_dbConnection.side_effect = ValidationError
     response = client.delete('/api/bids/invalid_bid_id')
     assert response.status_code == 400
-    assert response.get_json() == {'Error': "{'bid_id': ['Shorter than minimum length 36.']}"}
+    assert response.get_json() == {"Error": "{'bid_id': ['Invalid bid Id']}"}

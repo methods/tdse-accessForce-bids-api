@@ -63,12 +63,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/Bid'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                example: {"Error": "Could not connect to database"}
+          $ref: '#/components/responses/InternalServerError'
 # --------------------------------------------
     post:
       tags:
@@ -114,15 +109,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bid'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '404':
-          description: Bid not found
-          content:
-            application/json:
-              schema:
-                type: object
-                example: {
-                  "Error": "Bid not found"
-                }
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
   # --------------------------------------------
@@ -151,8 +141,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Bid'
         '400':
-          description: Bad request (missing mandatory field/fields)
           $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   # --------------------------------------------
     delete:
       tags:
@@ -174,16 +167,10 @@ paths:
           description: Bid deleted
           content:
             noContent: {}
-
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '404':
-          description: Bid not found
-          content:
-            application/json:
-              schema:
-                type: object
-                example: {
-                  "Error": "Not found"
-                }
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
 # --------------------------------------------
@@ -439,6 +426,15 @@ components:
             type: object
             example: {
               "Error": "{'{field}': ['{message}']}"
+            }
+    NotFound:
+      description: Not Found Error
+      content:
+        application/json:
+          schema:
+            type: object
+            example: {
+              "Error": "Resource not found"
             }
     InternalServerError:
       description: Internal Server Error
