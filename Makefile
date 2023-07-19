@@ -44,9 +44,9 @@ clean:
 	@find . -name ".venv" -exec rm -rf {} +
 
 help:
-	@echo "make run - run the application"
-	@echo "make test - run the tests"
-	@echo "make clean - remove all generated files"
-	@echo "make check - check for security vulnerabilities"
-	@echo "make commit - commit changes to git"
-	@echo "make help - display this help"
+	@echo "gmake run - run the application"
+	@echo "gmake test - run the tests"
+	@echo "gmake clean - remove all generated files"
+	@echo "gmake check - check for security vulnerabilities"
+	@echo "gmake commit - commit changes to git"
+	@echo "gmake help - display this help"

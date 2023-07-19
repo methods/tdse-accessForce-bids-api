@@ -1,1 +1,1 @@
-refactor: makefile check
+test: testing commit msg
