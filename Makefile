@@ -7,6 +7,7 @@ TOPICS := fix - feat - docs - style - refactor - test - chore - build
 PYTHON = ./.venv/bin/python3
 PIP = ./.venv/bin/pip
 
+
 .PHONY: run test clean check help commit
 
 venv/bin/activate: requirements.txt
