@@ -39,7 +39,7 @@ def test_get_bid_by_id_not_found(mock_dbConnection, client):
     mock_dbConnection.assert_called_once()
     mock_db['bids'].find_one.assert_called_once_with({'_id': '1ff45b42-b72a-464c-bde9-9bead14a07b9', 'status': {'$ne': 'deleted'}})
     assert response.status_code == 404
-    assert response.get_json() == {"Error": "Not found"}
+    assert response.get_json() == {"Error": "Resource not found"}
 
 # Case 4: Validation error
 @patch('api.controllers.bid_controller.dbConnection')
