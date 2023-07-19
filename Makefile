@@ -28,7 +28,8 @@ branch:
 	@echo "$(TOPICS)"
 	@read -p "Enter the branch type: " type; \
 	read -p "Enter the branch description: " description; \
-	git checkout -b $${type}/$${description}
+	git checkout -b $${type}/$${description}; \
+	git push --set-upstream origin $${type}/$${description}
 
 commit:
 	@echo "Available topics:"
