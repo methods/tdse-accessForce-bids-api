@@ -9,7 +9,6 @@ def test_score_is_mandatory(mock_dbConnection, client):
         "client": "Office for National Statistics",
         "bid_date": "21-06-2023",
         "success": [{"phase": 1, "has_score": True, "out_of": 36}],
-        "failed": {"phase": 2, "has_score": True, "score": 20, "out_of": 36},
     }
 
     response = client.post("api/bids", json=data)

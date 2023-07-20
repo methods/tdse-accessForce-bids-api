@@ -56,3 +56,15 @@ def test_bid_not_found(mock_dbConnection, client):
     response = client.put(f"api/bids/{bid_id}/status", json=update)
     assert response.status_code == 404
     assert response.get_json()["Error"] == "Resource not found"
+
+
+# Case 5: Failed to call database
+@patch("api.controllers.bid_controller.dbConnection")
+def test_update_status_find_error(mock_dbConnection, client):
+    mock_db = mock_dbConnection.return_value
+    mock_db["bids"].find_one_and_update.side_effect = Exception
+    bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
+    update = {"status": "completed"}
+    response = client.put(f"api/bids/{bid_id}/status", json=update)
+    assert response.status_code == 500
+    assert response.get_json() == {"Error": "Could not connect to database"}

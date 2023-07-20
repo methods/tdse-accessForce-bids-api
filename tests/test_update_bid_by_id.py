@@ -53,3 +53,15 @@ def test_cannot_update_status(mock_dbConnection, client):
     response = client.put(f"api/bids/{bid_id}", json=update)
     assert response.status_code == 422
     assert response.get_json()["Error"] == "Cannot update status"
+
+
+# Case 5: Failed to call database
+@patch("api.controllers.bid_controller.dbConnection")
+def test_update_by_id_find_error(mock_dbConnection, client):
+    mock_db = mock_dbConnection.return_value
+    mock_db["bids"].find_one_and_update.side_effect = Exception
+    bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
+    update = {"tender": "Updated tender"}
+    response = client.put(f"api/bids/{bid_id}", json=update)
+    assert response.status_code == 500
+    assert response.get_json() == {"Error": "Could not connect to database"}

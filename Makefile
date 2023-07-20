@@ -23,7 +23,7 @@ run: venv
 test: venv
 	coverage run -m pytest -vv
 	@echo "TEST COVERAGE REPORT"
-	coverage report -m --omit="tests/*"
+	coverage report -m --omit="tests/*,dbconfig/*"
 
 branch:
 	@echo "Available branch types:"

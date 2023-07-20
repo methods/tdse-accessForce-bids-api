@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 # Case 1: Successful get
 @patch("api.controllers.bid_controller.dbConnection")
-def test_get_bids(mock_dbConnection, client):
+def test_get_bids_success(mock_dbConnection, client):
     mock_db = mock_dbConnection.return_value
     mock_db["bids"].find.return_value = []
 
