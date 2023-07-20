@@ -1,9 +1,8 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, request
 from datetime import datetime
 from marshmallow import ValidationError
 from api.models.status_enum import Status
 from dbconfig.mongo_setup import dbConnection
-from pymongo.errors import ConnectionFailure
 from helpers.helpers import showInternalServerError, showNotFoundError, showValidationError, validate_and_create_bid_document, validate_bid_id_path, validate_bid_update
 
 bid = Blueprint('bid', __name__)
@@ -31,7 +30,7 @@ def post_bid():
     except ValidationError as e:
         return showValidationError(e), 400
     # Return 500 response in case of connection failure
-    except ConnectionFailure:
+    except Exception:
         return showInternalServerError(), 500
     
 @bid.route("/bids/<bid_id>", methods=["GET"])
@@ -48,7 +47,7 @@ def get_bid_by_id(bid_id):
     except ValidationError as e:
         return showValidationError(e), 400
     # Return 500 response in case of connection failure
-    except ConnectionFailure:
+    except Exception:
         return showInternalServerError(), 500
 
 @bid.route("/bids/<bid_id>", methods=["PUT"])
@@ -67,7 +66,7 @@ def update_bid_by_id(bid_id):
     except ValidationError as e:
         return showValidationError(e), 400
     # Return 500 response in case of connection failure
-    except ConnectionFailure:
+    except Exception:
         return showInternalServerError(), 500
 
 @bid.route("/bids/<bid_id>", methods=["DELETE"])
@@ -83,5 +82,5 @@ def change_status_to_deleted(bid_id):
     except ValidationError as e:
         return showValidationError(e), 400
     # Return 500 response in case of connection failure
-    except ConnectionFailure:
+    except Exception:
         return showInternalServerError(), 500

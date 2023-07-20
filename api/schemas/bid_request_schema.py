@@ -1,9 +1,7 @@
 from marshmallow import Schema, fields, post_load, validates, ValidationError
 from api.models.bid_model import BidModel
-from .links_schema import LinksSchema
 from .phase_schema import PhaseSchema
 from .feedback_schema import FeedbackSchema
-from ..models.status_enum import Status
 
 # Marshmallow schema for request body
 class BidRequestSchema(Schema):
