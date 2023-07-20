@@ -21,7 +21,7 @@ run: venv
 	$(PYTHON) app.py
 
 test: venv
-	$(PYTHON) -m pytest
+	$(PYTHON) -m pytest -vv
 
 commit:
 	@echo "Available topics:"

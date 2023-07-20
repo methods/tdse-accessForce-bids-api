@@ -44,8 +44,8 @@ def validate_bid_update(user_request):
     data = BidSchema().load(user_request, partial=True)
     return data
 
-def prepend_host(resource, hostname):
-    host = f"http//{hostname}"
+def prepend_host_to_links(resource, hostname):
+    host = f"http://{hostname}"
     for key in resource["links"]:
         resource["links"][key] = f'{host}{resource["links"][key]}'
     return resource

@@ -3,7 +3,7 @@ from datetime import datetime
 from marshmallow import ValidationError
 from api.models.status_enum import Status
 from dbconfig.mongo_setup import dbConnection
-from helpers.helpers import showInternalServerError, showNotFoundError, showValidationError, validate_and_create_bid_document, validate_bid_id_path, validate_bid_update
+from helpers.helpers import showInternalServerError, showNotFoundError, showValidationError, validate_and_create_bid_document, validate_bid_id_path, validate_bid_update, prepend_host_to_links
 
 bid = Blueprint('bid', __name__)
 
@@ -13,6 +13,9 @@ def get_bids():
     try:
         db = dbConnection()
         data = list(db['bids'].find({"status": {"$ne": Status.DELETED.value}}))
+        hostname = request.headers.get("host")
+        for resource in data:
+            prepend_host_to_links(resource, hostname)
         return {'total_count': len(data), 'items': data}, 200  
     except Exception:
         return showInternalServerError(), 500
@@ -42,6 +45,10 @@ def get_bid_by_id(bid_id):
         # Return 404 response if not found / returns None
         if data is None:
             return showNotFoundError(), 404
+        # Get hostname from request headers
+        hostname = request.headers.get("host")
+        # print(data, hostname)
+        data = prepend_host_to_links(data, hostname)
         return data, 200
     # Return 400 if bid_id is invalid
     except ValidationError as e:

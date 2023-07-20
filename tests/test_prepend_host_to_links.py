@@ -1,4 +1,4 @@
-from helpers.helpers import prepend_host
+from helpers.helpers import prepend_host_to_links
 
 def test_prepend_host():
     resource = {
@@ -18,9 +18,9 @@ def test_prepend_host():
     }
     hostname = "localhost:8080"
     
-    result = prepend_host(resource, hostname)
+    result = prepend_host_to_links(resource, hostname)
 
     assert result["links"] == {
-        "questions": "http//localhost:8080/bids/9f688442-b535-4683-ae1a-a64c1a3b8616/questions",
-        "self": "http//localhost:8080/bids/9f688442-b535-4683-ae1a-a64c1a3b8616"
+        "questions": "http://localhost:8080/bids/9f688442-b535-4683-ae1a-a64c1a3b8616/questions",
+        "self": "http://localhost:8080/bids/9f688442-b535-4683-ae1a-a64c1a3b8616"
       }
