@@ -8,6 +8,27 @@
 * You may rebase your branch after feedback if it's to include relevant updates from the develop branch. It is preferable to rebase here then a merge commit as a clean and straight history on develop with discrete merge commits for features is preferred
 * To find out more about contributing click [here](https://contributing.md/)
 
+## Branching
+* Branches should be named in the following format:
+  ```textbox
+  <type>/<description>
+  ```
+  where `type` is one of the following:
+    ```textbox
+    * fix: for a bug fix
+    * feat: for a new feature
+    * docs: for documentation changes
+    * style: for changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+    * refactor: for refactoring production code
+    * test: for adding tests
+    * chore: for updating build tasks, package manager configs, etc
+    * build: for changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+    ```
+  and `description` is a short description of the feature or fix being made
+  * e.g. `feat/new-feature` or `fix/bug-fix`
+* Branches should be created from the `develop` branch
+* Branches should be merged back into the `develop` branch
+
 ## Commit messages
 
 Please use the following format for commit messages:
