@@ -58,4 +58,3 @@ def prepend_host_to_links(resource, hostname):
     for key in resource["links"]:
         resource["links"][key] = f'{host}{resource["links"][key]}'
     return resource
-

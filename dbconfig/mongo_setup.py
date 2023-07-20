@@ -1,6 +1,10 @@
 from pymongo import MongoClient
+import os
+from dotenv import load_dotenv
 
-MONGO_URI = "mongodb://localhost:27017/bidsAPI"
+load_dotenv()
+
+MONGO_URI = os.getenv("MONGO_URL") or "mongodb://localhost:27017/bidsAPI"
 
 
 # Create a new client and connect to the server
