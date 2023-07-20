@@ -1,1 +1,1 @@
-GET http://localhost:8080/api/bids HTTP/1.1
+GET http://localhost:8080/api/bids/faaf8ef5-5db4-459d-8d24-bc39492e1301 HTTP/1.1

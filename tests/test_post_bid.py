@@ -57,12 +57,26 @@ def test_field_missing(client):
 
 
 # Case 3: Connection error
-@patch("api.controllers.bid_controller.dbConnection", side_effect=ConnectionFailure)
-def test_get_bids_connection_error(mock_dbConnection, client):
+@patch("api.controllers.bid_controller.dbConnection")
+def test_post_bid_connection_error(mock_dbConnection, client):
+    data = {
+        "tender": "Business Intelligence and Data Warehousing",
+        "client": "Office for National Statistics",
+        "bid_date": "21-06-2023",
+        "alias": "ONS",
+        "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+        "feedback": {
+            "description": "Feedback from client in detail",
+            "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback",
+        },
+        "success": [{"phase": 1, "has_score": True, "out_of": 36, "score": 30}],
+        "failed": {"phase": 2, "has_score": True, "score": 20, "out_of": 36},
+    }
     # Mock the behavior of dbConnection
     mock_db = mock_dbConnection.return_value
-    mock_db["bids"].insert_one.side_effect = Exception
-    response = client.get("/api/bids")
+    mock_db["bids"].insert_one.side_effect = ConnectionFailure
+    response = client.post("/api/bids", json=data)
+    
     assert response.status_code == 500
     assert response.get_json() == {"Error": "Could not connect to database"}
 
@@ -84,9 +98,6 @@ def test_phase_greater_than_2(mock_dbConnection, client):
         "failed": {"phase": 3, "has_score": True, "score": 20, "out_of": 36},
     }
 
-    # Mock the behavior of dbConnection
-    mock_db = mock_dbConnection.return_value
-    mock_db["bids"].insert_one.side_effect = Exception
 
     response = client.post("api/bids", json=data)
     assert response.status_code == 400
@@ -111,10 +122,6 @@ def test_same_phase(mock_dbConnection, client):
         "success": [{"phase": 1, "has_score": True, "out_of": 36, "score": 30}],
         "failed": {"phase": 1, "has_score": True, "score": 20, "out_of": 36},
     }
-
-    # Mock the behavior of dbConnection
-    mock_db = mock_dbConnection.return_value
-    mock_db["bids"].insert_one.side_effect = Exception
 
     response = client.post("api/bids", json=data)
     assert response.status_code == 400
@@ -141,10 +148,6 @@ def test_success_same_phase(mock_dbConnection, client):
             {"phase": 1, "has_score": True, "out_of": 50, "score": 60},
         ],
     }
-
-    # Mock the behavior of dbConnection
-    mock_db = mock_dbConnection.return_value
-    mock_db["bids"].insert_one.side_effect = Exception
 
     response = client.post("api/bids", json=data)
     assert response.status_code == 400

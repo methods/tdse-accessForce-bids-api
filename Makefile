@@ -21,7 +21,7 @@ run: venv
 	$(PYTHON) app.py
 
 test: venv
-	$(PYTHON) -m pytest
+	$(PYTHON) -m pytest -vv
 
 branch:
 	@echo "Available branch types:"

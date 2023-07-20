@@ -1,9 +1,8 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, request
 from datetime import datetime
 from marshmallow import ValidationError
 from api.models.status_enum import Status
 from dbconfig.mongo_setup import dbConnection
-from pymongo.errors import ConnectionFailure
 from helpers.helpers import (
     showInternalServerError,
     showNotFoundError,
@@ -11,6 +10,8 @@ from helpers.helpers import (
     validate_and_create_bid_document,
     validate_bid_id_path,
     validate_bid_update,
+    prepend_host_to_links,
+
 )
 
 bid = Blueprint("bid", __name__)
@@ -22,6 +23,9 @@ def get_bids():
     try:
         db = dbConnection()
         data = list(db["bids"].find({"status": {"$ne": Status.DELETED.value}}))
+        hostname = request.headers.get("host")
+        for resource in data:
+            prepend_host_to_links(resource, hostname)
         return {"total_count": len(data), "items": data}, 200
     except Exception:
         return showInternalServerError(), 500
@@ -40,7 +44,7 @@ def post_bid():
     except ValidationError as e:
         return showValidationError(e), 400
     # Return 500 response in case of connection failure
-    except ConnectionFailure:
+    except Exception:
         return showInternalServerError(), 500
 
 
@@ -55,12 +59,16 @@ def get_bid_by_id(bid_id):
         # Return 404 response if not found / returns None
         if data is None:
             return showNotFoundError(), 404
+        # Get hostname from request headers
+        hostname = request.headers.get("host")
+        # print(data, hostname)
+        data = prepend_host_to_links(data, hostname)
         return data, 200
     # Return 400 if bid_id is invalid
     except ValidationError as e:
         return showValidationError(e), 400
     # Return 500 response in case of connection failure
-    except ConnectionFailure:
+    except Exception:
         return showInternalServerError(), 500
 
 
@@ -82,7 +90,7 @@ def update_bid_by_id(bid_id):
     except ValidationError as e:
         return showValidationError(e), 400
     # Return 500 response in case of connection failure
-    except ConnectionFailure:
+    except Exception:
         return showInternalServerError(), 500
 
 
@@ -107,5 +115,5 @@ def change_status_to_deleted(bid_id):
     except ValidationError as e:
         return showValidationError(e), 400
     # Return 500 response in case of connection failure
-    except ConnectionFailure:
+    except Exception:
         return showInternalServerError(), 500

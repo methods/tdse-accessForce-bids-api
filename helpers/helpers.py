@@ -1,7 +1,6 @@
 from flask import jsonify
 import uuid
 from datetime import datetime
-from marshmallow import ValidationError
 from api.schemas.bid_schema import BidSchema
 from api.schemas.bid_request_schema import BidRequestSchema
 from api.schemas.valid_bid_id_schema import valid_bid_id_schema
@@ -45,10 +44,18 @@ def validate_and_create_bid_document(request):
 
 def validate_bid_id_path(bid_id):
     valid_bid_id = valid_bid_id_schema().load({"bid_id": bid_id})
-    validated_id = valid_bid_id["bid_id"]
-    return validated_id
+    data = valid_bid_id["bid_id"]
+    return data
 
 
 def validate_bid_update(user_request):
     data = BidSchema().load(user_request, partial=True)
     return data
+
+
+def prepend_host_to_links(resource, hostname):
+    host = f"http://{hostname}"
+    for key in resource["links"]:
+        resource["links"][key] = f'{host}{resource["links"][key]}'
+    return resource
+

@@ -9,10 +9,23 @@ def test_get_bid_by_id_success(mock_dbConnection, client):
     mock_db = mock_dbConnection.return_value
     mock_db["bids"].find_one.return_value = {
         "_id": "1ff45b42-b72a-464c-bde9-9bead14a07b9",
+        "alias": "ONS",
+        "bid_date": "2023-06-23",
+        "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+        "client": "Office for National Statistics",
+        "links": {
+            "questions": "/bids/faaf8ef5-5db4-459d-8d24-bc39492e1301/questions",
+            "self": "/bids/faaf8ef5-5db4-459d-8d24-bc39492e1301",
+        },
+        "status": "in_progress",
         "tender": "Business Intelligence and Data Warehousing",
+        "was_successful": False,
     }
 
-    response = client.get("/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9")
+    response = client.get(
+        "/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9",
+        headers={"host": "localhost:8080"}
+    )
 
     mock_dbConnection.assert_called_once()
     mock_db["bids"].find_one.assert_called_once_with(
@@ -21,7 +34,17 @@ def test_get_bid_by_id_success(mock_dbConnection, client):
     assert response.status_code == 200
     assert response.get_json() == {
         "_id": "1ff45b42-b72a-464c-bde9-9bead14a07b9",
+        "alias": "ONS",
+        "bid_date": "2023-06-23",
+        "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+        "client": "Office for National Statistics",
+        "links": {
+            "questions": "http://localhost:8080/bids/faaf8ef5-5db4-459d-8d24-bc39492e1301/questions",
+            "self": "http://localhost:8080/bids/faaf8ef5-5db4-459d-8d24-bc39492e1301",
+        },
+        "status": "in_progress",
         "tender": "Business Intelligence and Data Warehousing",
+        "was_successful": False
     }
 
 
