@@ -4,7 +4,7 @@ from datetime import datetime
 from werkzeug.exceptions import UnprocessableEntity
 from api.schemas.bid_schema import BidSchema
 from api.schemas.bid_request_schema import BidRequestSchema
-from api.schemas.valid_bid_id_schema import valid_bid_id_schema
+from api.schemas.bid_id_schema import BidIdSchema
 
 
 def showInternalServerError():
@@ -48,7 +48,7 @@ def validate_and_create_bid_document(request):
 
 
 def validate_bid_id_path(bid_id):
-    valid_bid_id = valid_bid_id_schema().load({"bid_id": bid_id})
+    valid_bid_id = BidIdSchema().load({"bid_id": bid_id})
     data = valid_bid_id["bid_id"]
     return data
 

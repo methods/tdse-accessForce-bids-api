@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 # Case 1: Successful update
 @patch("api.controllers.bid_controller.dbConnection")
-def test_update_bid_by_id_success(mock_dbConnection, client):
+def test_update_bid_status_success(mock_dbConnection, client):
     mock_db = mock_dbConnection.return_value
     mock_db["bids"].find_one_and_update.return_value = {
         "_id": "9f688442-b535-4683-ae1a-a64c1a3b8616",
@@ -16,40 +16,43 @@ def test_update_bid_by_id_success(mock_dbConnection, client):
     }
 
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
-    update = {"tender": "UPDATED TENDER"}
-    response = client.put(f"api/bids/{bid_id}", json=update)
+    update = {"status": "completed"}
+    response = client.put(f"api/bids/{bid_id}/status", json=update)
     mock_dbConnection.assert_called_once()
     mock_db["bids"].find_one_and_update.assert_called_once()
     assert response.status_code == 200
 
 
-# Case 2: Invalid user input
+# Case 2: Invalid status
 @patch("api.controllers.bid_controller.dbConnection")
-def test_input_validation(mock_dbConnection, client):
+def test_invalid_status(mock_dbConnection, client):
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
-    update = {"tender": 42}
-    response = client.put(f"api/bids/{bid_id}", json=update)
+    update = {"status": "invalid"}
+    response = client.put(f"api/bids/{bid_id}/status", json=update)
     assert response.status_code == 400
-    assert response.get_json()["Error"] == "{'tender': ['Not a valid string.']}"
+    assert (
+        response.get_json()["Error"]
+        == "{'status': ['Must be one of: deleted, in_progress, completed.']}"
+    )
 
 
-# Case 3: Bid not found
+# Case 3: Empty request body
+@patch("api.controllers.bid_controller.dbConnection")
+def test_empty_request(mock_dbConnection, client):
+    bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
+    update = {}
+    response = client.put(f"api/bids/{bid_id}/status", json=update)
+    assert response.status_code == 422
+    assert response.get_json()["Error"] == "Request must not be empty"
+
+
+# Case 4: Bid not found
 @patch("api.controllers.bid_controller.dbConnection")
 def test_bid_not_found(mock_dbConnection, client):
     mock_db = mock_dbConnection.return_value
     mock_db["bids"].find_one_and_update.return_value = None
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
-    update = {"tender": "Updated tender"}
-    response = client.put(f"api/bids/{bid_id}", json=update)
+    update = {"status": "completed"}
+    response = client.put(f"api/bids/{bid_id}/status", json=update)
     assert response.status_code == 404
     assert response.get_json()["Error"] == "Resource not found"
-
-
-# Case 4: Cannot update status
-@patch("api.controllers.bid_controller.dbConnection")
-def test_cannot_update_status(mock_dbConnection, client):
-    bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
-    update = {"status": "deleted"}
-    response = client.put(f"api/bids/{bid_id}", json=update)
-    assert response.status_code == 422
-    assert response.get_json()["Error"] == "Cannot update status"

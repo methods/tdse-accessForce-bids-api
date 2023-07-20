@@ -21,9 +21,9 @@ run: venv
 	$(PYTHON) app.py
 
 test: venv
-	$(PYTHON) -m pytest -vv
+	coverage run -m pytest -vv
 	@echo "TEST COVERAGE REPORT"
-	coverage report -m
+	coverage report -m --omit="tests/*"
 
 branch:
 	@echo "Available branch types:"
