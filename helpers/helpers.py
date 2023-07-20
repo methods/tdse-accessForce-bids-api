@@ -1,6 +1,8 @@
 from flask import jsonify
 import uuid
 from datetime import datetime
+from werkzeug.exceptions import UnprocessableEntity
+from api.models.status_enum import Status
 from api.schemas.bid_schema import BidSchema
 from api.schemas.bid_request_schema import BidRequestSchema
 from api.schemas.valid_bid_id_schema import valid_bid_id_schema
@@ -12,6 +14,10 @@ def showInternalServerError():
 
 def showNotFoundError():
     return jsonify({"Error": "Resource not found"})
+
+
+def showUnprocessableEntityError(e):
+    return jsonify({"Error": str(e.description)})
 
 
 def showValidationError(e):
@@ -49,7 +55,18 @@ def validate_bid_id_path(bid_id):
 
 
 def validate_bid_update(user_request):
+    if "status" in user_request:
+        raise UnprocessableEntity("Cannot update status")
     data = BidSchema().load(user_request, partial=True)
+    return data
+
+
+def validate_status_update(user_request):
+    if user_request == {}:
+        raise UnprocessableEntity("Request must not be empty")
+    data = BidSchema().load(user_request, partial=True)
+    if data:
+        data["status"] = data["status"].value
     return data
 
 
