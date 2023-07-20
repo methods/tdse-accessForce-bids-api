@@ -22,12 +22,14 @@ run: venv
 
 test: venv
 	$(PYTHON) -m pytest -vv
+	@echo "TEST COVERAGE REPORT"
+	coverage report -m
 
 branch:
 	@echo "Available branch types:"
 	@echo "$(TOPICS)"
 	@read -p "Enter the branch type: " type; \
-	read -p "Enter the branch description: " description; \
+	read -p "Enter the branch description (kebab-case): " description; \
 	git checkout -b $${type}/$${description}; \
 	git push --set-upstream origin $${type}/$${description}
 
@@ -64,7 +66,10 @@ help:
 	@echo "gmake test - run the tests"
 	@echo "gmake clean - remove all generated files"
 	@echo "gmake check - check for security vulnerabilities"
+	@echo "gmake branch - create and checkout to new branch"
 	@echo "gmake commit - commit changes to git"
+	@echo "gmake lint - run linters"
+	@echo "gmake format - format all files in directory"
 	@echo "gmake help - display this help"
 
 swagger: venv

@@ -24,7 +24,7 @@ def test_get_bid_by_id_success(mock_dbConnection, client):
 
     response = client.get(
         "/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9",
-        headers={"host": "localhost:8080"}
+        headers={"host": "localhost:8080"},
     )
 
     mock_dbConnection.assert_called_once()
@@ -44,7 +44,7 @@ def test_get_bid_by_id_success(mock_dbConnection, client):
         },
         "status": "in_progress",
         "tender": "Business Intelligence and Data Warehousing",
-        "was_successful": False
+        "was_successful": False,
     }
 
 

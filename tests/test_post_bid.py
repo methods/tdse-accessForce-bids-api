@@ -76,7 +76,7 @@ def test_post_bid_connection_error(mock_dbConnection, client):
     mock_db = mock_dbConnection.return_value
     mock_db["bids"].insert_one.side_effect = ConnectionFailure
     response = client.post("/api/bids", json=data)
-    
+
     assert response.status_code == 500
     assert response.get_json() == {"Error": "Could not connect to database"}
 
@@ -97,7 +97,6 @@ def test_phase_greater_than_2(mock_dbConnection, client):
         "success": [{"phase": 1, "has_score": True, "out_of": 36, "score": 30}],
         "failed": {"phase": 3, "has_score": True, "score": 20, "out_of": 36},
     }
-
 
     response = client.post("api/bids", json=data)
     assert response.status_code == 400
