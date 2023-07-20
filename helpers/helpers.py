@@ -2,7 +2,6 @@ from flask import jsonify
 import uuid
 from datetime import datetime
 from werkzeug.exceptions import UnprocessableEntity
-from api.models.status_enum import Status
 from api.schemas.bid_schema import BidSchema
 from api.schemas.bid_request_schema import BidRequestSchema
 from api.schemas.valid_bid_id_schema import valid_bid_id_schema
