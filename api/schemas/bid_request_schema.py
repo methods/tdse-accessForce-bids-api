@@ -4,6 +4,7 @@ from .phase_schema import PhaseSchema
 from .feedback_schema import FeedbackSchema
 
 
+
 # Marshmallow schema for request body
 class BidRequestSchema(Schema):
     tender = fields.Str(
