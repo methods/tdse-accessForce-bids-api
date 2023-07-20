@@ -1,5 +1,6 @@
 from enum import Enum, unique
 
+
 # Enum for status
 @unique
 class Status(Enum):

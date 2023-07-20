@@ -5,6 +5,7 @@ from .phase_schema import PhaseSchema
 from .feedback_schema import FeedbackSchema
 from ..models.status_enum import Status
 
+
 # Marshmallow schema
 class BidSchema(Schema):
     _id = fields.UUID(required=True)

@@ -8,7 +8,7 @@ PYTHON = ./.venv/bin/python3
 PIP = ./.venv/bin/pip
 
 
-.PHONY: run test clean check help commit swagger
+.PHONY: run test clean check help commit swagger format branch lint
 
 venv/bin/activate: requirements.txt
 	python3 -m venv .venv
@@ -31,7 +31,7 @@ branch:
 	git checkout -b $${type}/$${description}; \
 	git push --set-upstream origin $${type}/$${description}
 
-commit:
+commit: format
 	@echo "Available topics:"
 	@echo "$(TOPICS)"
 	@read -p "Enter the topic for the commit: " topic; \
@@ -49,6 +49,15 @@ clean:
 	@find . -name "__pycache__" -type d -exec rm -rf {} +
 	@find . -name ".pytest_cache" -exec rm -rf {} +
 	@find . -name ".venv" -exec rm -rf {} +
+
+lint: venv
+	$(PIP) install flake8 pylint
+	$(PYTHON) -m flake8 
+	$(PYTHON) -m pylint **/*.py
+
+format: 
+	$(PIP) install black
+	$(PYTHON) -m black .
 
 help:
 	@echo "gmake run - run the application"

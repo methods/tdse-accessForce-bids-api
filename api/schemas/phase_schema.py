@@ -1,10 +1,12 @@
 from marshmallow import Schema, fields, validates_schema, ValidationError
 from enum import Enum, unique
 
+
 @unique
 class Phase(Enum):
     PHASE_1 = 1
     PHASE_2 = 2
+
 
 class PhaseSchema(Schema):
     phase = fields.Enum(Phase, required=True, by_value=True)
