@@ -8,7 +8,7 @@ PYTHON = ./.venv/bin/python3
 PIP = ./.venv/bin/pip
 
 
-.PHONY: run test clean check help commit swagger format branch lint
+.PHONY: run test clean check help commit swagger format branch lint setup bids dbclean
 
 help:
 	@echo "gmake help - display this help"
@@ -25,7 +25,7 @@ help:
 	@echo "gmake setup - setup the application database"
 	@echo "gmake test - run the tests"
 
-bids: 
+bids: venv 
 	@echo "Creating sample data..."
 	@find . -name "create_sample_data.py" -exec python3 {} \;
 
@@ -56,7 +56,7 @@ commit: format
 	git commit -m "$${topic}: $${message}"; \
 	git push
 
-dbclean: 
+dbclean: venv 
 	@echo "Cleaning up database..."
 	@find . -name "delete_db.py" -exec python3 {} \;
 
@@ -72,7 +72,7 @@ lint: venv
 run: venv
 	$(PYTHON) app.py
 
-setup: dbclean bids
+setup: venv dbclean bids
 	@echo "Setting up the application database..."
 
 swagger: venv
