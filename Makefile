@@ -8,22 +8,27 @@ PYTHON = ./.venv/bin/python3
 PIP = ./.venv/bin/pip
 
 
-.PHONY: run test clean check help commit swagger format branch lint
+.PHONY: run test clean check help commit swagger format branch lint setup bids dbclean
 
-venv/bin/activate: requirements.txt
-	python3 -m venv .venv
-	$(PIP) install -r requirements.txt
+help:
+	@echo "gmake help - display this help"
+	@echo "gmake bids - create sample data"
+	@echo "gmake branch - create a new branch"
+  @echo "gmake build - create and activate virtual environment"
+	@echo "gmake check - check for security vulnerabilities"
+	@echo "gmake clean - remove all generated files"
+	@echo "gmake commit - commit changes to git"
+	@echo "gmake dbclean - clean up the application database"
+	@echo "gmake format - format the code"
+	@echo "gmake lint - run linters"
+	@echo "gmake run - run the application"
+	@echo "gmake swagger - open swagger documentation"
+	@echo "gmake setup - setup the application database"
+	@echo "gmake test - run the tests"
 
-venv: venv/bin/activate
-	. ./.venv/bin/activate
-
-run: venv
-	$(PYTHON) app.py
-
-test: venv
-	coverage run -m pytest -vv
-	@echo "TEST COVERAGE REPORT"
-	coverage report -m --omit="tests/*,dbconfig/*"
+bids:
+	@echo "Creating sample data..."
+	@find . -name "create_sample_data.py" -exec python3 {} \;
 
 branch:
 	@echo "Available branch types:"
@@ -32,6 +37,19 @@ branch:
 	read -p "Enter the branch description (kebab-case): " description; \
 	git checkout -b $${type}/$${description}; \
 	git push --set-upstream origin $${type}/$${description}
+
+build: venv/bin/activate
+	. ./.venv/bin/activate
+
+check:
+	$(PIP) install safety
+	$(PIP) freeze | $(PYTHON) -m safety check --stdin
+
+clean:
+	@echo "Cleaning up..."
+	@find . -name "__pycache__" -type d -exec rm -rf {} +
+	@find . -name ".pytest_cache" -exec rm -rf {} +
+	@find . -name ".venv" -exec rm -rf {} +	
 
 commit: format
 	@echo "Available topics:"
@@ -42,36 +60,35 @@ commit: format
 	git commit -m "$${topic}: $${message}"; \
 	git push
 
-check: venv
-	$(PIP) install safety
-	$(PIP) freeze | $(PYTHON) -m safety check --stdin
-
-clean:
-	@echo "Cleaning up..."
-	@find . -name "__pycache__" -type d -exec rm -rf {} +
-	@find . -name ".pytest_cache" -exec rm -rf {} +
-	@find . -name ".venv" -exec rm -rf {} +
-
-lint: venv
-	$(PIP) install flake8 pylint
-	$(PYTHON) -m flake8 
-	$(PYTHON) -m pylint **/*.py
+dbclean:
+	@echo "Cleaning up database..."
+	@find . -name "delete_db.py" -exec python3 {} \;
 
 format: 
 	$(PIP) install black
 	$(PYTHON) -m black .
 
-help:
-	@echo "gmake run - run the application"
-	@echo "gmake test - run the tests"
-	@echo "gmake clean - remove all generated files"
-	@echo "gmake check - check for security vulnerabilities"
-	@echo "gmake branch - create and checkout to new branch"
-	@echo "gmake commit - commit changes to git"
-	@echo "gmake lint - run linters"
-	@echo "gmake format - format all files in directory"
-	@echo "gmake help - display this help"
+lint:
+	$(PIP) install flake8 pylint
+	$(PYTHON) -m flake8 
+	$(PYTHON) -m pylint **/*.py
 
-swagger: venv
+run: build
+	$(PYTHON) app.py
+
+setup: build dbclean bids
+	@echo "Setting up the application database..."
+
+swagger: build
 	open http://localhost:8080/api/docs/#/
 	$(PYTHON) app.py
+
+test:
+	coverage run -m pytest -vv
+	@echo "TEST COVERAGE REPORT"
+	coverage report -m --omit="tests/*,dbconfig/*"
+
+venv/bin/activate: requirements.txt
+	python3 -m venv .venv
+	$(PIP) install -r requirements.txt
+

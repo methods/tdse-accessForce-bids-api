@@ -11,3 +11,4 @@ flask_swagger_ui
 marshmallow
 pymongo
 coverage
+python-dotenv
