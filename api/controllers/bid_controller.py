@@ -3,7 +3,7 @@ from datetime import datetime
 from marshmallow import ValidationError
 from werkzeug.exceptions import UnprocessableEntity
 from api.models.status_enum import Status
-from dbconfig.mongo_setup import dbConnection
+from dbconfig.mongo_setup import dbConnection as db
 from helpers.helpers import (
     showInternalServerError,
     showNotFoundError,
@@ -23,7 +23,6 @@ bid = Blueprint("bid", __name__)
 def get_bids():
     # Get all bids from database collection
     try:
-        db = dbConnection()
         data = list(db["bids"].find({"status": {"$ne": Status.DELETED.value}}))
         hostname = request.headers.get("host")
         for resource in data:
@@ -36,7 +35,6 @@ def get_bids():
 @bid.route("/bids", methods=["POST"])
 def post_bid():
     try:
-        db = dbConnection()
         # Process input and create data model
         data = validate_and_create_bid_document(request.get_json())
         # Insert document into database collection
@@ -54,7 +52,6 @@ def post_bid():
 def get_bid_by_id(bid_id):
     try:
         bid_id = validate_bid_id_path(bid_id)
-        db = dbConnection()
         data = db["bids"].find_one(
             {"_id": bid_id, "status": {"$ne": Status.DELETED.value}}
         )
@@ -80,7 +77,6 @@ def update_bid_by_id(bid_id):
         bid_id = validate_bid_id_path(bid_id)
         user_request = validate_bid_update(request.get_json())
         # Updates document where id is equal to bid_id
-        db = dbConnection()
         data = db["bids"].find_one_and_update(
             {"_id": bid_id, "status": Status.IN_PROGRESS.value},
             {"$set": user_request},
@@ -104,7 +100,6 @@ def update_bid_by_id(bid_id):
 def change_status_to_deleted(bid_id):
     try:
         bid_id = validate_bid_id_path(bid_id)
-        db = dbConnection()
         data = db["bids"].find_one_and_update(
             {"_id": bid_id, "status": {"$ne": Status.DELETED.value}},
             {
@@ -131,7 +126,6 @@ def update_bid_status(bid_id):
         bid_id = validate_bid_id_path(bid_id)
         data = validate_status_update(request.get_json())
         # Updates document where id is equal to bid_id
-        db = dbConnection()
         response = db["bids"].find_one_and_update(
             {"_id": bid_id}, {"$set": data}, return_document=True
         )

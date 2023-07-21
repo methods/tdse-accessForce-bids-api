@@ -2,8 +2,8 @@ from unittest.mock import patch
 
 
 # Case 1: score is mandatory when has_score is set to True
-@patch("api.controllers.bid_controller.dbConnection")
-def test_score_is_mandatory(mock_dbConnection, client):
+@patch("api.controllers.bid_controller.db")
+def test_score_is_mandatory(mock_db, client):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
@@ -20,8 +20,8 @@ def test_score_is_mandatory(mock_dbConnection, client):
 
 
 # Case 2: out_of is mandatory when has_score is set to True
-@patch("api.controllers.bid_controller.dbConnection")
-def test_score_is_mandatory(mock_dbConnection, client):
+@patch("api.controllers.bid_controller.db")
+def test_out_of_is_mandatory(mock_db, client):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",

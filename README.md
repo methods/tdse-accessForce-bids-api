@@ -1,7 +1,7 @@
 # tdse-accessForce-bids-api
 # API Documentation
 
-This API provides an endpoint to post a new bid document.
+This API stores and serves information about Methods bids for client tenders.
 
 ## Prerequisites
 
@@ -55,11 +55,27 @@ This API provides an endpoint to post a new bid document.
 1. Run the following command to start the API:
 
       ```bash
-      python app/app.py
+      gmake run
       ```
-2. The Swagger Specification will be available at http://localhost:8080/api/docs
+2. In a new terminal run the following command to open the Swagger UI in your default web browser:
+      
+      ```bash
+      gmake swag
+      ```
+--------------
 
+## Testing the application
 
+1. Run the following command to start the API:
+
+      ```bash
+      gmake run
+      ```
+2. In a new terminal enter the following command to run the test suites and generate a test coverage report:
+      
+      ```bash
+      gmake test
+      ```
 --------------
 
 ## Installing and running an instance of MongoDB on your local machine (MacOS)
