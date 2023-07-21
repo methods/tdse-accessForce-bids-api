@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load, validates, ValidationError
+from marshmallow import Schema, fields, post_load, validates_schema, ValidationError
 from api.models.bid_model import BidModel
 from .links_schema import LinksSchema
 from .phase_schema import PhaseSchema
@@ -32,41 +32,21 @@ class PostBidSchema(Schema):
     links = fields.Nested(LinksSchema)
     last_updated = fields.DateTime()
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.context["failed_phase_values"] = set()
+    @validates_schema
+    def validate_unique_phases(self, data, **kwargs):
+        # Get the list of success phases and the failed phase (if available)
+        success_phases = data.get("success", [])
+        failed_phase = data.get("failed", None)
 
-    @validates("success")
-    def validate_success(self, value):
-        phase_values = set()
-        for phase in value:
-            phase_value = phase.get("phase")
-            if phase_value in phase_values:
-                raise ValidationError(
-                    "Phase value already exists in 'success' list and cannot be repeated."
-                )
-            phase_values.add(phase_value)
+        # Combine the success phases and the failed phase (if available)
+        all_phases = success_phases + ([failed_phase] if failed_phase else [])
 
-    @validates("failed")
-    def validate_failed(self, value):
-        phase_value = value.get("phase")
-        if phase_value in self.context.get("success_phase_values", set()):
-            raise ValidationError(
-                "Phase value already exists in 'success' list and cannot be repeated."
-            )
-        self.context["failed_phase_values"].add(phase_value)
+        # Extract phase values and remove any None values
+        phase_values = [phase.get("phase") for phase in all_phases if phase]
 
-    @validates("success")
-    def validate_success_and_failed(self, value):
-        success_phase_values = set()
-        failed_phase_values = self.context.get("failed_phase_values", set())
-        for phase in value:
-            phase_value = phase.get("phase")
-            if phase_value in failed_phase_values:
-                raise ValidationError(
-                    "Phase value already exists in 'failed' section and cannot be repeated."
-                )
-            success_phase_values.add(phase_value)
+        # Check if phase_values contain duplicates using sets
+        if len(phase_values) != len(set(phase_values)):
+            raise ValidationError("Phase values must be unique")
 
     # Creates a Bid instance after processing
     @post_load
