@@ -1,15 +1,18 @@
 from flask import Blueprint, request
 from datetime import datetime
 from marshmallow import ValidationError
+from werkzeug.exceptions import UnprocessableEntity
 from api.models.status_enum import Status
 from dbconfig.mongo_setup import dbConnection
 from helpers.helpers import (
     showInternalServerError,
     showNotFoundError,
+    showUnprocessableEntityError,
     showValidationError,
     validate_and_create_bid_document,
     validate_bid_id_path,
     validate_bid_update,
+    validate_status_update,
     prepend_host_to_links,
 )
 
@@ -79,7 +82,9 @@ def update_bid_by_id(bid_id):
         # Updates document where id is equal to bid_id
         db = dbConnection()
         data = db["bids"].find_one_and_update(
-            {"_id": bid_id}, {"$set": user_request}, return_document=True
+            {"_id": bid_id, "status": Status.IN_PROGRESS.value},
+            {"$set": user_request},
+            return_document=True,
         )
         # Return 404 response if not found / returns None
         if data is None:
@@ -88,6 +93,8 @@ def update_bid_by_id(bid_id):
     # Return 400 response if input validation fails
     except ValidationError as e:
         return showValidationError(e), 400
+    except UnprocessableEntity as e:
+        return showUnprocessableEntityError(e), 422
     # Return 500 response in case of connection failure
     except Exception:
         return showInternalServerError(), 500
@@ -113,6 +120,30 @@ def change_status_to_deleted(bid_id):
     # Return 400 response if input validation fails
     except ValidationError as e:
         return showValidationError(e), 400
+    # Return 500 response in case of connection failure
+    except Exception:
+        return showInternalServerError(), 500
+
+
+@bid.route("/bids/<bid_id>/status", methods=["PUT"])
+def update_bid_status(bid_id):
+    try:
+        bid_id = validate_bid_id_path(bid_id)
+        data = validate_status_update(request.get_json())
+        # Updates document where id is equal to bid_id
+        db = dbConnection()
+        response = db["bids"].find_one_and_update(
+            {"_id": bid_id}, {"$set": data}, return_document=True
+        )
+        # Return 404 response if not found / returns None
+        if response is None:
+            return showNotFoundError(), 404
+        return response, 200
+    # Return 400 response if input validation fails
+    except ValidationError as e:
+        return showValidationError(e), 400
+    except UnprocessableEntity as e:
+        return showUnprocessableEntityError(e), 422
     # Return 500 response in case of connection failure
     except Exception:
         return showInternalServerError(), 500

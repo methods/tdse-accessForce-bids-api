@@ -1,5 +1,4 @@
 from unittest.mock import patch
-from pymongo.errors import ConnectionFailure
 
 
 # Case 1: Successful post
@@ -46,7 +45,8 @@ def test_post_is_successful(mock_dbConnection, client):
 
 
 # Case 2: Missing mandatory fields
-def test_field_missing(client):
+@patch("api.controllers.bid_controller.dbConnection")
+def test_field_missing(mock_dbConnection, client):
     data = {"client": "Sample Client", "bid_date": "20-06-2023"}
 
     response = client.post("api/bids", json=data)
@@ -74,7 +74,7 @@ def test_post_bid_connection_error(mock_dbConnection, client):
     }
     # Mock the behavior of dbConnection
     mock_db = mock_dbConnection.return_value
-    mock_db["bids"].insert_one.side_effect = ConnectionFailure
+    mock_db["bids"].insert_one.side_effect = Exception
     response = client.post("/api/bids", json=data)
 
     assert response.status_code == 500

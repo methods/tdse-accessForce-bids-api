@@ -144,6 +144,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
         '500':
           $ref: '#/components/responses/InternalServerError'
   # --------------------------------------------
@@ -173,6 +175,42 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+# -------------------------------------------- 
+  /bids/{bid_id}/status:
+# --------------------------------------------
+    put:
+      tags:
+        - bids
+      summary: Update status of an existing bid
+      description: Update status of an existing bid
+      operationId: update_bid_status
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateBid'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bid'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+# --------------------------------------------
 # --------------------------------------------
 # Components
 components:
@@ -294,12 +332,12 @@ components:
     QuestionsLink:
       description: A link to a collection of questions for a bid
       type: string
-      example: 'https://localhost:8080/api//bids/96d69775-29af-46b1-aaf4-bfbdb1543412/questions'
+      example: 'https://{hostname}/api//bids/96d69775-29af-46b1-aaf4-bfbdb1543412/questions'
 # --------------------------------------------
     SelfLink:
       description: A link to the current resource
       type: string
-      example: 'https://localhost:8080/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428'
+      example: 'https://{hostname}/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428'
 # --------------------------------------------
     BidRequestBody:
       type: object
@@ -415,6 +453,21 @@ components:
                   "out_of": 36
                 }
                 was_successful: false
+    UpdateStatus:
+      description: Request body to update bid status
+      content:
+        application/json:
+          schema:
+            properties:
+              status:
+                description: Status of bid
+                type: string
+                format: enum
+          examples:
+            200 OK:
+              summary: 200 OK
+              value:
+                status: 'completed'
 # --------------------------------------------
 # Error responses
   responses:
@@ -444,5 +497,14 @@ components:
             type: object
             example: {
               "Error": "Could not connect to database"
+            }
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            type: object
+            example: {
+              "Error": "Request must not be empty"
             }
 # --------------------------------------------

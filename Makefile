@@ -14,6 +14,7 @@ help:
 	@echo "gmake help - display this help"
 	@echo "gmake bids - create sample data"
 	@echo "gmake branch - create a new branch"
+  @echo "gmake build - create and activate virtual environment"
 	@echo "gmake check - check for security vulnerabilities"
 	@echo "gmake clean - remove all generated files"
 	@echo "gmake commit - commit changes to git"
@@ -25,7 +26,7 @@ help:
 	@echo "gmake setup - setup the application database"
 	@echo "gmake test - run the tests"
 
-bids: venv 
+bids:
 	@echo "Creating sample data..."
 	@find . -name "create_sample_data.py" -exec python3 {} \;
 
@@ -33,11 +34,14 @@ branch:
 	@echo "Available branch types:"
 	@echo "$(TOPICS)"
 	@read -p "Enter the branch type: " type; \
-	read -p "Enter the branch description: " description; \
+	read -p "Enter the branch description (kebab-case): " description; \
 	git checkout -b $${type}/$${description}; \
 	git push --set-upstream origin $${type}/$${description}
 
-check: venv
+build: venv/bin/activate
+	. ./.venv/bin/activate
+
+check:
 	$(PIP) install safety
 	$(PIP) freeze | $(PYTHON) -m safety check --stdin
 
@@ -56,7 +60,7 @@ commit: format
 	git commit -m "$${topic}: $${message}"; \
 	git push
 
-dbclean: venv 
+dbclean:
 	@echo "Cleaning up database..."
 	@find . -name "delete_db.py" -exec python3 {} \;
 
@@ -64,34 +68,27 @@ format:
 	$(PIP) install black
 	$(PYTHON) -m black .
 
-lint: venv
+lint:
 	$(PIP) install flake8 pylint
 	$(PYTHON) -m flake8 
 	$(PYTHON) -m pylint **/*.py
 
-run: venv
+run: build
 	$(PYTHON) app.py
 
-setup: venv dbclean bids
+setup: build dbclean bids
 	@echo "Setting up the application database..."
 
-swagger: venv
+swagger: build
 	open http://localhost:8080/api/docs/#/
 	$(PYTHON) app.py
 
-test: venv
-	$(PYTHON) -m pytest -vv
+test:
+	coverage run -m pytest -vv
+	@echo "TEST COVERAGE REPORT"
+	coverage report -m --omit="tests/*,dbconfig/*"
 
 venv/bin/activate: requirements.txt
 	python3 -m venv .venv
 	$(PIP) install -r requirements.txt
-
-venv: venv/bin/activate
-	. ./.venv/bin/activate
-
-
-
-
-
-
 

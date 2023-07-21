@@ -1,6 +1,5 @@
 from unittest.mock import patch
 from pymongo.errors import ConnectionFailure
-from marshmallow import ValidationError
 
 
 # Case 1: Successful get_bid_by_id
@@ -49,8 +48,8 @@ def test_get_bid_by_id_success(mock_dbConnection, client):
 
 
 # Case 2: Connection error
-@patch("api.controllers.bid_controller.dbConnection", side_effect=ConnectionFailure)
-def test_get_bids_connection_error(mock_dbConnection, client):
+@patch("api.controllers.bid_controller.dbConnection", side_effect=Exception)
+def test_get_bid_by_id_connection_error(mock_dbConnection, client):
     response = client.get("/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9")
     assert response.status_code == 500
     assert response.get_json() == {"Error": "Could not connect to database"}
@@ -75,7 +74,6 @@ def test_get_bid_by_id_not_found(mock_dbConnection, client):
 # Case 4: Validation error
 @patch("api.controllers.bid_controller.dbConnection")
 def test_get_bid_by_id_validation_error(mock_dbConnection, client):
-    mock_dbConnection.side_effect = ValidationError
     response = client.get("/api/bids/invalid_bid_id")
     assert response.status_code == 400
     assert response.get_json() == {"Error": "{'bid_id': ['Invalid bid Id']}"}
