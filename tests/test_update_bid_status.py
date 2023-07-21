@@ -2,9 +2,8 @@ from unittest.mock import patch
 
 
 # Case 1: Successful update
-@patch("api.controllers.bid_controller.dbConnection")
-def test_update_bid_status_success(mock_dbConnection, client):
-    mock_db = mock_dbConnection.return_value
+@patch("api.controllers.bid_controller.db")
+def test_update_bid_status_success(mock_db, client):
     mock_db["bids"].find_one_and_update.return_value = {
         "_id": "9f688442-b535-4683-ae1a-a64c1a3b8616",
         "tender": "Business Intelligence and Data Warehousing",
@@ -18,14 +17,13 @@ def test_update_bid_status_success(mock_dbConnection, client):
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"status": "completed"}
     response = client.put(f"api/bids/{bid_id}/status", json=update)
-    mock_dbConnection.assert_called_once()
     mock_db["bids"].find_one_and_update.assert_called_once()
     assert response.status_code == 200
 
 
 # Case 2: Invalid status
-@patch("api.controllers.bid_controller.dbConnection")
-def test_invalid_status(mock_dbConnection, client):
+@patch("api.controllers.bid_controller.db")
+def test_invalid_status(mock_db, client):
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"status": "invalid"}
     response = client.put(f"api/bids/{bid_id}/status", json=update)
@@ -37,8 +35,8 @@ def test_invalid_status(mock_dbConnection, client):
 
 
 # Case 3: Empty request body
-@patch("api.controllers.bid_controller.dbConnection")
-def test_empty_request(mock_dbConnection, client):
+@patch("api.controllers.bid_controller.db")
+def test_empty_request(mock_db, client):
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {}
     response = client.put(f"api/bids/{bid_id}/status", json=update)
@@ -47,9 +45,8 @@ def test_empty_request(mock_dbConnection, client):
 
 
 # Case 4: Bid not found
-@patch("api.controllers.bid_controller.dbConnection")
-def test_bid_not_found(mock_dbConnection, client):
-    mock_db = mock_dbConnection.return_value
+@patch("api.controllers.bid_controller.db")
+def test_bid_not_found(mock_db, client):
     mock_db["bids"].find_one_and_update.return_value = None
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"status": "completed"}
@@ -59,9 +56,8 @@ def test_bid_not_found(mock_dbConnection, client):
 
 
 # Case 5: Failed to call database
-@patch("api.controllers.bid_controller.dbConnection")
-def test_update_status_find_error(mock_dbConnection, client):
-    mock_db = mock_dbConnection.return_value
+@patch("api.controllers.bid_controller.db")
+def test_update_status_find_error(mock_db, client):
     mock_db["bids"].find_one_and_update.side_effect = Exception
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"status": "completed"}

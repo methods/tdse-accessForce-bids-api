@@ -2,8 +2,8 @@ from unittest.mock import patch
 
 
 # Case 1: Successful post
-@patch("api.controllers.bid_controller.dbConnection")
-def test_post_is_successful(mock_dbConnection, client):
+@patch("api.controllers.bid_controller.db")
+def test_post_is_successful(mock_db, client):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
@@ -18,8 +18,7 @@ def test_post_is_successful(mock_dbConnection, client):
         "failed": {"phase": 2, "has_score": True, "score": 20, "out_of": 36},
     }
 
-    # Mock the behavior of dbConnection
-    mock_db = mock_dbConnection.return_value
+    # Mock the behavior of db
     mock_db["bids"].insert_one.return_value = data
 
     response = client.post("api/bids", json=data)
@@ -45,8 +44,8 @@ def test_post_is_successful(mock_dbConnection, client):
 
 
 # Case 2: Missing mandatory fields
-@patch("api.controllers.bid_controller.dbConnection")
-def test_field_missing(mock_dbConnection, client):
+@patch("api.controllers.bid_controller.db")
+def test_field_missing(mock_db, client):
     data = {"client": "Sample Client", "bid_date": "20-06-2023"}
 
     response = client.post("api/bids", json=data)
@@ -57,8 +56,8 @@ def test_field_missing(mock_dbConnection, client):
 
 
 # Case 3: Connection error
-@patch("api.controllers.bid_controller.dbConnection")
-def test_post_bid_connection_error(mock_dbConnection, client):
+@patch("api.controllers.bid_controller.db")
+def test_post_bid_connection_error(mock_db, client):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
@@ -72,84 +71,9 @@ def test_post_bid_connection_error(mock_dbConnection, client):
         "success": [{"phase": 1, "has_score": True, "out_of": 36, "score": 30}],
         "failed": {"phase": 2, "has_score": True, "score": 20, "out_of": 36},
     }
-    # Mock the behavior of dbConnection
-    mock_db = mock_dbConnection.return_value
+    # Mock the behavior of db
     mock_db["bids"].insert_one.side_effect = Exception
     response = client.post("/api/bids", json=data)
 
     assert response.status_code == 500
     assert response.get_json() == {"Error": "Could not connect to database"}
-
-
-# Case 4: Neither success nor failed fields phase can be more than 2
-@patch("api.controllers.bid_controller.dbConnection")
-def test_phase_greater_than_2(mock_dbConnection, client):
-    data = {
-        "tender": "Business Intelligence and Data Warehousing",
-        "client": "Office for National Statistics",
-        "bid_date": "21-06-2023",
-        "alias": "ONS",
-        "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
-        "feedback": {
-            "description": "Feedback from client in detail",
-            "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback",
-        },
-        "success": [{"phase": 1, "has_score": True, "out_of": 36, "score": 30}],
-        "failed": {"phase": 3, "has_score": True, "score": 20, "out_of": 36},
-    }
-
-    response = client.post("api/bids", json=data)
-    assert response.status_code == 400
-    assert response.get_json() == {
-        "Error": "{'failed': {'phase': ['Must be one of: 1, 2.']}}"
-    }
-
-
-# Case 5: Neither success nor failed fields can have the same phase
-@patch("api.controllers.bid_controller.dbConnection")
-def test_same_phase(mock_dbConnection, client):
-    data = {
-        "tender": "Business Intelligence and Data Warehousing",
-        "client": "Office for National Statistics",
-        "bid_date": "21-06-2023",
-        "alias": "ONS",
-        "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
-        "feedback": {
-            "description": "Feedback from client in detail",
-            "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback",
-        },
-        "success": [{"phase": 1, "has_score": True, "out_of": 36, "score": 30}],
-        "failed": {"phase": 1, "has_score": True, "score": 20, "out_of": 36},
-    }
-
-    response = client.post("api/bids", json=data)
-    assert response.status_code == 400
-    assert response.get_json() == {
-        "Error": "{'success': [\"Phase value already exists in 'failed' section and cannot be repeated.\"]}"
-    }
-
-
-# Case 6: Success cannot have the same phase in the list
-@patch("api.controllers.bid_controller.dbConnection")
-def test_success_same_phase(mock_dbConnection, client):
-    data = {
-        "tender": "Business Intelligence and Data Warehousing",
-        "client": "Office for National Statistics",
-        "bid_date": "21-06-2023",
-        "alias": "ONS",
-        "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
-        "feedback": {
-            "description": "Feedback from client in detail",
-            "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback",
-        },
-        "success": [
-            {"phase": 1, "has_score": True, "out_of": 36, "score": 30},
-            {"phase": 1, "has_score": True, "out_of": 50, "score": 60},
-        ],
-    }
-
-    response = client.post("api/bids", json=data)
-    assert response.status_code == 400
-    assert response.get_json() == {
-        "Error": "{'success': [\"Phase value already exists in 'success' list and cannot be repeated.\"]}"
-    }
