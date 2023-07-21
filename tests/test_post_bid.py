@@ -7,7 +7,7 @@ def test_post_is_successful(mock_db, client):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
-        "bid_date": "21-06-2023",
+        "bid_date": "2023-06-21",
         "alias": "ONS",
         "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
         "feedback": {
@@ -39,14 +39,14 @@ def test_post_is_successful(mock_db, client):
     )
     assert (
         "bid_date" in response.get_json()
-        and response.get_json()["bid_date"] == "21-06-2023"
+        and response.get_json()["bid_date"] == "2023-06-21"
     )
 
 
 # Case 2: Missing mandatory fields
 @patch("api.controllers.bid_controller.db")
 def test_field_missing(mock_db, client):
-    data = {"client": "Sample Client", "bid_date": "20-06-2023"}
+    data = {"client": "Sample Client", "bid_date": "2023-06-20"}
 
     response = client.post("api/bids", json=data)
     assert response.status_code == 400
@@ -61,7 +61,7 @@ def test_post_bid_connection_error(mock_db, client):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
-        "bid_date": "21-06-2023",
+        "bid_date": "2023-06-21",
         "alias": "ONS",
         "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
         "feedback": {

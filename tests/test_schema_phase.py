@@ -7,7 +7,7 @@ def test_score_is_mandatory(mock_db, client):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
-        "bid_date": "21-06-2023",
+        "bid_date": "2023-06-21",
         "success": [{"phase": 1, "has_score": True, "out_of": 36}],
     }
 
@@ -25,7 +25,7 @@ def test_out_of_is_mandatory(mock_db, client):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
-        "bid_date": "21-06-2023",
+        "bid_date": "2023-06-21",
         "failed": {"phase": 2, "has_score": True, "score": 20},
     }
 

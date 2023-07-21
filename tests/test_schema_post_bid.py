@@ -9,7 +9,7 @@ def test_bid_model():
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
-        "bid_date": "21-06-2023",
+        "bid_date": "2023-06-21",
         "alias": "ONS",
         "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
         "feedback": {
@@ -51,7 +51,7 @@ def test_validate_tender():
     data = {
         "tender": 42,
         "client": "Office for National Statistics",
-        "bid_date": "21-06-2023",
+        "bid_date": "2023-06-21",
     }
     with pytest.raises(ValidationError):
         PostBidSchema().load(data)
@@ -62,7 +62,7 @@ def test_validate_client():
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": 42,
-        "bid_date": "21-06-2023",
+        "bid_date": "2023-06-21",
     }
     with pytest.raises(ValidationError):
         PostBidSchema().load(data)
@@ -73,7 +73,7 @@ def test_validate_bid_date():
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
-        "bid_date": "2023-12-25",
+        "bid_date": "20-12-2023",
     }
     with pytest.raises(ValidationError):
         PostBidSchema().load(data)
@@ -84,7 +84,7 @@ def test_validate_bid_folder_url():
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
-        "bid_date": "21-06-2023",
+        "bid_date": "2023-06-21",
         "bid_folder_url": "Not a valid URL",
     }
 
@@ -97,7 +97,7 @@ def test_validate_feedback():
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
-        "bid_date": "21-06-2023",
+        "bid_date": "2023-06-21",
         "alias": "ONS",
         "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
         "feedback": {"description": 42, "url": "Invalid URL"},
