@@ -18,7 +18,7 @@ class PostBidSchema(Schema):
         error_messages={"required": {"message": "Missing mandatory field"}},
     )
     bid_date = fields.Date(
-        format="%d-%m-%Y",
+        format="%Y-%m-%d",
         required=True,
         error_messages={"required": {"message": "Missing mandatory field"}},
     )

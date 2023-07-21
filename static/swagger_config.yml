@@ -394,7 +394,7 @@ components:
                   description: 'Feedback from client in detail'
                 client: 'Office for National Statistics'
                 alias: 'ONS'
-                bid_date: '21-06-2023'
+                bid_date: '2023-06-21'
                 success: [
                   {
                     "phase": 1,
@@ -419,7 +419,7 @@ components:
                   description: 'Feedback from client in detail'
                 client: 'Office for National Statistics'
                 alias: 'ONS'
-                bid_date: '21-06-2023'
+                bid_date: '2023-06-21'
     UpdateBid:
       description: Bid object to replace bid by Id
       content:
@@ -437,7 +437,7 @@ components:
                   description: 'Feedback from client in detail'
                 client: 'Office for National Statistics'
                 alias: 'ONS'
-                bid_date: '21-06-2023'
+                bid_date: '2023-06-21'
                 success: [
                   {
                     "phase": 1,
