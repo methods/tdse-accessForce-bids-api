@@ -1,6 +1,7 @@
 from helpers.helpers import prepend_host_to_links
 
 
+# Case 1: Host is prepended to values in links object
 def test_prepend_host():
     resource = {
         "_id": "9f688442-b535-4683-ae1a-a64c1a3b8616",

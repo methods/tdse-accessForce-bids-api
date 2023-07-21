@@ -3,7 +3,7 @@ from datetime import datetime
 from marshmallow import ValidationError
 from werkzeug.exceptions import UnprocessableEntity
 from api.models.status_enum import Status
-from dbconfig.mongo_setup import dbConnection as db
+from dbconfig.mongo_setup import db
 from helpers.helpers import (
     showInternalServerError,
     showNotFoundError,
@@ -44,7 +44,7 @@ def post_bid():
     except ValidationError as e:
         return showValidationError(e), 400
     # Return 500 response in case of connection failure
-    except Exception:
+    except Exception as e:
         return showInternalServerError(), 500
 
 

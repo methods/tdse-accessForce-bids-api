@@ -15,8 +15,8 @@ Content-Type: application/json
     {
       "phase": 1,
       "has_score": true,
-      "out_of": 36,
-      "score": 30
+      "score": 28,
+      "out_of": 36
     }
   ],
   "failed": {

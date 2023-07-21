@@ -39,7 +39,7 @@ def test_post_is_successful(mock_db, client):
     )
     assert (
         "bid_date" in response.get_json()
-        and response.get_json()["bid_date"] == "2023-06-21"
+        and response.get_json()["bid_date"] == "21-06-2023"
     )
 
 

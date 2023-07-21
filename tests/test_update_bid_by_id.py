@@ -61,3 +61,28 @@ def test_update_by_id_find_error(mock_db, client):
     response = client.put(f"api/bids/{bid_id}", json=update)
     assert response.status_code == 500
     assert response.get_json() == {"Error": "Could not connect to database"}
+
+
+# Case 6: Update failed field
+@patch("api.controllers.bid_controller.db")
+def test_update_failed(mock_db, client):
+    bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
+    update = {"failed": {"phase": 2, "has_score": True, "score": 20, "out_of": 36}}
+    response = client.put(f"api/bids/{bid_id}", json=update)
+    mock_db["bids"].find_one_and_update.assert_called_once()
+    assert response.status_code == 200
+
+
+# Case 7: Update success field
+@patch("api.controllers.bid_controller.db")
+def test_update_success(mock_db, client):
+    bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
+    update = {
+        "success": [
+            {"phase": 1, "has_score": True, "score": 20, "out_of": 36},
+            {"phase": 2, "has_score": True, "score": 20, "out_of": 36},
+        ]
+    }
+    response = client.put(f"api/bids/{bid_id}", json=update)
+    mock_db["bids"].find_one_and_update.assert_called_once()
+    assert response.status_code == 200
