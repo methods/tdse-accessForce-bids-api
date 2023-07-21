@@ -14,7 +14,7 @@ help:
 	@echo "gmake help - display this help"
 	@echo "gmake bids - create sample data"
 	@echo "gmake branch - create a new branch"
-  @echo "gmake build - create and activate virtual environment"
+	@echo "gmake build - create and activate virtual environment"
 	@echo "gmake check - check for security vulnerabilities"
 	@echo "gmake clean - remove all generated files"
 	@echo "gmake commit - commit changes to git"
@@ -79,14 +79,16 @@ run: build
 setup: build dbclean bids
 	@echo "Setting up the application database..."
 
-swagger: build
+swag:
 	open http://localhost:8080/api/docs/#/
-	$(PYTHON) app.py
 
-test:
+test: test_setup
 	coverage run -m pytest -vv
 	@echo "TEST COVERAGE REPORT"
 	coverage report -m --omit="tests/*,dbconfig/*"
+
+test_setup: test_requirements.txt
+	$(PIP) install -r test_requirements.txt
 
 venv/bin/activate: requirements.txt
 	python3 -m venv .venv
