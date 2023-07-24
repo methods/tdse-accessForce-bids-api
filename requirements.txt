@@ -10,3 +10,8 @@ flask_swagger_ui
 marshmallow
 pymongo
 python-dotenv
+black
+flake8
+pylint
+coverage
+pytest
