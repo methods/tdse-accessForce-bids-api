@@ -34,7 +34,7 @@ def is_valid_isoformat(string):
     try:
         datetime.fromisoformat(string)
         return True
-    except:
+    except ValueError:
         return False
 
 
