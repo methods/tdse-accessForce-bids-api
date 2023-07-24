@@ -69,7 +69,7 @@ format:
 
 lint:
 	$(PYTHON) -m flake8 
-	$(PYTHON) -m pylint **/*.py
+	$(PYTHON) -m pylint **/*.py **/**/*.py *.py
 
 run: build
 	$(PYTHON) app.py

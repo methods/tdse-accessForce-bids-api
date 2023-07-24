@@ -22,19 +22,19 @@ def test_bid_model():
     bid_document = BidSchema().load(data)
     to_post = BidSchema().dump(bid_document)
 
-    id = to_post["_id"]
+    bid_id = to_post["_id"]
     # Test that UUID is generated and is valid UUID
     assert to_post["_id"] is not None
-    assert is_valid_uuid(id) is True
+    assert is_valid_uuid(bid_id) is True
     # Test UUID validator
     assert is_valid_uuid("99999") is False
 
     # Test that links object is generated and URLs are correct
     assert to_post["links"] is not None
     assert "self" in to_post["links"]
-    assert to_post["links"]["self"] == f"/bids/{id}"
+    assert to_post["links"]["self"] == f"/bids/{bid_id}"
     assert "questions" in to_post["links"]
-    assert to_post["links"]["questions"] == f"/bids/{id}/questions"
+    assert to_post["links"]["questions"] == f"/bids/{bid_id}/questions"
 
     # Test that status is set to in_progress
     assert to_post["status"] == "in_progress"

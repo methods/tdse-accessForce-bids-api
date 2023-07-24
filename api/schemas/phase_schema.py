@@ -1,5 +1,5 @@
-from marshmallow import Schema, fields, validates_schema, ValidationError
 from enum import Enum, unique
+from marshmallow import Schema, fields, validates_schema, ValidationError
 
 
 @unique

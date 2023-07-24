@@ -1,7 +1,7 @@
 from uuid import uuid4
 from datetime import datetime
-from .links_model import LinksModel
 from api.models.status_enum import Status
+from .links_model import LinksModel
 
 
 # Description: Schema for the bid object

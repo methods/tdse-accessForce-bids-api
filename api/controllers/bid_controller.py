@@ -1,5 +1,5 @@
-from flask import Blueprint, request
 from datetime import datetime
+from flask import Blueprint, request
 from marshmallow import ValidationError
 from werkzeug.exceptions import UnprocessableEntity
 from api.models.status_enum import Status
