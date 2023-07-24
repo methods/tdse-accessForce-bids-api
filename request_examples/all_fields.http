@@ -4,25 +4,6 @@ Content-Type: application/json
 {
   "tender": "Business Intelligence and Data Warehousing",
   "client": "Office for National Statistics",
-  "bid_date": "23-06-2023",
-  "alias": "ONS",
-  "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
-  "feedback": {
-    "description": "Feedback from client in detail",
-    "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
-  },
-  "success": [
-    {
-      "phase": 1,
-      "has_score": true,
-      "out_of": 36,
-      "score": 30
-    }
-  ],
-  "failed": {
-      "phase": 2,
-      "has_score": true,
-      "score": 20,
-      "out_of": 36
-    }
+  "bid_date": "2023-06-23",
+  "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder"
 }

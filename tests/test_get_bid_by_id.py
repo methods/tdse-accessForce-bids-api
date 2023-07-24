@@ -1,5 +1,4 @@
 from unittest.mock import patch
-from pymongo.errors import ConnectionFailure
 
 
 # Case 1: Successful get_bid_by_id

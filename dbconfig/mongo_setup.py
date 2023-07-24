@@ -8,7 +8,5 @@ MONGO_URI = os.getenv("MONGO_URL") or "mongodb://localhost:27017/bidsAPI"
 
 
 # Create a new client and connect to the server
-def dbConnection():
-    client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=10000)
-    db = client["bidsAPI"]
-    return db
+client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=10000)
+db = client["bidsAPI"]

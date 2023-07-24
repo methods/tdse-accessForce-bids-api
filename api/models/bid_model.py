@@ -17,15 +17,24 @@ class BidModel:
         failed=None,
         was_successful=False,
         success=[],
-        status=Status.IN_PROGRESS,
+        status=None,
+        _id=None,
+        links=None,
+        last_updated=None,
     ):
-        self._id = uuid4()
+        if _id is None:
+            self._id = uuid4()
+        else:
+            self._id = _id
+        if status is None:
+            self.status = Status.IN_PROGRESS
+        else:
+            self.status = status
         self.tender = tender
         self.client = client
         self.alias = alias
         self.bid_date = bid_date
         self.bid_folder_url = bid_folder_url
-        self.status = status  # enum: "deleted", "in_progress" or "completed"
         self.links = LinksModel(self._id)
         self.was_successful = was_successful
         self.success = success

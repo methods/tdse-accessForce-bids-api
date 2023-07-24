@@ -3,7 +3,6 @@ import uuid
 from datetime import datetime
 from werkzeug.exceptions import UnprocessableEntity
 from api.schemas.bid_schema import BidSchema
-from api.schemas.bid_request_schema import BidRequestSchema
 from api.schemas.bid_id_schema import BidIdSchema
 
 
@@ -41,7 +40,7 @@ def is_valid_isoformat(string):
 
 def validate_and_create_bid_document(request):
     # Process input and create data model
-    bid_document = BidRequestSchema().load(request)
+    bid_document = BidSchema().load(request)
     # Serialize to a JSON object
     data = BidSchema().dump(bid_document)
     return data
@@ -53,19 +52,21 @@ def validate_bid_id_path(bid_id):
     return data
 
 
-def validate_bid_update(user_request):
-    if "status" in user_request:
+def validate_bid_update(request, resource):
+    if "status" in request:
         raise UnprocessableEntity("Cannot update status")
-    data = BidSchema().load(user_request, partial=True)
+    resource.update(request)
+    bid = BidSchema().load(resource, partial=True)
+    data = BidSchema().dump(bid)
     return data
 
 
-def validate_status_update(user_request):
-    if user_request == {}:
+def validate_status_update(request, resource):
+    if request == {}:
         raise UnprocessableEntity("Request must not be empty")
-    data = BidSchema().load(user_request, partial=True)
-    if data:
-        data["status"] = data["status"].value
+    resource.update(request)
+    bid = BidSchema().load(resource, partial=True)
+    data = BidSchema().dump(bid)
     return data
 
 
