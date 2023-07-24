@@ -1,0 +1,8 @@
+- Refactor PUT to retrieve bid with id
+- Update bid with user_update
+- Load and validate with bid_schema
+    - will validate unique phases
+- Post_load into Bid Model
+    - will generate timestamp
+- Dump insatnce back into bid_schema
+- Replace bid in collection

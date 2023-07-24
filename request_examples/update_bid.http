@@ -1,0 +1,6 @@
+PUT http://localhost:8080/api/bids/34c765e7-ed75-4108-80ac-2c902bcf38f1/status HTTP/1.1
+Content-Type: application/json
+
+{
+  "status": "completed"
+}

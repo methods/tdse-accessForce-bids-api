@@ -1,0 +1,11 @@
+POST http://localhost:8080/api/bids HTTP/1.1
+Content-Type: application/json
+
+{
+  "tender": 42,
+  "alias": "ONS",
+  "bid_date": "2023-12-25",
+  "bid_folder_url": "Not a valid URL",
+  "client": 7,
+  "was_successful": "String"
+}
