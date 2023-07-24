@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 # Case 1: Successful update
 @patch("api.controllers.bid_controller.db")
-def test_update_bid_status_success(mock_db, client):
+def test_update_bid_status_success(mock_db, test_client):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",
         "alias": "ONS",
@@ -25,7 +25,7 @@ def test_update_bid_status_success(mock_db, client):
 
     bid_id = "4141fac8-8879-4169-a46d-2effb1f515f6"
     update = {"status": "completed"}
-    response = client.put(f"api/bids/{bid_id}/status", json=update)
+    response = test_client.put(f"api/bids/{bid_id}/status", json=update)
     mock_db["bids"].find_one.assert_called_once_with({"_id": bid_id})
     # mock_db["bids"].replace_one.assert_called_once()
     assert response.status_code == 200
@@ -33,7 +33,7 @@ def test_update_bid_status_success(mock_db, client):
 
 # Case 2: Invalid status
 @patch("api.controllers.bid_controller.db")
-def test_invalid_status(mock_db, client):
+def test_invalid_status(mock_db, test_client):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",
         "alias": "ONS",
@@ -54,7 +54,7 @@ def test_invalid_status(mock_db, client):
     }
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"status": "invalid"}
-    response = client.put(f"api/bids/{bid_id}/status", json=update)
+    response = test_client.put(f"api/bids/{bid_id}/status", json=update)
     assert response.status_code == 400
     assert (
         response.get_json()["Error"]
@@ -64,31 +64,31 @@ def test_invalid_status(mock_db, client):
 
 # Case 3: Empty request body
 @patch("api.controllers.bid_controller.db")
-def test_empty_request(mock_db, client):
+def test_empty_request(mock_db, test_client):
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {}
-    response = client.put(f"api/bids/{bid_id}/status", json=update)
+    response = test_client.put(f"api/bids/{bid_id}/status", json=update)
     assert response.status_code == 422
     assert response.get_json()["Error"] == "Request must not be empty"
 
 
 # Case 4: Bid not found
 @patch("api.controllers.bid_controller.db")
-def test_bid_not_found(mock_db, client):
+def test_bid_not_found(mock_db, test_client):
     mock_db["bids"].find_one.return_value = None
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"status": "completed"}
-    response = client.put(f"api/bids/{bid_id}/status", json=update)
+    response = test_client.put(f"api/bids/{bid_id}/status", json=update)
     assert response.status_code == 404
     assert response.get_json()["Error"] == "Resource not found"
 
 
 # Case 5: Failed to call database
 @patch("api.controllers.bid_controller.db")
-def test_update_status_find_error(mock_db, client):
+def test_update_status_find_error(mock_db, test_client):
     mock_db["bids"].find_one.side_effect = Exception
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"status": "completed"}
-    response = client.put(f"api/bids/{bid_id}/status", json=update)
+    response = test_client.put(f"api/bids/{bid_id}/status", json=update)
     assert response.status_code == 500
     assert response.get_json() == {"Error": "Could not connect to database"}
