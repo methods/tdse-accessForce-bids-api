@@ -1,0 +1,7 @@
+[FORMAT]
+
+# Set the maximum line length to 100 characters
+max-line-length=120
+
+[MESSAGES CONTROL]
+disable=C0103,W0613 
