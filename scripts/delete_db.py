@@ -3,8 +3,8 @@ This script deletes all bids from the MongoDB collection.
 
 """
 
-from pymongo import MongoClient
 import os
+from pymongo import MongoClient
 from dotenv import load_dotenv
 
 load_dotenv()

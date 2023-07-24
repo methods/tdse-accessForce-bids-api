@@ -4,10 +4,10 @@ This script creates sample data for the MongoDB database.
 
 """
 
-from pymongo import MongoClient
-from dotenv import load_dotenv
 import os
 import json
+from pymongo import MongoClient
+from dotenv import load_dotenv
 
 load_dotenv()
 
