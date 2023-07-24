@@ -75,24 +75,26 @@ def get_bid_by_id(bid_id):
 def update_bid_by_id(bid_id):
     try:
         bid_id = validate_bid_id_path(bid_id)
-        user_request = validate_bid_update(request.get_json())
-        # Updates document where id is equal to bid_id
-        data = db["bids"].find_one_and_update(
-            {"_id": bid_id, "status": Status.IN_PROGRESS.value},
-            {"$set": user_request},
-            return_document=True,
+        # Retrieve resource where id is equal to bid_id
+        current_bid = db["bids"].find_one(
+            {"_id": bid_id, "status": Status.IN_PROGRESS.value}
         )
         # Return 404 response if not found / returns None
-        if data is None:
+        if current_bid is None:
             return showNotFoundError(), 404
-        return data, 200
+        updated_bid = validate_bid_update(request.get_json(), current_bid)
+        db["bids"].replace_one(
+            {"_id": bid_id},
+            updated_bid,
+        )
+        return updated_bid, 200
     # Return 400 response if input validation fails
     except ValidationError as e:
         return showValidationError(e), 400
     except UnprocessableEntity as e:
         return showUnprocessableEntityError(e), 422
     # Return 500 response in case of connection failure
-    except Exception:
+    except Exception as e:
         return showInternalServerError(), 500
 
 
@@ -124,15 +126,17 @@ def change_status_to_deleted(bid_id):
 def update_bid_status(bid_id):
     try:
         bid_id = validate_bid_id_path(bid_id)
-        data = validate_status_update(request.get_json())
-        # Updates document where id is equal to bid_id
-        response = db["bids"].find_one_and_update(
-            {"_id": bid_id}, {"$set": data}, return_document=True
-        )
+        # Retrieve resource where id is equal to bid_id
+        current_bid = db["bids"].find_one({"_id": bid_id})
         # Return 404 response if not found / returns None
-        if response is None:
+        if current_bid is None:
             return showNotFoundError(), 404
-        return response, 200
+        updated_bid = validate_status_update(request.get_json(), current_bid)
+        db["bids"].replace_one(
+            {"_id": bid_id},
+            updated_bid,
+        )
+        return updated_bid, 200
     # Return 400 response if input validation fails
     except ValidationError as e:
         return showValidationError(e), 400

@@ -2,8 +2,7 @@ from flask import jsonify
 import uuid
 from datetime import datetime
 from werkzeug.exceptions import UnprocessableEntity
-from api.schemas.update_bid_schema import UpdateBidSchema
-from api.schemas.post_bid_schema import PostBidSchema
+from api.schemas.bid_schema import BidSchema
 from api.schemas.bid_id_schema import BidIdSchema
 
 
@@ -41,9 +40,9 @@ def is_valid_isoformat(string):
 
 def validate_and_create_bid_document(request):
     # Process input and create data model
-    bid_document = PostBidSchema().load(request)
+    bid_document = BidSchema().load(request)
     # Serialize to a JSON object
-    data = PostBidSchema().dump(bid_document)
+    data = BidSchema().dump(bid_document)
     return data
 
 
@@ -53,24 +52,21 @@ def validate_bid_id_path(bid_id):
     return data
 
 
-def validate_bid_update(user_request):
-    if "status" in user_request:
+def validate_bid_update(request, resource):
+    if "status" in request:
         raise UnprocessableEntity("Cannot update status")
-    data = UpdateBidSchema().load(user_request, partial=True)
-    if "failed" in data:
-        data["failed"]["phase"] = data["failed"]["phase"].value
-    if "success" in data:
-        for obj in data["success"]:
-            obj["phase"] = obj["phase"].value
+    resource.update(request)
+    bid = BidSchema().load(resource, partial=True)
+    data = BidSchema().dump(bid)
     return data
 
 
-def validate_status_update(user_request):
-    if user_request == {}:
+def validate_status_update(request, resource):
+    if request == {}:
         raise UnprocessableEntity("Request must not be empty")
-    data = UpdateBidSchema().load(user_request, partial=True)
-    if data:
-        data["status"] = data["status"].value
+    resource.update(request)
+    bid = BidSchema().load(resource, partial=True)
+    data = BidSchema().dump(bid)
     return data
 
 

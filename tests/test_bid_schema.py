@@ -1,6 +1,6 @@
 import pytest
 from marshmallow import ValidationError
-from api.schemas.post_bid_schema import PostBidSchema
+from api.schemas.bid_schema import BidSchema
 from helpers.helpers import is_valid_uuid, is_valid_isoformat
 
 
@@ -19,8 +19,8 @@ def test_bid_model():
         "success": [{"phase": 1, "has_score": True, "out_of": 36, "score": 30}],
         "failed": {"phase": 2, "has_score": True, "score": 20, "out_of": 36},
     }
-    bid_document = PostBidSchema().load(data)
-    to_post = PostBidSchema().dump(bid_document)
+    bid_document = BidSchema().load(data)
+    to_post = BidSchema().dump(bid_document)
 
     id = to_post["_id"]
     # Test that UUID is generated and is valid UUID
@@ -54,7 +54,7 @@ def test_validate_tender():
         "bid_date": "2023-06-21",
     }
     with pytest.raises(ValidationError):
-        PostBidSchema().load(data)
+        BidSchema().load(data)
 
 
 # Case 3: Field validation - client
@@ -65,7 +65,7 @@ def test_validate_client():
         "bid_date": "2023-06-21",
     }
     with pytest.raises(ValidationError):
-        PostBidSchema().load(data)
+        BidSchema().load(data)
 
 
 # Case 4: Field validation - bid_date
@@ -76,7 +76,7 @@ def test_validate_bid_date():
         "bid_date": "20-12-2023",
     }
     with pytest.raises(ValidationError):
-        PostBidSchema().load(data)
+        BidSchema().load(data)
 
 
 # Case 5: Field validation - bid_folder_url
@@ -89,7 +89,7 @@ def test_validate_bid_folder_url():
     }
 
     with pytest.raises(ValidationError):
-        PostBidSchema().load(data)
+        BidSchema().load(data)
 
 
 # Case 6: Field validation - feedback
@@ -104,30 +104,28 @@ def test_validate_feedback():
     }
 
     with pytest.raises(ValidationError):
-        PostBidSchema().load(data)
+        BidSchema().load(data)
 
 
-# Case 7: Neither success nor failed fields phase can be more than 2
-def test_phase_greater_than_2():
+# Case 7: Failed phase cannot be more than 2
+def test_failed_phase_greater_than_2():
     data = {
-        "tender": "Business Intelligence and Data Warehousing",
-        "client": "Office for National Statistics",
-        "bid_date": "2023-06-21",
-        "alias": "ONS",
-        "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
-        "feedback": {
-            "description": "Feedback from client in detail",
-            "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback",
-        },
-        "success": [{"phase": 1, "has_score": True, "out_of": 36, "score": 30}],
         "failed": {"phase": 3, "has_score": True, "score": 20, "out_of": 36},
     }
 
     with pytest.raises(ValidationError, match="Must be one of: 1, 2."):
-        PostBidSchema().load(data, partial=True)
+        BidSchema().load(data, partial=True)
 
 
-# Case 8: Success cannot have the same phase in the list
+# Case 8: Success phase cannot be more than 2
+def test_success_phase_greater_than_2():
+    data = {"success": [{"phase": 4, "has_score": True, "out_of": 36, "score": 30}]}
+
+    with pytest.raises(ValidationError, match="Must be one of: 1, 2."):
+        BidSchema().load(data, partial=True)
+
+
+# Case 9: Success cannot have the same phase in the list
 def test_phase_already_exists_in_success():
     data = {
         "tender": "Business Intelligence and Data Warehousing",
@@ -149,10 +147,10 @@ def test_phase_already_exists_in_success():
         ValidationError,
         match="Phase values must be unique",
     ):
-        PostBidSchema().load(data, partial=True)
+        BidSchema().load(data, partial=True)
 
 
-# Case 9: Success cannot contain same phase value as failed
+# Case 10: Success cannot contain same phase value as failed
 def test_same_phase():
     data = {
         "tender": "Business Intelligence and Data Warehousing",
@@ -172,4 +170,4 @@ def test_same_phase():
         ValidationError,
         match="Phase values must be unique",
     ):
-        PostBidSchema().load(data, partial=True)
+        BidSchema().load(data, partial=True)

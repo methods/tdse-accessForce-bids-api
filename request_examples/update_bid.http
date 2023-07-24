@@ -1,11 +1,6 @@
-PUT http://localhost:8080/api/bids/0f05e112-6fd5-49b0-b7b0-e86aa376a61f HTTP/1.1
+PUT http://localhost:8080/api/bids/34c765e7-ed75-4108-80ac-2c902bcf38f1/status HTTP/1.1
 Content-Type: application/json
 
 {
-  "failed": {
-    "has_score": true,
-    "out_of": 36,
-    "phase": 1,
-    "score": 28
-  }
+  "status": "completed"
 }
