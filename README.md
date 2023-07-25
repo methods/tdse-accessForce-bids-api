@@ -96,7 +96,7 @@ This API stores and serves information about Methods bids for client tenders.
 3. To run MongoDB (i.e. the mongod process) as a macOS service, run:
 
       ```bash
-      brew services start mongodb-community@6.0
+      make mongostart
       ```
 4. To verify that MongoDB is running, run:
 
@@ -107,7 +107,7 @@ This API stores and serves information about Methods bids for client tenders.
 5. Run the following command to stop the MongoDB instance, as needed:
 
       ```bash
-      brew services stop mongodb-community@6.0
+      make mongostop
       ```
 6. To begin using MongoDB, connect the MongoDB shell (mongosh) to the running instance. From a new terminal, issue the following:
 

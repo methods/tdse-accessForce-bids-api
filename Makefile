@@ -71,6 +71,14 @@ lint:
 	$(PYTHON) -m flake8 
 	$(PYTHON) -m pylint **/*.py **/**/*.py *.py
 
+mongostart:
+	@echo "Starting MongoDB..."
+	brew services start mongodb-community@6.0
+
+mongostop:
+	@echo "Stopping MongoDB..."
+	brew services stop mongodb-community@6.0
+
 run: build
 	$(PYTHON) app.py
 
