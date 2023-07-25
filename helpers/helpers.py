@@ -1,6 +1,6 @@
-from flask import jsonify
 import uuid
 from datetime import datetime
+from flask import jsonify
 from werkzeug.exceptions import UnprocessableEntity
 from api.schemas.bid_schema import BidSchema
 from api.schemas.bid_id_schema import BidIdSchema
@@ -34,7 +34,7 @@ def is_valid_isoformat(string):
     try:
         datetime.fromisoformat(string)
         return True
-    except:
+    except ValueError:
         return False
 
 

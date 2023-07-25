@@ -3,10 +3,10 @@ from unittest.mock import patch
 
 # Case 1: Successful get
 @patch("api.controllers.bid_controller.db")
-def test_get_bids_success(mock_db, client):
+def test_get_bids_success(mock_db, test_client):
     mock_db["bids"].find.return_value = []
 
-    response = client.get("/api/bids")
+    response = test_client.get("/api/bids")
     mock_db["bids"].find.assert_called_once_with({"status": {"$ne": "deleted"}})
     assert response.status_code == 200
     assert response.get_json() == {"total_count": 0, "items": []}
@@ -14,7 +14,7 @@ def test_get_bids_success(mock_db, client):
 
 # Case 2: Links prepended with hostname
 @patch("api.controllers.bid_controller.db")
-def test_links_with_host(mock_db, client):
+def test_links_with_host(mock_db, test_client):
     mock_db["bids"].find.return_value = [
         {
             "_id": "1ff45b42-b72a-464c-bde9-9bead14a07b9",
@@ -29,7 +29,7 @@ def test_links_with_host(mock_db, client):
         }
     ]
 
-    response = client.get("/api/bids", headers={"host": "localhost:8080"})
+    response = test_client.get("/api/bids", headers={"host": "localhost:8080"})
     assert response.status_code == 200
     assert response.get_json() == {
         "total_count": 1,
@@ -51,8 +51,8 @@ def test_links_with_host(mock_db, client):
 
 # Case 3: Connection error
 @patch("api.controllers.bid_controller.db")
-def test_get_bids_connection_error(mock_db, client):
+def test_get_bids_connection_error(mock_db, test_client):
     mock_db["bids"].find.side_effect = Exception
-    response = client.get("/api/bids")
+    response = test_client.get("/api/bids")
     assert response.status_code == 500
     assert response.get_json() == {"Error": "Could not connect to database"}

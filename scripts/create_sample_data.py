@@ -4,10 +4,12 @@ This script creates sample data for the MongoDB database.
 
 """
 
-from pymongo import MongoClient
-from dotenv import load_dotenv
 import os
 import json
+import sys
+from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -15,10 +17,13 @@ MONGO_URI = os.getenv("MONGO_URL") or "mongodb://localhost:27017/bidsAPI"
 
 
 def populate_bids():
+    """
+    Populates the MongoDB database with sample bids data from bids.json file.
+    """
     try:
         client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=10000)
-        db = client["bidsAPI"]
-        collection = db["bids"]
+        data_base = client["bidsAPI"]
+        collection = data_base["bids"]
 
         # Get the current script's directory
         current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -27,7 +32,7 @@ def populate_bids():
         file_path = os.path.join(current_dir, "test_data", "bids.json")
 
         # Read bids data from JSON file
-        with open(file_path) as bids_file:
+        with open(file_path, encoding="utf-8") as bids_file:
             bids_data = json.load(bids_file)
 
         # Insert bids into the database
@@ -40,9 +45,9 @@ def populate_bids():
                 collection.insert_one(bid)
                 print(f"Inserted bid with _id: {bid['_id']}")
 
-    except Exception as e:
-        print(f"Error: {e}")
-        exit(1)
+    except ConnectionFailure as error:
+        print(f"Error: {error}")
+        sys.exit(1)
 
     finally:
         # Close the MongoDB connection
@@ -51,4 +56,4 @@ def populate_bids():
 
 if __name__ == "__main__":
     populate_bids()
-    exit(0)
+    sys.exit(0)

@@ -1,5 +1,5 @@
-from flask import Blueprint, request
 from datetime import datetime
+from flask import Blueprint, request
 from marshmallow import ValidationError
 from werkzeug.exceptions import UnprocessableEntity
 from api.models.status_enum import Status
@@ -44,7 +44,7 @@ def post_bid():
     except ValidationError as e:
         return showValidationError(e), 400
     # Return 500 response in case of connection failure
-    except Exception as e:
+    except Exception:
         return showInternalServerError(), 500
 
 
@@ -94,7 +94,7 @@ def update_bid_by_id(bid_id):
     except UnprocessableEntity as e:
         return showUnprocessableEntityError(e), 422
     # Return 500 response in case of connection failure
-    except Exception as e:
+    except Exception:
         return showInternalServerError(), 500
 
 

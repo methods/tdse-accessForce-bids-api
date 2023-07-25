@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 # Case 1: score is mandatory when has_score is set to True
 @patch("api.controllers.bid_controller.db")
-def test_score_is_mandatory(mock_db, client):
+def test_score_is_mandatory(mock_db, test_client):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
@@ -11,7 +11,7 @@ def test_score_is_mandatory(mock_db, client):
         "success": [{"phase": 1, "has_score": True, "out_of": 36}],
     }
 
-    response = client.post("api/bids", json=data)
+    response = test_client.post("api/bids", json=data)
     assert response.status_code == 400
     assert (
         response.get_json()["Error"]
@@ -21,7 +21,7 @@ def test_score_is_mandatory(mock_db, client):
 
 # Case 2: out_of is mandatory when has_score is set to True
 @patch("api.controllers.bid_controller.db")
-def test_out_of_is_mandatory(mock_db, client):
+def test_out_of_is_mandatory(mock_db, test_client):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
@@ -29,7 +29,7 @@ def test_out_of_is_mandatory(mock_db, client):
         "failed": {"phase": 2, "has_score": True, "score": 20},
     }
 
-    response = client.post("api/bids", json=data)
+    response = test_client.post("api/bids", json=data)
     assert response.status_code == 400
     assert (
         response.get_json()["Error"]

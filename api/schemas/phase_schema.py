@@ -1,14 +1,32 @@
-from marshmallow import Schema, fields, validates_schema, ValidationError
 from enum import Enum, unique
+from marshmallow import Schema, fields, validates_schema, ValidationError
 
 
 @unique
 class Phase(Enum):
+    """
+    Enum representing phases of a bid.
+
+    Attributes:
+        PHASE_1 (int): Phase 1 of the bid.
+        PHASE_2 (int): Phase 2 of the bid.
+    """
+
     PHASE_1 = 1
     PHASE_2 = 2
 
 
 class PhaseSchema(Schema):
+    """
+    Schema for representing a bid phase.
+
+    Attributes:
+        phase (Phase): The phase of the bid.
+        has_score (bool): Indicates if the phase has a score.
+        score (int): The score of the phase (if applicable).
+        out_of (int): The maximum score possible for the phase (if applicable).
+    """
+
     phase = fields.Enum(Phase, required=True, by_value=True)
     has_score = fields.Boolean(required=True)
     score = fields.Integer()

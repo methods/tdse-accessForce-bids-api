@@ -3,8 +3,10 @@ This script deletes all bids from the MongoDB collection.
 
 """
 
-from pymongo import MongoClient
 import os
+import sys
+from pymongo import MongoClient
+from pymongo.errors import ConnectionFailure
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -13,22 +15,24 @@ MONGO_URI = os.getenv("MONGO_URL") or "mongodb://localhost:27017/bidsAPI"
 
 
 def delete_bids():
+    """
+    Deletes all bids from the MongoDB collection.
+    """
     try:
         client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=10000)
-        db = client["bidsAPI"]
-        collection = db["bids"]
+        data_base = client["bidsAPI"]
+        collection = data_base["bids"]
 
         if collection.count_documents({}) == 0:
             print("No bids to delete.")
 
         delete_result = collection.delete_many({})
 
-        # Print the number of deleted bids
         print(f"Deleted {delete_result.deleted_count} bids from the collection.")
 
-    except Exception as e:
-        print(f"Error: {e}")
-        exit(1)
+    except ConnectionFailure as error:
+        print(f"Error: {error}")
+        sys.exit(1)
 
     finally:
         client.close()
@@ -36,4 +40,4 @@ def delete_bids():
 
 if __name__ == "__main__":
     delete_bids()
-    exit(0)
+    sys.exit(0)

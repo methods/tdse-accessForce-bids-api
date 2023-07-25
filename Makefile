@@ -65,13 +65,19 @@ dbclean:
 	@find . -name "delete_db.py" -exec python3 {} \;
 
 format: 
-	$(PIP) install black
 	$(PYTHON) -m black .
 
 lint:
-	$(PIP) install flake8 pylint
 	$(PYTHON) -m flake8 
-	$(PYTHON) -m pylint **/*.py
+	$(PYTHON) -m pylint **/*.py **/**/*.py *.py
+
+mongostart:
+	@echo "Starting MongoDB..."
+	brew services start mongodb-community@6.0
+
+mongostop:
+	@echo "Stopping MongoDB..."
+	brew services stop mongodb-community@6.0
 
 run: build
 	$(PYTHON) app.py
@@ -82,13 +88,10 @@ setup: build dbclean bids
 swag:
 	open http://localhost:8080/api/docs/#/
 
-test: test_setup
+test: 
 	coverage run -m pytest -vv
 	@echo "TEST COVERAGE REPORT"
 	coverage report -m --omit="tests/*,dbconfig/*"
-
-test_setup: test_requirements.txt
-	$(PIP) install -r test_requirements.txt
 
 venv/bin/activate: requirements.txt
 	python3 -m venv .venv
