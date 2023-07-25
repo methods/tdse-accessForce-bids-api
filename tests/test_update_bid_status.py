@@ -27,7 +27,7 @@ def test_update_bid_status_success(mock_db, test_client):
     update = {"status": "completed"}
     response = test_client.put(f"api/bids/{bid_id}/status", json=update)
     mock_db["bids"].find_one.assert_called_once_with({"_id": bid_id})
-    # mock_db["bids"].replace_one.assert_called_once()
+    mock_db["bids"].replace_one.assert_called_once()
     assert response.status_code == 200
 
 
