@@ -11,7 +11,9 @@ def test_score_is_mandatory(mock_db, test_client):
         "success": [{"phase": 1, "has_score": True, "out_of": 36}],
     }
 
-    response = test_client.post("api/bids", json=data)
+    response = test_client.post(
+        "api/bids", json=data, headers={"X-API-Key": "PASSWORD"}
+    )
     assert response.status_code == 400
     assert (
         response.get_json()["Error"]
@@ -29,7 +31,9 @@ def test_out_of_is_mandatory(mock_db, test_client):
         "failed": {"phase": 2, "has_score": True, "score": 20},
     }
 
-    response = test_client.post("api/bids", json=data)
+    response = test_client.post(
+        "api/bids", json=data, headers={"X-API-Key": "PASSWORD"}
+    )
     assert response.status_code == 400
     assert (
         response.get_json()["Error"]

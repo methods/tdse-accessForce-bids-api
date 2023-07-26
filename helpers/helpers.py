@@ -87,7 +87,7 @@ def require_api_key(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
         try:
-            api_key = request.headers.get("Authorization")
+            api_key = request.headers.get("X-API-Key")
             assert api_key == os.getenv("API_KEY")
         except AssertionError:
             return jsonify({"Error": "Unauthorized"}), 401
