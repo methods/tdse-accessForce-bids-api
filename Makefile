@@ -12,6 +12,7 @@ PIP = ./.venv/bin/pip
 
 help:
 	@echo "gmake help - display this help"
+	@echo "gmake auth - run auth api application"
 	@echo "gmake bids - create sample data"
 	@echo "gmake branch - create a new branch"
 	@echo "gmake build - create and activate virtual environment"
@@ -25,6 +26,9 @@ help:
 	@echo "gmake swagger - open swagger documentation"
 	@echo "gmake setup - setup the application database"
 	@echo "gmake test - run the tests"
+
+auth:
+	$(PYTHON) ../tdse-accessForce-auth-api/app.py
 
 bids:
 	@echo "Creating sample data..."
