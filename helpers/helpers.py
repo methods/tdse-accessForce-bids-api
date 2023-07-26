@@ -1,9 +1,15 @@
+import os
 import uuid
+from dotenv import load_dotenv
 from datetime import datetime
-from flask import jsonify
+from flask import jsonify, request
+from functools import wraps
 from werkzeug.exceptions import UnprocessableEntity
 from api.schemas.bid_schema import BidSchema
 from api.schemas.bid_id_schema import BidIdSchema
+
+
+load_dotenv()
 
 
 def showInternalServerError():
@@ -75,3 +81,16 @@ def prepend_host_to_links(resource, hostname):
     for key in resource["links"]:
         resource["links"][key] = f'{host}{resource["links"][key]}'
     return resource
+
+
+def require_api_key(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        try:
+            api_key = request.headers.get("Authorization")
+            assert api_key == os.getenv("API_KEY")
+        except AssertionError:
+            return jsonify({"Error": "Unauthorized"}), 401
+        return fn(*args, **kwargs)
+
+    return wrapper

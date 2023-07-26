@@ -14,6 +14,7 @@ from helpers.helpers import (
     validate_bid_update,
     validate_status_update,
     prepend_host_to_links,
+    require_api_key,
 )
 
 bid = Blueprint("bid", __name__)
@@ -33,6 +34,7 @@ def get_bids():
 
 
 @bid.route("/bids", methods=["POST"])
+@require_api_key
 def post_bid():
     try:
         # Process input and create data model
@@ -72,6 +74,7 @@ def get_bid_by_id(bid_id):
 
 
 @bid.route("/bids/<bid_id>", methods=["PUT"])
+@require_api_key
 def update_bid_by_id(bid_id):
     try:
         bid_id = validate_bid_id_path(bid_id)
@@ -99,6 +102,7 @@ def update_bid_by_id(bid_id):
 
 
 @bid.route("/bids/<bid_id>", methods=["DELETE"])
+@require_api_key
 def change_status_to_deleted(bid_id):
     try:
         bid_id = validate_bid_id_path(bid_id)
@@ -123,6 +127,7 @@ def change_status_to_deleted(bid_id):
 
 
 @bid.route("/bids/<bid_id>/status", methods=["PUT"])
+@require_api_key
 def update_bid_status(bid_id):
     try:
         bid_id = validate_bid_id_path(bid_id)
