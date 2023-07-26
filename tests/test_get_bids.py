@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 # Case 1: Successful get
 @patch("api.controllers.bid_controller.db")
-def test_get_bids_success(mock_db, test_client):
+def test_get_bids_success(mock_db, test_client, api_key):
     mock_db["bids"].find.return_value = []
 
     response = test_client.get("/api/bids")
@@ -14,7 +14,7 @@ def test_get_bids_success(mock_db, test_client):
 
 # Case 2: Links prepended with hostname
 @patch("api.controllers.bid_controller.db")
-def test_links_with_host(mock_db, test_client):
+def test_links_with_host(mock_db, test_client, api_key):
     mock_db["bids"].find.return_value = [
         {
             "_id": "1ff45b42-b72a-464c-bde9-9bead14a07b9",
@@ -51,7 +51,7 @@ def test_links_with_host(mock_db, test_client):
 
 # Case 3: Connection error
 @patch("api.controllers.bid_controller.db")
-def test_get_bids_connection_error(mock_db, test_client):
+def test_get_bids_connection_error(mock_db, test_client, api_key):
     mock_db["bids"].find.side_effect = Exception
     response = test_client.get("/api/bids")
     assert response.status_code == 500

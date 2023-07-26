@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 # Case 1: Successful update
 @patch("api.controllers.bid_controller.db")
-def test_update_bid_status_success(mock_db, test_client):
+def test_update_bid_status_success(mock_db, test_client, api_key):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",
         "alias": "ONS",
@@ -26,7 +26,7 @@ def test_update_bid_status_success(mock_db, test_client):
     bid_id = "4141fac8-8879-4169-a46d-2effb1f515f6"
     update = {"status": "completed"}
     response = test_client.put(
-        f"api/bids/{bid_id}/status", json=update, headers={"X-API-Key": "PASSWORD"}
+        f"api/bids/{bid_id}/status", json=update, headers={"X-API-Key": api_key}
     )
     mock_db["bids"].find_one.assert_called_once_with({"_id": bid_id})
     mock_db["bids"].replace_one.assert_called_once()
@@ -35,7 +35,7 @@ def test_update_bid_status_success(mock_db, test_client):
 
 # Case 2: Invalid status
 @patch("api.controllers.bid_controller.db")
-def test_invalid_status(mock_db, test_client):
+def test_invalid_status(mock_db, test_client, api_key):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",
         "alias": "ONS",
@@ -57,7 +57,7 @@ def test_invalid_status(mock_db, test_client):
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"status": "invalid"}
     response = test_client.put(
-        f"api/bids/{bid_id}/status", json=update, headers={"X-API-Key": "PASSWORD"}
+        f"api/bids/{bid_id}/status", json=update, headers={"X-API-Key": api_key}
     )
     assert response.status_code == 400
     assert (
@@ -68,11 +68,11 @@ def test_invalid_status(mock_db, test_client):
 
 # Case 3: Empty request body
 @patch("api.controllers.bid_controller.db")
-def test_empty_request(mock_db, test_client):
+def test_empty_request(mock_db, test_client, api_key):
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {}
     response = test_client.put(
-        f"api/bids/{bid_id}/status", json=update, headers={"X-API-Key": "PASSWORD"}
+        f"api/bids/{bid_id}/status", json=update, headers={"X-API-Key": api_key}
     )
     assert response.status_code == 422
     assert response.get_json()["Error"] == "Request must not be empty"
@@ -80,12 +80,12 @@ def test_empty_request(mock_db, test_client):
 
 # Case 4: Bid not found
 @patch("api.controllers.bid_controller.db")
-def test_bid_not_found(mock_db, test_client):
+def test_bid_not_found(mock_db, test_client, api_key):
     mock_db["bids"].find_one.return_value = None
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"status": "completed"}
     response = test_client.put(
-        f"api/bids/{bid_id}/status", json=update, headers={"X-API-Key": "PASSWORD"}
+        f"api/bids/{bid_id}/status", json=update, headers={"X-API-Key": api_key}
     )
     assert response.status_code == 404
     assert response.get_json()["Error"] == "Resource not found"
@@ -93,12 +93,12 @@ def test_bid_not_found(mock_db, test_client):
 
 # Case 5: Failed to call database
 @patch("api.controllers.bid_controller.db")
-def test_update_status_find_error(mock_db, test_client):
+def test_update_status_find_error(mock_db, test_client, api_key):
     mock_db["bids"].find_one.side_effect = Exception
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"status": "completed"}
     response = test_client.put(
-        f"api/bids/{bid_id}/status", json=update, headers={"X-API-Key": "PASSWORD"}
+        f"api/bids/{bid_id}/status", json=update, headers={"X-API-Key": api_key}
     )
     assert response.status_code == 500
     assert response.get_json() == {"Error": "Could not connect to database"}
@@ -106,7 +106,7 @@ def test_update_status_find_error(mock_db, test_client):
 
 # Case 6: Unauthorized - invalid API key
 @patch("api.controllers.bid_controller.db")
-def test_update_bid_status_unauthorized(mock_db, test_client):
+def test_update_bid_status_unauthorized(mock_db, test_client, api_key):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",
         "alias": "ONS",

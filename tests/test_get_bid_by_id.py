@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 # Case 1: Successful get_bid_by_id
 @patch("api.controllers.bid_controller.db")
-def test_get_bid_by_id_success(mock_db, test_client):
+def test_get_bid_by_id_success(mock_db, test_client, api_key):
     mock_db["bids"].find_one.return_value = {
         "_id": "1ff45b42-b72a-464c-bde9-9bead14a07b9",
         "alias": "ONS",
@@ -46,7 +46,7 @@ def test_get_bid_by_id_success(mock_db, test_client):
 
 # Case 2: Connection error
 @patch("api.controllers.bid_controller.db", side_effect=Exception)
-def test_get_bid_by_id_connection_error(mock_db, test_client):
+def test_get_bid_by_id_connection_error(mock_db, test_client, api_key):
     mock_db["bids"].find_one.side_effect = Exception
     response = test_client.get("/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9")
     assert response.status_code == 500
@@ -55,7 +55,7 @@ def test_get_bid_by_id_connection_error(mock_db, test_client):
 
 # Case 3: Bid not found
 @patch("api.controllers.bid_controller.db")
-def test_get_bid_by_id_not_found(mock_db, test_client):
+def test_get_bid_by_id_not_found(mock_db, test_client, api_key):
     mock_db["bids"].find_one.return_value = None
 
     response = test_client.get("/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9")
@@ -69,7 +69,7 @@ def test_get_bid_by_id_not_found(mock_db, test_client):
 
 # Case 4: Validation error
 @patch("api.controllers.bid_controller.db")
-def test_get_bid_by_id_validation_error(mock_db, test_client):
+def test_get_bid_by_id_validation_error(mock_db, test_client, api_key):
     response = test_client.get("/api/bids/invalid_bid_id")
     assert response.status_code == 400
     assert response.get_json() == {"Error": "{'bid_id': ['Invalid bid Id']}"}
