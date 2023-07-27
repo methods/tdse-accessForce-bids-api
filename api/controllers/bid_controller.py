@@ -15,6 +15,7 @@ from helpers.helpers import (
     validate_status_update,
     prepend_host_to_links,
     require_api_key,
+    require_jwt,
 )
 
 bid = Blueprint("bid", __name__)
@@ -34,7 +35,7 @@ def get_bids():
 
 
 @bid.route("/bids", methods=["POST"])
-@require_api_key
+@require_jwt
 def post_bid():
     try:
         # Process input and create data model
@@ -46,8 +47,8 @@ def post_bid():
     except ValidationError as e:
         return showValidationError(e), 400
     # Return 500 response in case of connection failure
-    except Exception:
-        return showInternalServerError(), 500
+    except Exception as e:
+        return str(e), 500
 
 
 @bid.route("/bids/<bid_id>", methods=["GET"])
