@@ -8,7 +8,7 @@ PYTHON = ./.venv/bin/python3
 PIP = ./.venv/bin/pip
 
 
-.PHONY: run test clean check help commit swagger format branch lint setup bids dbclean
+.PHONY: run test clean check help commit swagger format branch lint setup bids dbclean auth authg authp authpd
 
 help:
 	@echo "gmake help - display this help"
@@ -29,6 +29,15 @@ help:
 
 auth:
 	$(PYTHON) ../tdse-accessForce-auth-api/app.py
+
+authg:
+	@find . -name "get_bids_apikey.py" -exec python3 {} \;
+
+authp:
+	@find . -name "post_bid_jwt.py" -exec python3 {} \;
+
+authpd:
+	@find . -name "post_and_delete_admin.py" -exec python3 {} \;
 
 bids:
 	@echo "Creating sample data..."

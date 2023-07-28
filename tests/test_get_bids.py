@@ -62,3 +62,13 @@ def test_get_bids_connection_error(mock_db, test_client, api_key):
     )
     assert response.status_code == 500
     assert response.get_json() == {"Error": "Could not connect to database"}
+
+
+# Case 4: Unauthorized / invalid api key
+@patch("api.controllers.bid_controller.db")
+def test_get_bids_unauthorized(mock_db, test_client):
+    response = test_client.get(
+        "/api/bids", headers={"host": "localhost:8080", "X-API-Key": "INVALID_API_KEY"}
+    )
+    assert response.status_code == 401
+    assert response.get_json()["Error"] == "Unauthorized"

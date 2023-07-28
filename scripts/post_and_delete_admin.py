@@ -2,7 +2,7 @@ import json
 import requests
 
 
-user_info = {"username": "Tester McTestface"}
+user_info = {"username": "Pira"}
 
 response = requests.post(
     "http://localhost:5000/authorise/",
@@ -12,7 +12,7 @@ response = requests.post(
 
 token = response.json()["jwt"]
 
-print(token)
+# print(token)
 
 data = {
     "tender": "Business Intelligence and Data Warehousing",
@@ -29,4 +29,12 @@ post_response = requests.post(
     "http://localhost:8080/api/bids", data=json.dumps(data), headers=headers
 )
 
-print(post_response)
+# print(post_response)
+
+bid_id = post_response.json()["_id"]
+
+delete_url = f"http://localhost:8080/api/bids/{bid_id}"
+
+delete_response = requests.delete(delete_url, headers=headers)
+
+print(delete_response)
