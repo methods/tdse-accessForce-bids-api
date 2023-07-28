@@ -108,13 +108,7 @@ def require_jwt(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
         try:
-            PREFIX = "Bearer "
-            auth_header = request.headers.get("Authorization")
-            assert auth_header.startswith(PREFIX) is True
-            token = auth_header[len(PREFIX) :]
-            load_dotenv()
-            key = os.getenv("SECRET")
-            jwt.decode(token, key, algorithms="HS256")
+            validate_token(request=request)
         except (AssertionError, InvalidTokenError):
             return showUnauthorizedError(), 401
         return fn(*args, **kwargs)
@@ -126,13 +120,7 @@ def require_admin_access(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
         try:
-            PREFIX = "Bearer "
-            auth_header = request.headers.get("Authorization")
-            assert auth_header.startswith(PREFIX) is True
-            token = auth_header[len(PREFIX) :]
-            load_dotenv()
-            key = os.getenv("SECRET")
-            decoded = jwt.decode(token, key, algorithms="HS256")
+            decoded = validate_token(request=request)
             if decoded["admin"] is False:
                 return showForbiddenError(), 403
         except (AssertionError, InvalidTokenError):
@@ -140,3 +128,14 @@ def require_admin_access(fn):
         return fn(*args, **kwargs)
 
     return wrapper
+
+
+def validate_token(request):
+    PREFIX = "Bearer "
+    auth_header = request.headers.get("Authorization")
+    assert auth_header.startswith(PREFIX) is True
+    token = auth_header[len(PREFIX) :]
+    load_dotenv()
+    key = os.getenv("SECRET")
+    decoded = jwt.decode(token, key, algorithms="HS256")
+    return decoded

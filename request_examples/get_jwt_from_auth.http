@@ -3,7 +3,5 @@ Content-Type: application/json
 
 {
   "username": "Tester McTestface",
-  "admin": false,
-  "write": true,
-  "read": true
+  "admin": false
 }

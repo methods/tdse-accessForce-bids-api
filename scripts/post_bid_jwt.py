@@ -1,11 +1,18 @@
 import json
 import requests
 
-response = requests.get("http://localhost:5000/authorise/")
 
-api_key = response.json()["API_KEY"]
+user_info = {"username": "Tester McTestface", "admin": False}
 
-print(api_key)
+response = requests.post(
+    "http://localhost:5000/authorise/",
+    data=json.dumps(user_info),
+    headers={"Content-Type": "application/json"},
+)
+
+token = response.json()["jwt"]
+
+print(token)
 
 data = {
     "tender": "Business Intelligence and Data Warehousing",
@@ -14,7 +21,9 @@ data = {
     "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
 }
 
-headers = {"Content-Type": "application/json", "X-API-Key": api_key}
+fstring = f"Bearer {token}"
+
+headers = {"Content-Type": "application/json", "Authorization": fstring}
 
 post_response = requests.post(
     "http://localhost:8080/api/bids", data=json.dumps(data), headers=headers

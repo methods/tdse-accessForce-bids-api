@@ -16,12 +16,14 @@ from helpers.helpers import (
     prepend_host_to_links,
     require_api_key,
     require_jwt,
+    require_admin_access,
 )
 
 bid = Blueprint("bid", __name__)
 
 
 @bid.route("/bids", methods=["GET"])
+@require_api_key
 def get_bids():
     # Get all bids from database collection
     try:
@@ -52,6 +54,7 @@ def post_bid():
 
 
 @bid.route("/bids/<bid_id>", methods=["GET"])
+@require_api_key
 def get_bid_by_id(bid_id):
     try:
         bid_id = validate_bid_id_path(bid_id)
@@ -75,7 +78,7 @@ def get_bid_by_id(bid_id):
 
 
 @bid.route("/bids/<bid_id>", methods=["PUT"])
-@require_api_key
+@require_jwt
 def update_bid_by_id(bid_id):
     try:
         bid_id = validate_bid_id_path(bid_id)
@@ -103,7 +106,7 @@ def update_bid_by_id(bid_id):
 
 
 @bid.route("/bids/<bid_id>", methods=["DELETE"])
-@require_api_key
+@require_admin_access
 def change_status_to_deleted(bid_id):
     try:
         bid_id = validate_bid_id_path(bid_id)
@@ -128,7 +131,7 @@ def change_status_to_deleted(bid_id):
 
 
 @bid.route("/bids/<bid_id>/status", methods=["PUT"])
-@require_api_key
+@require_admin_access
 def update_bid_status(bid_id):
     try:
         bid_id = validate_bid_id_path(bid_id)
