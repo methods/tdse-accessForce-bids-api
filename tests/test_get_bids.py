@@ -6,7 +6,9 @@ from unittest.mock import patch
 def test_get_bids_success(mock_db, test_client, api_key):
     mock_db["bids"].find.return_value = []
 
-    response = test_client.get("/api/bids")
+    response = test_client.get(
+        "/api/bids", headers={"host": "localhost:8080", "X-API-Key": api_key}
+    )
     mock_db["bids"].find.assert_called_once_with({"status": {"$ne": "deleted"}})
     assert response.status_code == 200
     assert response.get_json() == {"total_count": 0, "items": []}
@@ -29,7 +31,9 @@ def test_links_with_host(mock_db, test_client, api_key):
         }
     ]
 
-    response = test_client.get("/api/bids", headers={"host": "localhost:8080"})
+    response = test_client.get(
+        "/api/bids", headers={"host": "localhost:8080", "X-API-Key": api_key}
+    )
     assert response.status_code == 200
     assert response.get_json() == {
         "total_count": 1,
@@ -53,6 +57,8 @@ def test_links_with_host(mock_db, test_client, api_key):
 @patch("api.controllers.bid_controller.db")
 def test_get_bids_connection_error(mock_db, test_client, api_key):
     mock_db["bids"].find.side_effect = Exception
-    response = test_client.get("/api/bids")
+    response = test_client.get(
+        "/api/bids", headers={"host": "localhost:8080", "X-API-Key": api_key}
+    )
     assert response.status_code == 500
     assert response.get_json() == {"Error": "Could not connect to database"}

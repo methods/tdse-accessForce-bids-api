@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 # Case 1: Successful update
 @patch("api.controllers.bid_controller.db")
-def test_update_bid_by_id_success(mock_db, test_client, api_key):
+def test_update_bid_by_id_success(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one.return_value = {
         "_id": "9f688442-b535-4683-ae1a-a64c1a3b8616",
         "tender": "Business Intelligence and Data Warehousing",
@@ -17,7 +17,9 @@ def test_update_bid_by_id_success(mock_db, test_client, api_key):
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"tender": "UPDATED TENDER"}
     response = test_client.put(
-        f"api/bids/{bid_id}", json=update, headers={"X-API-Key": api_key}
+        f"api/bids/{bid_id}",
+        json=update,
+        headers={"Authorization": f"Bearer {basic_jwt}"},
     )
     mock_db["bids"].find_one.assert_called_once_with(
         {"_id": bid_id, "status": "in_progress"}
@@ -28,7 +30,7 @@ def test_update_bid_by_id_success(mock_db, test_client, api_key):
 
 # Case 2: Invalid user input
 @patch("api.controllers.bid_controller.db")
-def test_input_validation(mock_db, test_client, api_key):
+def test_input_validation(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",
         "alias": "ONS",
@@ -50,7 +52,9 @@ def test_input_validation(mock_db, test_client, api_key):
     bid_id = "4141fac8-8879-4169-a46d-2effb1f515f6"
     update = {"tender": 42}
     response = test_client.put(
-        f"api/bids/{bid_id}", json=update, headers={"X-API-Key": api_key}
+        f"api/bids/{bid_id}",
+        json=update,
+        headers={"Authorization": f"Bearer {basic_jwt}"},
     )
     assert response.status_code == 400
     assert response.get_json()["Error"] == "{'tender': ['Not a valid string.']}"
@@ -58,12 +62,14 @@ def test_input_validation(mock_db, test_client, api_key):
 
 # Case 3: Bid not found
 @patch("api.controllers.bid_controller.db")
-def test_bid_not_found(mock_db, test_client, api_key):
+def test_bid_not_found(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one.return_value = None
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"tender": "Updated tender"}
     response = test_client.put(
-        f"api/bids/{bid_id}", json=update, headers={"X-API-Key": api_key}
+        f"api/bids/{bid_id}",
+        json=update,
+        headers={"Authorization": f"Bearer {basic_jwt}"},
     )
     assert response.status_code == 404
     assert response.get_json()["Error"] == "Resource not found"
@@ -71,11 +77,13 @@ def test_bid_not_found(mock_db, test_client, api_key):
 
 # Case 4: Cannot update status
 @patch("api.controllers.bid_controller.db")
-def test_cannot_update_status(mock_db, test_client, api_key):
+def test_cannot_update_status(mock_db, test_client, basic_jwt):
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"status": "deleted"}
     response = test_client.put(
-        f"api/bids/{bid_id}", json=update, headers={"X-API-Key": api_key}
+        f"api/bids/{bid_id}",
+        json=update,
+        headers={"Authorization": f"Bearer {basic_jwt}"},
     )
     assert response.status_code == 422
     assert response.get_json()["Error"] == "Cannot update status"
@@ -83,7 +91,7 @@ def test_cannot_update_status(mock_db, test_client, api_key):
 
 # Case 5: Failed to call database
 @patch("api.controllers.bid_controller.db")
-def test_update_by_id_find_error(mock_db, test_client, api_key):
+def test_update_by_id_find_error(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one.return_value = {
         "_id": "9f688442-b535-4683-ae1a-a64c1a3b8616",
         "tender": "Business Intelligence and Data Warehousing",
@@ -97,7 +105,9 @@ def test_update_by_id_find_error(mock_db, test_client, api_key):
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"tender": "Updated tender"}
     response = test_client.put(
-        f"api/bids/{bid_id}", json=update, headers={"X-API-Key": api_key}
+        f"api/bids/{bid_id}",
+        json=update,
+        headers={"Authorization": f"Bearer {basic_jwt}"},
     )
     assert response.status_code == 500
     assert response.get_json() == {"Error": "Could not connect to database"}
@@ -105,7 +115,7 @@ def test_update_by_id_find_error(mock_db, test_client, api_key):
 
 # Case 6: Update failed field
 @patch("api.controllers.bid_controller.db")
-def test_update_failed(mock_db, test_client, api_key):
+def test_update_failed(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",
         "alias": "ONS",
@@ -127,7 +137,9 @@ def test_update_failed(mock_db, test_client, api_key):
     bid_id = "4141fac8-8879-4169-a46d-2effb1f515f6"
     update = {"failed": {"phase": 2, "has_score": True, "score": 20, "out_of": 36}}
     response = test_client.put(
-        f"api/bids/{bid_id}", json=update, headers={"X-API-Key": api_key}
+        f"api/bids/{bid_id}",
+        json=update,
+        headers={"Authorization": f"Bearer {basic_jwt}"},
     )
     mock_db["bids"].find_one.assert_called_once_with(
         {"_id": bid_id, "status": "in_progress"}
@@ -138,7 +150,7 @@ def test_update_failed(mock_db, test_client, api_key):
 
 # Case 7: Update success field
 @patch("api.controllers.bid_controller.db")
-def test_update_success(mock_db, test_client, api_key):
+def test_update_success(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",
         "alias": "ONS",
@@ -165,7 +177,9 @@ def test_update_success(mock_db, test_client, api_key):
         ]
     }
     response = test_client.put(
-        f"api/bids/{bid_id}", json=update, headers={"X-API-Key": api_key}
+        f"api/bids/{bid_id}",
+        json=update,
+        headers={"Authorization": f"Bearer {basic_jwt}"},
     )
     mock_db["bids"].find_one.assert_called_once_with(
         {"_id": bid_id, "status": "in_progress"}
@@ -174,9 +188,9 @@ def test_update_success(mock_db, test_client, api_key):
     assert response.status_code == 200
 
 
-# Case 8: Unauthorized - invalid API key
+# Case 8: Unauthorized - invalid token
 @patch("api.controllers.bid_controller.db")
-def test_update_bid_by_id_unauthorized(mock_db, test_client, api_key):
+def test_update_bid_by_id_unauthorized(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one.return_value = {
         "_id": "9f688442-b535-4683-ae1a-a64c1a3b8616",
         "tender": "Business Intelligence and Data Warehousing",
@@ -190,7 +204,9 @@ def test_update_bid_by_id_unauthorized(mock_db, test_client, api_key):
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"tender": "UPDATED TENDER"}
     response = test_client.put(
-        f"api/bids/{bid_id}", json=update, headers={"X-API-Key": "INVALID"}
+        f"api/bids/{bid_id}",
+        json=update,
+        headers={"Authorization": "Bearer N0tV4l1djsonW3Bt0K3n"},
     )
     assert response.status_code == 401
     assert response.get_json() == {"Error": "Unauthorized"}

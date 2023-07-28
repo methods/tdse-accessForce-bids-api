@@ -49,8 +49,8 @@ def post_bid():
     except ValidationError as e:
         return showValidationError(e), 400
     # Return 500 response in case of connection failure
-    except Exception as e:
-        return str(e), 500
+    except Exception:
+        return showInternalServerError(), 500
 
 
 @bid.route("/bids/<bid_id>", methods=["GET"])

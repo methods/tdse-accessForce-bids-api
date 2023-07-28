@@ -12,7 +12,7 @@ from api.schemas.bid_id_schema import BidIdSchema
 
 
 def showForbiddenError():
-    return jsonify({"Error": "Forbidden - insufficient permissions"})
+    return jsonify({"Error": "Forbidden"})
 
 
 def showInternalServerError():
@@ -24,7 +24,7 @@ def showNotFoundError():
 
 
 def showUnauthorizedError():
-    return jsonify({"Error": "Unauthorized - invalid token"})
+    return jsonify({"Error": "Unauthorized"})
 
 
 def showUnprocessableEntityError(e):
