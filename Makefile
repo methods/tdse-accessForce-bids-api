@@ -106,6 +106,10 @@ test:
 	@echo "TEST COVERAGE REPORT"
 	coverage report -m --omit="tests/*,dbconfig/*"
 
+token:
+	@echo "Getting JWT..."
+	@find . -name "get_jwt.py" -exec python3 {} \;
+
 venv/bin/activate: requirements.txt
 	python3 -m venv .venv
 	$(PIP) install -r requirements.txt
