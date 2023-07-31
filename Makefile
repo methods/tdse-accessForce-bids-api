@@ -12,7 +12,8 @@ PIP = ./.venv/bin/pip
 
 help:
 	@echo "gmake help - display this help"
-	@echo "gmake auth - run auth api application"
+	@echo "gmake authserver - run auth api application"
+	@echo "gmake auth - get JWT and interact with auth api"
 	@echo "gmake bids - create sample data"
 	@echo "gmake branch - create a new branch"
 	@echo "gmake build - create and activate virtual environment"
@@ -27,17 +28,12 @@ help:
 	@echo "gmake setup - setup the application database"
 	@echo "gmake test - run the tests"
 
-auth:
+authserver:
 	$(PYTHON) ../tdse-accessForce-auth-api/app.py
 
-authg:
-	@find . -name "get_bids_apikey.py" -exec python3 {} \;
-
-authp:
-	@find . -name "post_bid_jwt.py" -exec python3 {} \;
-
-authpd:
-	@find . -name "post_and_delete_admin.py" -exec python3 {} \;
+auth:
+	@echo "Getting JWT..."
+	@find . -name "get_jwt.py" -exec python3 {} \;
 
 bids:
 	@echo "Creating sample data..."
@@ -105,10 +101,6 @@ test:
 	coverage run -m pytest -vv
 	@echo "TEST COVERAGE REPORT"
 	coverage report -m --omit="tests/*,dbconfig/*"
-
-token:
-	@echo "Getting JWT..."
-	@find . -name "get_jwt.py" -exec python3 {} \;
 
 venv/bin/activate: requirements.txt
 	python3 -m venv .venv

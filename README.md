@@ -46,7 +46,17 @@ This API stores and serves information about Methods bids for client tenders.
       ```bash
       gmake run
       ```
-8. The API will be available at http://localhost:8080/api/bids
+ * The API will be available at http://localhost:8080/api/bids
+
+8. Follow this link to go to the authorization documentation: [Authorization Documentation](https://github.com/methods/tdse-accessForce-auth-stub/blob/main/README.md)
+
+
+9. In a new terminal enter the following command to run authorization server if not already running. This will be needed to generate a token:
+
+      ```bash
+      gmake authserver
+      ```
+ * The API will be available at http://localhost:5000/authorise
 
 --------------
 
@@ -76,6 +86,19 @@ This API stores and serves information about Methods bids for client tenders.
       ```bash
       gmake test
       ```
+--------------
+
+## Using auth playground to generate a token
+
+1. Follow the steps in the section above to start the API and authorization server.
+
+2. In a new terminal enter the following command to open the auth playground in your default web browser:
+
+      ```bash
+      gmake auth
+      ```
+3. Follow the steps in the auth playground to generate a token and much more.
+
 --------------
 
 ## Installing and running an instance of MongoDB on your local machine (MacOS)
