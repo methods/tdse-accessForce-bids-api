@@ -55,7 +55,7 @@ def test_delete_bid_not_found(mock_db, test_client, admin_jwt):
 
 # Case 5: Unauthorized - invalid token
 @patch("api.controllers.bid_controller.db")
-def test_delete_bid_unauthorized(mock_db, test_client, admin_jwt):
+def test_delete_bid_unauthorized(mock_db, test_client):
     mock_db["bids"].find_one_and_update.return_value = {
         "_id": "1ff45b42-b72a-464c-bde9-9bead14a07b9",
         "status": "deleted",
@@ -66,3 +66,18 @@ def test_delete_bid_unauthorized(mock_db, test_client, admin_jwt):
     )
     assert response.status_code == 401
     assert response.get_json() == {"Error": "Unauthorized"}
+
+
+# Case 6: Forbidden - not admin
+@patch("api.controllers.bid_controller.db")
+def test_delete_bid_forbidden(mock_db, test_client, basic_jwt):
+    mock_db["bids"].find_one_and_update.return_value = {
+        "_id": "1ff45b42-b72a-464c-bde9-9bead14a07b9",
+        "status": "deleted",
+    }
+    response = test_client.delete(
+        "/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9",
+        headers={"Authorization": f"Bearer {basic_jwt}"},
+    )
+    assert response.status_code == 403
+    assert response.get_json() == {"Error": "Forbidden"}
