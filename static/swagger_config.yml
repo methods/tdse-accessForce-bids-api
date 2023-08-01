@@ -239,6 +239,211 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 # --------------------------------------------
+  /bids/{bid_id}/questions:
+    # --------------------------------------------
+    get:
+      tags:
+        - questions
+      summary: Returns all questions for a bid
+      description: A JSON with item count and array of all questions for a bid
+      operationId: get_questions
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to return questions for
+          required: true
+          schema:
+            type: string
+            format: uuid
+      security:
+        - BearerAuth: []
+      responses:
+        '200':  
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_count:
+                    type: integer
+                    example: 1
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Question'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    # --------------------------------------------
+    post:
+      tags:
+        - questions
+      summary: Create a new question for a bid
+      description: Create a new question for a bid
+      operationId: post_question
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to add question to
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        $ref: '#/components/requestBodies/PostQuestion'
+        required: true
+      security:
+        - BearerAuth: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_count:
+                    type: integer
+                    example: 1
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Question'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+# --------------------------------------------
+  /bids/{bid_id}/questions/{question_id}:
+    get:
+      tags:
+        - questions
+      summary: Returns a single question for a bid
+      description: Returns a single question for a bid
+      operationId: get_question
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to return question for
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: question_id
+          in: path
+          description: ID of question to return
+          required: true
+          schema:
+            type: string
+            format: uuid
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: A single question
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    # --------------------------------------------
+    put:
+      tags:
+        - questions
+      summary: Update an existing question for a bid
+      description: Update an existing question for a bid
+      operationId: update_question
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to update question for
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: question_id
+          in: path
+          description: ID of question to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        $ref: '#/components/requestBodies/PostQuestion'
+        required: true
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    # --------------------------------------------
+    delete:
+      tags:
+        - questions
+      summary: Hard delete a question for a bid
+      description: Hard delete a question for a bid
+      operationId: delete_question
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to delete question for
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: question_id
+          in: path
+          description: ID of question to delete
+          required: true
+          schema:
+            type: string
+            format: uuid
+      security:
+        - BearerAuth: []
+      responses:
+        # return 204 (No Content)
+        '204':
+          description: Question deleted
+          content:
+            noContent: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
 # --------------------------------------------
 # Components
 components:
@@ -253,9 +458,6 @@ components:
         - tender
         - client
         - bid_date
-        - status
-        - links
-        - last_updated
       properties:
         tender:
           type: string
@@ -356,6 +558,71 @@ components:
           description: Summary of feedback
           type: string
           example: 'Feedback from client in detail'
+
+# --------------------------------------------
+    BidLink:
+      description: A link to a bid
+      type: string
+      example: 'https://{hostname}/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428'
+# --------------------------------------------
+    Question:
+      description: Question for a bid
+      type: object
+      required:
+        - _id
+        - description
+        - question_url
+        - feedback
+        - last_updated
+        - links
+      properties:
+        _id:
+          type: string
+          format: uuid
+          example: "471fea1f-705c-4851-9a5b-df7bc2651428"
+        description:
+          description: Question
+          type: string
+          example: 'THIS IS A QUESTION'
+        response:
+          description: Answer
+          type: string
+          example: 'THIS IS AN ANSWER'
+        question_url:
+          description: Link to question
+          type: string
+          example: 'https://organisation.sharepoint.com/Docs/dummyfolder/question'
+        score:
+          description: Score achieved at phase
+          type: string
+          example: "10"
+        out_of:
+          description: Maximum score
+          type: string
+          example: "20"
+        feedback:
+          type: object
+          $ref: '#/components/schemas/Feedback'
+        respondents:
+          type: array
+          items:
+            type: string
+            example: 'ONS'
+        last_updated:
+          type: string
+          example: "2023-06-27T14:05:17.623827"
+        links:
+          type: object
+          required:
+            - self
+          properties:
+            self:
+              $ref: '#/components/schemas/SelfQuestionLink'
+            bid:
+              $ref: '#/components/schemas/SelfLink'
+
+
+
 # --------------------------------------------
     QuestionsLink:
       description: A link to a collection of questions for a bid
@@ -365,7 +632,13 @@ components:
     SelfLink:
       description: A link to the current resource
       type: string
-      example: 'https://{hostname}/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428'
+      example: "https://{hostname}/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428"
+# --------------------------------------------
+    SelfQuestionLink:
+      description: A link to the current resource
+      type: string
+      example: "https://{hostname}/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428/questions/471fea1f-705c-4851-9a5b-df7bc2651428"
+    
 # --------------------------------------------
     BidRequestBody:
       type: object
@@ -402,6 +675,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Phase'
+
+    QuestionRequestBody:
+      type: object
+      required:
+        - description
+        - feedback
+      properties:
+        description:
+          description: Question
+          type: string
+        response:
+          description: Answer
+          type: string
+        question_url:
+          description: Link to question
+          type: string
+        score:
+          description: Score achieved at phase
+          type: integer
+        out_of:
+          description: Maximum score
+          type: integer
+        feedback:
+          type: object
+          $ref: '#/components/schemas/Feedback'
+        respondents:
+          type: string
+          example: 'ONS'
+# --------------------------------------------
+# Security schemes
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
@@ -505,6 +808,34 @@ components:
               summary: 200 OK
               value:
                 status: 'completed'
+    PostQuestion:
+      description: Question object to be added to collection
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/QuestionRequestBody'
+          examples:
+            200 OK:
+              summary: 200 OK
+              value:
+                description: 'THIS IS A QUESTION'
+                response: 'THIS IS AN ANSWER'
+                question_url: 'https://organisation.sharepoint.com/Docs/dummyfolder/question'
+                score: 10
+                out_of: 20
+                feedback:
+                  url: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
+                  description: 'Feedback from client in detail'
+                respondents: 'ONS'
+            400 Bad Request:
+              summary: 400 Bad Request
+              value:
+                description: 'THIS IS A QUESTION'
+                response: 'THIS IS AN ANSWER'
+                score: 10
+                out_of: 20
+                respondents: 'ONS'
+
 # --------------------------------------------
 # Error responses
   responses:
