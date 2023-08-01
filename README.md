@@ -95,7 +95,7 @@ This API stores and serves information about Methods bids for client tenders.
 2. In a new terminal enter the following command to open the auth playground in your default web browser:
 
       ```bash
-      gmake auth
+      gmake authplay
       ```
 3. Follow the steps in the auth playground to generate a token and much more.
 
