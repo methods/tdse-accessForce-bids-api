@@ -31,7 +31,7 @@ help:
 authserver:
 	$(PYTHON) ../tdse-accessForce-auth-api/app.py
 
-auth:
+authplay:
 	@echo "Getting JWT..."
 	@find . -name "get_jwt.py" -exec python3 {} \;
 

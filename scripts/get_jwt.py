@@ -8,7 +8,7 @@ def simulate_login(username):
         response.raise_for_status()  # Raise an exception for any HTTP errors
 
         token_data = response.json()
-        token = token_data
+        token = token_data['jwt']
 
         return token
     except requests.exceptions.RequestException as e:
