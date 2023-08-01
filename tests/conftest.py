@@ -25,7 +25,7 @@ def api_key():
 def basic_jwt():
     payload = {"username": "User McTestface", "admin": False}
     load_dotenv()
-    key = os.getenv("SECRET")
+    key = os.getenv("SECRET_KEY")
     token = jwt.encode(payload=payload, key=key)
     return token
 
@@ -34,6 +34,6 @@ def basic_jwt():
 def admin_jwt():
     payload = {"username": "Admin McTestface", "admin": True}
     load_dotenv()
-    key = os.getenv("SECRET")
+    key = os.getenv("SECRET_KEY")
     token = jwt.encode(payload=payload, key=key)
     return token

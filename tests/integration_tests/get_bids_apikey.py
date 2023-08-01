@@ -15,6 +15,6 @@ data = {
 
 headers = {"Content-Type": "application/json", "X-API-Key": api_key}
 
-post_response = requests.get("http://localhost:8080/api/bids", headers=headers)
+get_response = requests.get("http://localhost:8080/api/bids", headers=headers)
 
-print(post_response)
+print(get_response)

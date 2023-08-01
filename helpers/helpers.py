@@ -133,9 +133,10 @@ def require_admin_access(fn):
 def validate_token(request):
     PREFIX = "Bearer "
     auth_header = request.headers.get("Authorization")
+    assert auth_header is not None
     assert auth_header.startswith(PREFIX) is True
     token = auth_header[len(PREFIX) :]
     load_dotenv()
-    key = os.getenv("SECRET")
+    key = os.getenv("SECRET_KEY")
     decoded = jwt.decode(token, key, algorithms="HS256")
     return decoded

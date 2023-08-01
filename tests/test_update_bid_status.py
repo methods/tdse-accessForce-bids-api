@@ -116,7 +116,7 @@ def test_update_status_find_error(mock_db, test_client, admin_jwt):
 
 # Case 6: Unauthorized - invalid token
 @patch("api.controllers.bid_controller.db")
-def test_update_bid_status_unauthorized(mock_db, test_client, admin_jwt):
+def test_update_bid_status_unauthorized(mock_db, test_client):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",
         "alias": "ONS",
