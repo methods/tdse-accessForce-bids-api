@@ -1,10 +1,9 @@
 from uuid import uuid4
 from datetime import datetime
 from api.models.status_enum import Status
-from .links_model import LinksModel
 
 
-# Description: Schema for the bid object
+# Data model for bid resource
 class BidModel:
     """
     Represents a bid model for the MongoDB database.
@@ -57,3 +56,18 @@ class BidModel:
         self.failed = failed
         self.feedback = feedback
         self.last_updated = datetime.now()
+
+
+# Model for links object
+class LinksModel:
+    """
+    Represents a links model for the bid resource.
+
+    Attributes:
+        self (str): The URL to the bid resource.
+        questions (str): The URL to the questions resource related to the bid.
+    """
+
+    def __init__(self, bid_id):
+        self.self = f"/bids/{bid_id}"
+        self.questions = f"/bids/{bid_id}/questions"

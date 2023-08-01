@@ -8,7 +8,7 @@ PYTHON = ./.venv/bin/python3
 PIP = ./.venv/bin/pip
 
 
-.PHONY: run test clean check help commit swagger format branch lint setup bids dbclean auth authg authp authpd
+.PHONY: run test clean check help commit swagger format branch lint setup bids dbclean authserver authplay
 
 help:
 	@echo "gmake help - display this help"

@@ -6,6 +6,7 @@ This is a simple Python application.
 from flask import Flask
 from flask_swagger_ui import get_swaggerui_blueprint
 from api.controllers.bid_controller import bid
+from api.controllers.question_controller import question
 
 app = Flask(__name__)
 
@@ -21,6 +22,7 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 
 app.register_blueprint(swaggerui_blueprint)
 app.register_blueprint(bid, url_prefix="/api")
+app.register_blueprint(question, url_prefix="/api")
 
 
 if __name__ == "__main__":

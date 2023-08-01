@@ -1,12 +1,12 @@
 from marshmallow import Schema, fields, post_load, validates_schema, ValidationError
 from api.models.status_enum import Status
 from api.models.bid_model import BidModel
-from .links_schema import LinksSchema
+from .bid_links_schema import BidLinksSchema
 from .phase_schema import PhaseSchema
 from .feedback_schema import FeedbackSchema
 
 
-# Marshmallow schema for request body
+# Marshmallow schema for bid resource
 class BidSchema(Schema):
     """
     Marshmallow schema for the bid object.
@@ -23,7 +23,7 @@ class BidSchema(Schema):
         failed (PhaseSchema, optional): The failed phase of the bid.
         feedback (FeedbackSchema, optional): Feedback information for the bid.
         status (Status): The status of the bid (using the Status enum).
-        links (LinksSchema): Links to the bid resource and questions resource.
+        links (BidLinksSchema): Links to the bid resource and questions resource.
         last_updated (DateTime, optional): The date and time when the bid was last updated.
     """
 
@@ -48,7 +48,7 @@ class BidSchema(Schema):
     failed = fields.Nested(PhaseSchema, allow_none=True)
     feedback = fields.Nested(FeedbackSchema, allow_none=True)
     status = fields.Enum(Status, by_value=True)
-    links = fields.Nested(LinksSchema)
+    links = fields.Nested(BidLinksSchema)
     last_updated = fields.DateTime()
 
     @validates_schema
