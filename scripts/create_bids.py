@@ -1,6 +1,6 @@
 """
 
-This script creates sample data for the MongoDB database.
+This script creates sample data for the Bids collection.
 
 """
 

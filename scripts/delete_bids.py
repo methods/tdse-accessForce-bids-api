@@ -1,5 +1,5 @@
 """
-This script deletes all bids from the MongoDB collection.
+This script deletes all bids from the Bids collection.
 
 """
 
