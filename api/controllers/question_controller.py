@@ -23,7 +23,7 @@ question = Blueprint("question", __name__)
 
 
 @question.route("/bids/<bid_id>/questions", methods=["POST"])
-# @require_jwt
+@require_jwt
 def post_question(bid_id):
     try:
         bid_id = validate_bid_id_path(bid_id)

@@ -4,12 +4,14 @@ import os
 from dotenv import load_dotenv
 from flask import Flask
 from api.controllers.bid_controller import bid
+from api.controllers.question_controller import question
 
 
 @pytest.fixture(scope="session")
 def test_client():
     app = Flask(__name__)
     app.register_blueprint(bid, url_prefix="/api")
+    app.register_blueprint(question, url_prefix="/api")
     with app.test_client() as client:
         yield client
 
