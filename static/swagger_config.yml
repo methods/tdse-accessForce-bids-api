@@ -575,6 +575,7 @@ components:
         - feedback
         - last_updated
         - links
+        - status
       properties:
         _id:
           type: string
@@ -603,6 +604,14 @@ components:
         feedback:
           type: object
           $ref: '#/components/schemas/Feedback'
+        status:
+          type: string
+          description: Bid Status
+          example: in_progress
+          enum:
+            - in_progress
+            - deleted
+            - completed
         respondents:
           type: array
           items:
@@ -681,6 +690,7 @@ components:
       required:
         - description
         - feedback
+        - question_url
       properties:
         description:
           description: Question
