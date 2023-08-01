@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 # Case 1: score is mandatory when has_score is set to True
 @patch("api.controllers.bid_controller.db")
-def test_score_is_mandatory(mock_db, test_client):
+def test_score_is_mandatory(mock_db, test_client, basic_jwt):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
@@ -11,7 +11,9 @@ def test_score_is_mandatory(mock_db, test_client):
         "success": [{"phase": 1, "has_score": True, "out_of": 36}],
     }
 
-    response = test_client.post("api/bids", json=data)
+    response = test_client.post(
+        "api/bids", json=data, headers={"Authorization": f"Bearer {basic_jwt}"}
+    )
     assert response.status_code == 400
     assert (
         response.get_json()["Error"]
@@ -21,7 +23,7 @@ def test_score_is_mandatory(mock_db, test_client):
 
 # Case 2: out_of is mandatory when has_score is set to True
 @patch("api.controllers.bid_controller.db")
-def test_out_of_is_mandatory(mock_db, test_client):
+def test_out_of_is_mandatory(mock_db, test_client, basic_jwt):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
         "client": "Office for National Statistics",
@@ -29,7 +31,9 @@ def test_out_of_is_mandatory(mock_db, test_client):
         "failed": {"phase": 2, "has_score": True, "score": 20},
     }
 
-    response = test_client.post("api/bids", json=data)
+    response = test_client.post(
+        "api/bids", json=data, headers={"Authorization": f"Bearer {basic_jwt}"}
+    )
     assert response.status_code == 400
     assert (
         response.get_json()["Error"]

@@ -8,10 +8,11 @@ PYTHON = ./.venv/bin/python3
 PIP = ./.venv/bin/pip
 
 
-.PHONY: run test clean check help commit swagger format branch lint setup bids dbclean
+.PHONY: run test clean check help commit swagger format branch lint setup bids dbclean auth authg authp authpd
 
 help:
 	@echo "gmake help - display this help"
+	@echo "gmake auth - run auth api application"
 	@echo "gmake bids - create sample data"
 	@echo "gmake branch - create a new branch"
 	@echo "gmake build - create and activate virtual environment"
@@ -25,6 +26,18 @@ help:
 	@echo "gmake swagger - open swagger documentation"
 	@echo "gmake setup - setup the application database"
 	@echo "gmake test - run the tests"
+
+auth:
+	$(PYTHON) ../tdse-accessForce-auth-api/app.py
+
+authg:
+	@find . -name "get_bids_apikey.py" -exec python3 {} \;
+
+authp:
+	@find . -name "post_bid_jwt.py" -exec python3 {} \;
+
+authpd:
+	@find . -name "post_and_delete_admin.py" -exec python3 {} \;
 
 bids:
 	@echo "Creating sample data..."
