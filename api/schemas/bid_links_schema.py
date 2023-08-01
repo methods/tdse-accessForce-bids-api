@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields
 
 
-class LinksSchema(Schema):
+class BidLinksSchema(Schema):
     """
     Schema for representing links in a bid resource.
 

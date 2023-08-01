@@ -9,6 +9,7 @@ from functools import wraps
 from werkzeug.exceptions import UnprocessableEntity
 from api.schemas.bid_schema import BidSchema
 from api.schemas.bid_id_schema import BidIdSchema
+from api.schemas.question_schema import QuestionSchema
 
 
 def showForbiddenError():
@@ -140,3 +141,12 @@ def validate_token(request):
     key = os.getenv("SECRET_KEY")
     decoded = jwt.decode(token, key, algorithms="HS256")
     return decoded
+
+
+def validate_and_create_question_document(request, bid_id):
+    request["bid_id"] = bid_id
+    # Process input and create data model
+    question_document = QuestionSchema().load(request)
+    # Serialize to a JSON object
+    data = QuestionSchema().dump(question_document)
+    return data
