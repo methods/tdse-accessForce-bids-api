@@ -97,8 +97,11 @@ def delete_question(bid_id, question_id):
     try:
         bid_id = validate_id_path(bid_id)
         question_id = validate_id_path(question_id)
+        bid = db["bids"].find_one({"_id": bid_id, "status": Status.IN_PROGRESS.value})
+        if bid is None:
+            return showNotFoundError(), 404
         data = db["questions"].delete_one({"_id": question_id})
-        return data, 204
+        return data.raw_result, 204
     except ValidationError as e:
         return showValidationError(e), 400
     except Exception:

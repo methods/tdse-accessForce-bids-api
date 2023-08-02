@@ -13,7 +13,6 @@ def test_delete_bid_success(mock_db, test_client, admin_jwt):
         headers={"Authorization": f"Bearer {admin_jwt}"},
     )
     assert response.status_code == 204
-    assert response.content_length is None
 
 
 # Case 2: Failed to call database

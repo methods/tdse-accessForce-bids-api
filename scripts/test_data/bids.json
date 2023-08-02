@@ -54,7 +54,7 @@
           "questions": "/bids/b4846631-9135-4208-8e37-70eba8f77e15/questions",
           "self": "/bids/b4846631-9135-4208-8e37-70eba8f77e15"
         },
-        "status": "in_progress",
+        "status": "completed",
         "success": [
           {
             "has_score": true,
@@ -87,7 +87,7 @@
           "questions": "/bids/2529a0be-6e1c-4202-92c7-65c3742dfd4e/questions",
           "self": "/bids/2529a0be-6e1c-4202-92c7-65c3742dfd4e"
         },
-        "status": "in_progress",
+        "status": "deleted",
         "success": [
           {
             "has_score": true,
