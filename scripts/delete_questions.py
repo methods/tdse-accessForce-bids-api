@@ -1,5 +1,5 @@
 """
-This script deletes all bids from the Bids collection.
+This script deletes all questions from the Questions collection.
 
 """
 
@@ -21,13 +21,15 @@ def delete_bids():
     try:
         client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=10000)
         data_base = client["bidsAPI"]
-        collection = data_base["bids"]
+        collection = data_base["questions"]
 
         if collection.count_documents({}) == 0:
-            print("No bids to delete.")
+            print("No questions to delete.")
         else:
             delete_result = collection.delete_many({})
-            print(f"Deleted {delete_result.deleted_count} bids from the collection.")
+            print(
+                f"Deleted {delete_result.deleted_count} questions from the collection."
+            )
 
     except ConnectionFailure:
         print(f"Error: Failed to connect to database")

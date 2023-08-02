@@ -36,8 +36,8 @@ authplay:
 	@find . -name "get_jwt.py" -exec python3 {} \;
 
 bids:
-	@echo "Creating sample data..."
-	@find . -name "create_sample_data.py" -exec python3 {} \;
+	@echo "Creating bids..."
+	@find . -name "create_bids.py" -exec python3 {} \;
 
 branch:
 	@echo "Available branch types:"
@@ -71,7 +71,8 @@ commit: format
 
 dbclean:
 	@echo "Cleaning up database..."
-	@find . -name "delete_db.py" -exec python3 {} \;
+	@find . -name "delete_bids.py" -exec python3 {} \;
+	@find . -name "delete_questions.py" -exec python3 {} \;
 
 format: 
 	$(PYTHON) -m black .
@@ -91,8 +92,8 @@ mongostop:
 run: build
 	$(PYTHON) app.py
 
-setup: build dbclean bids
-	@echo "Setting up the application database..."
+setup: dbclean bids questions
+	@echo "Database setup complete."
 
 swag:
 	open http://localhost:8080/api/docs/#/
@@ -101,6 +102,10 @@ test:
 	coverage run -m pytest -vv
 	@echo "TEST COVERAGE REPORT"
 	coverage report -m --omit="tests/*,dbconfig/*"
+
+questions:
+	@echo "Creating questions..."
+	@find . -name "create_questions.py" -exec python3 {} \;
 
 venv/bin/activate: requirements.txt
 	python3 -m venv .venv
