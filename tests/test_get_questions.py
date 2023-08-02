@@ -70,7 +70,7 @@ def test_get_questions_success(mock_db, test_client, basic_jwt):
     assert response_data["items"] == filtered_sample_data
 
 
-# # Case 2: Links prepended with hostname
+# Case 2: Links prepended with hostname
 @patch("api.controllers.question_controller.db")
 def test_links_with_host(mock_db, test_client, basic_jwt):
     # Set up the sample data and expected result
@@ -117,3 +117,76 @@ def test_links_with_host(mock_db, test_client, basic_jwt):
         response_data["items"][0]["links"]["self"]
         == f"http://localhost:8080/bids/{sample_bid_id}/questions/2b18f477-627f-4d48-a008-ca0d9cea3791"
     )
+
+
+# Case 3: Connection error
+@patch("api.controllers.question_controller.db")
+def test_get_questions_connection_error(mock_db, test_client, basic_jwt):
+    # Set up the sample bid ID
+    sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
+
+    # Mock the database find method to raise a ConnectionError
+    mock_db["questions"].find.side_effect = Exception
+
+    # Make a request to the endpoint to get the questions
+    response = test_client.get(
+        f"api/bids/{sample_bid_id}/questions",
+        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+    )
+
+    # Assert the response status code and content
+    assert response.status_code == 500
+    response_data = response.get_json()
+    assert response_data == {"Error": "Could not connect to database"}
+
+
+# Case 4: Unauthorized / invalid api key
+@patch("api.controllers.question_controller.db")
+def test_get_questions_unauthorized(mock_db, test_client):
+    # Set up the sample bid ID
+    sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
+
+    # Mock the database find method to return an empty list
+    mock_db["questions"].find.return_value = []
+
+    # Make a request to the endpoint to get the questions without providing a JWT
+    response = test_client.get(
+        f"api/bids/{sample_bid_id}/questions", headers={"host": "localhost:8080"}
+    )
+
+    # Assert the response status code and content
+    assert response.status_code == 401
+    response_data = response.get_json()
+    assert response_data == {"Error": "Unauthorized"}
+
+    # Make a request to the endpoint to get the questions with an invalid JWT
+    response = test_client.get(
+        f"api/bids/{sample_bid_id}/questions",
+        headers={"host": "localhost:8080", "Authorization": "Bearer INVALID_JWT"},
+    )
+
+    # Assert the response status code and content
+    assert response.status_code == 401
+    response_data = response.get_json()
+    assert response_data == {"Error": "Unauthorized"}
+
+
+# Case 5: No questions found
+@patch("api.controllers.question_controller.db")
+def test_no_questions_found(mock_db, test_client, basic_jwt):
+    # Set up the sample bid ID
+    sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
+
+    # Mock the database find method to return an empty list
+    mock_db["questions"].find.return_value = []
+
+    # Make a request to the endpoint to get the questions
+    response = test_client.get(
+        f"api/bids/{sample_bid_id}/questions",
+        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+    )
+
+    # Assert the response status code and content
+    assert response.status_code == 404
+    response_data = response.get_json()
+    assert response_data == {"Error": "Resource not found"}

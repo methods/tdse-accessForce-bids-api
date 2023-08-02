@@ -56,11 +56,11 @@ def get_questions(bid_id):
             )
         )
 
-        if data is None:
+        if len(data) == 0:
             return showNotFoundError(), 404
-        else:
-            for question in data:
-                prepend_host_to_links(question, hostname)
+
+        for question in data:
+            prepend_host_to_links(question, hostname)
 
         return {"total_count": len(data), "items": data}, 200
 
@@ -78,13 +78,18 @@ def get_question(bid_id, question_id):
         question_id = validate_bid_id_path(question_id)
         hostname = request.headers.get("host")
         data = db["questions"].find_one(
-            {"_id": question_id, "links.bid": f"/bids/{bid_id}"}
+            {
+                "_id": question_id,
+                "links.bid": f"/bids/{bid_id}",
+                "status": {"$ne": Status.DELETED.value},
+            }
         )
 
-        if data is None:
+        if len(data) == 0:
             return showNotFoundError(), 404
-        else:
-            prepend_host_to_links(data, hostname)
+
+        prepend_host_to_links(data, hostname)
+
         return data, 200
     except ValidationError as e:
         return showValidationError(e), 400
