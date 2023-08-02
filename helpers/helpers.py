@@ -8,7 +8,7 @@ from flask import jsonify, request
 from functools import wraps
 from werkzeug.exceptions import UnprocessableEntity
 from api.schemas.bid_schema import BidSchema
-from api.schemas.bid_id_schema import BidIdSchema
+from api.schemas.id_schema import IdSchema
 from api.schemas.question_schema import QuestionSchema
 
 
@@ -60,9 +60,9 @@ def validate_and_create_bid_document(request):
     return data
 
 
-def validate_bid_id_path(bid_id):
-    valid_bid_id = BidIdSchema().load({"bid_id": bid_id})
-    data = valid_bid_id["bid_id"]
+def validate_id_path(id):
+    valid_id = IdSchema().load({"id": id})
+    data = valid_id["id"]
     return data
 
 

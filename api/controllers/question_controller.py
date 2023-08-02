@@ -10,7 +10,7 @@ from helpers.helpers import (
     showUnprocessableEntityError,
     showValidationError,
     validate_and_create_question_document,
-    validate_bid_id_path,
+    validate_id_path,
     validate_bid_update,
     validate_status_update,
     prepend_host_to_links,
@@ -26,7 +26,11 @@ question = Blueprint("question", __name__)
 @require_jwt
 def post_question(bid_id):
     try:
-        bid_id = validate_bid_id_path(bid_id)
+        bid_id = validate_id_path(bid_id)
+        # Check if the bid exists in the database
+        bid = db["bids"].find_one({"_id": bid_id})
+        if not bid:
+            return showNotFoundError(), 404
         # Process input and create data model
         data = validate_and_create_question_document(request.get_json(), bid_id)
         # Insert document into database collection
@@ -44,8 +48,7 @@ def post_question(bid_id):
 @require_jwt
 def get_questions(bid_id):
     try:
-        hostname = request.headers.get("host")
-        bid_id = validate_bid_id_path(bid_id)
+        bid_id = validate_id_path(bid_id)
         hostname = request.headers.get("host")
         data = list(
             db["questions"].find(
@@ -55,15 +58,12 @@ def get_questions(bid_id):
                 }
             )
         )
-
         if data is None:
             return showNotFoundError(), 404
         else:
             for question in data:
                 prepend_host_to_links(question, hostname)
-
         return {"total_count": len(data), "items": data}, 200
-
     except ValidationError as e:
         return showValidationError(e), 400
     except Exception:
@@ -74,13 +74,12 @@ def get_questions(bid_id):
 @require_jwt
 def get_question(bid_id, question_id):
     try:
-        bid_id = validate_bid_id_path(bid_id)
-        question_id = validate_bid_id_path(question_id)
+        bid_id = validate_id_path(bid_id)
+        question_id = validate_id_path(question_id)
         hostname = request.headers.get("host")
         data = db["questions"].find_one(
             {"_id": question_id, "links.bid": f"/bids/{bid_id}"}
         )
-
         if data is None:
             return showNotFoundError(), 404
         else:
@@ -89,4 +88,18 @@ def get_question(bid_id, question_id):
     except ValidationError as e:
         return showValidationError(e), 400
     except Exception as e:
+        return showInternalServerError(), 500
+
+
+@question.route("/bids/<bid_id>/questions/<question_id>", methods=["DELETE"])
+@require_admin_access
+def delete_question(bid_id, question_id):
+    try:
+        bid_id = validate_id_path(bid_id)
+        question_id = validate_id_path(question_id)
+        data = db["questions"].delete_one({"_id": question_id})
+        return data, 204
+    except ValidationError as e:
+        return showValidationError(e), 400
+    except Exception:
         return showInternalServerError(), 500

@@ -81,4 +81,4 @@ def test_get_bid_by_id_validation_error(mock_db, test_client, api_key):
         headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
     assert response.status_code == 400
-    assert response.get_json() == {"Error": "{'bid_id': ['Invalid bid Id']}"}
+    assert response.get_json() == {"Error": "{'id': ['Invalid Id']}"}

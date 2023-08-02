@@ -10,7 +10,7 @@ from helpers.helpers import (
     showUnprocessableEntityError,
     showValidationError,
     validate_and_create_bid_document,
-    validate_bid_id_path,
+    validate_id_path,
     validate_bid_update,
     validate_status_update,
     prepend_host_to_links,
@@ -57,7 +57,7 @@ def post_bid():
 @require_api_key
 def get_bid_by_id(bid_id):
     try:
-        bid_id = validate_bid_id_path(bid_id)
+        bid_id = validate_id_path(bid_id)
         data = db["bids"].find_one(
             {"_id": bid_id, "status": {"$ne": Status.DELETED.value}}
         )
@@ -81,7 +81,7 @@ def get_bid_by_id(bid_id):
 @require_jwt
 def update_bid_by_id(bid_id):
     try:
-        bid_id = validate_bid_id_path(bid_id)
+        bid_id = validate_id_path(bid_id)
         # Retrieve resource where id is equal to bid_id
         current_bid = db["bids"].find_one(
             {"_id": bid_id, "status": Status.IN_PROGRESS.value}
@@ -109,7 +109,7 @@ def update_bid_by_id(bid_id):
 @require_admin_access
 def change_status_to_deleted(bid_id):
     try:
-        bid_id = validate_bid_id_path(bid_id)
+        bid_id = validate_id_path(bid_id)
         data = db["bids"].find_one_and_update(
             {"_id": bid_id, "status": {"$ne": Status.DELETED.value}},
             {
@@ -134,7 +134,7 @@ def change_status_to_deleted(bid_id):
 @require_admin_access
 def update_bid_status(bid_id):
     try:
-        bid_id = validate_bid_id_path(bid_id)
+        bid_id = validate_id_path(bid_id)
         # Retrieve resource where id is equal to bid_id
         current_bid = db["bids"].find_one({"_id": bid_id})
         # Return 404 response if not found / returns None
