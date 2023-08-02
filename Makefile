@@ -8,13 +8,13 @@ PYTHON = ./.venv/bin/python3
 PIP = ./.venv/bin/pip
 
 
-.PHONY: run test clean check help commit swagger format branch lint setup bids dbclean authserver authplay
+.PHONY: run test clean check help commit swagger format branch lint setup bids questions dbclean authserver authplay
 
 help:
 	@echo "gmake help - display this help"
+	@echo "gmake authplay - get JWT and interact with auth api"
 	@echo "gmake authserver - run auth api application"
-	@echo "gmake auth - get JWT and interact with auth api"
-	@echo "gmake bids - create sample data"
+	@echo "gmake bids - populate bids collection"
 	@echo "gmake branch - create a new branch"
 	@echo "gmake build - create and activate virtual environment"
 	@echo "gmake check - check for security vulnerabilities"
@@ -27,9 +27,10 @@ help:
 	@echo "gmake swagger - open swagger documentation"
 	@echo "gmake setup - setup the application database"
 	@echo "gmake test - run the tests"
+	@echo "gmake questions - populate questions collection"
 
 authserver:
-	$(PYTHON) ../tdse-accessForce-auth-api/app.py
+	$(PYTHON) ../tdse-accessForce-auth-stub/app.py
 
 authplay:
 	@echo "Getting JWT..."
