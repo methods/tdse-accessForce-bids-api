@@ -1,6 +1,6 @@
 POST http://localhost:8080/api/bids HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJhIiwiYWRtaW4iOmZhbHNlLCJleHAiOjE2OTE0MjAxODZ9.FuanolVVEPL32xDTJfnqj7w5GEOoGI5qNu2nILmxTfM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikp1bGlvIiwiYWRtaW4iOnRydWUsImV4cCI6MTY5MTUyNDk0M30.GYWsLyCddSJqxFBCXJc5OMivZsQNQBUTaW6rd0bfq7A
 
 {
   "tender": "Business Intelligence and Data Warehousing",

@@ -29,7 +29,7 @@ help:
 	@echo "gmake test - run the tests"
 
 authserver:
-	$(PYTHON) ../tdse-accessForce-auth-api/app.py
+	$(PYTHON) ../tdse-accessForce-auth-stub/app.py
 
 authplay:
 	@echo "Getting JWT..."
