@@ -1,6 +1,6 @@
 """
 
-This script creates sample data for the MongoDB database.
+This script creates sample data for the Bids collection.
 
 """
 
@@ -45,8 +45,8 @@ def populate_bids():
                 collection.insert_one(bid)
                 print(f"Inserted bid with _id: {bid['_id']}")
 
-    except ConnectionFailure as error:
-        print(f"Error: {error}")
+    except ConnectionFailure:
+        print(f"Error: Failed to connect to database")
         sys.exit(1)
 
     finally:

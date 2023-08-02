@@ -8,13 +8,13 @@ PYTHON = ./.venv/bin/python3
 PIP = ./.venv/bin/pip
 
 
-.PHONY: run test clean check help commit swagger format branch lint setup bids dbclean authserver authplay
+.PHONY: run test clean check help commit swagger format branch lint setup bids questions dbclean authserver authplay
 
 help:
 	@echo "gmake help - display this help"
+	@echo "gmake authplay - get JWT and interact with auth api"
 	@echo "gmake authserver - run auth api application"
-	@echo "gmake auth - get JWT and interact with auth api"
-	@echo "gmake bids - create sample data"
+	@echo "gmake bids - populate bids collection"
 	@echo "gmake branch - create a new branch"
 	@echo "gmake build - create and activate virtual environment"
 	@echo "gmake check - check for security vulnerabilities"
@@ -23,10 +23,13 @@ help:
 	@echo "gmake dbclean - clean up the application database"
 	@echo "gmake format - format the code"
 	@echo "gmake lint - run linters"
+	@echo "gmake mongostart - run local mongodb instance"
+	@echo "gmake mongostop - stop local mongodb instance"
 	@echo "gmake run - run the application"
 	@echo "gmake swagger - open swagger documentation"
 	@echo "gmake setup - setup the application database"
 	@echo "gmake test - run the tests"
+	@echo "gmake questions - populate questions collection"
 
 authserver:
 	$(PYTHON) ../tdse-accessForce-auth-stub/app.py
@@ -36,8 +39,8 @@ authplay:
 	@find . -name "get_jwt.py" -exec python3 {} \;
 
 bids:
-	@echo "Creating sample data..."
-	@find . -name "create_sample_data.py" -exec python3 {} \;
+	@echo "Creating bids..."
+	@find . -name "create_bids.py" -exec python3 {} \;
 
 branch:
 	@echo "Available branch types:"
@@ -71,7 +74,8 @@ commit: format
 
 dbclean:
 	@echo "Cleaning up database..."
-	@find . -name "delete_db.py" -exec python3 {} \;
+	@find . -name "delete_bids.py" -exec python3 {} \;
+	@find . -name "delete_questions.py" -exec python3 {} \;
 
 format: 
 	$(PYTHON) -m black .
@@ -91,8 +95,8 @@ mongostop:
 run: build
 	$(PYTHON) app.py
 
-setup: build dbclean bids
-	@echo "Setting up the application database..."
+setup: dbclean bids questions
+	@echo "Database setup complete."
 
 swag:
 	open http://localhost:8080/api/docs/#/
@@ -101,6 +105,10 @@ test:
 	coverage run -m pytest -vv
 	@echo "TEST COVERAGE REPORT"
 	coverage report -m --omit="tests/*,dbconfig/*"
+
+questions:
+	@echo "Creating questions..."
+	@find . -name "create_questions.py" -exec python3 {} \;
 
 venv/bin/activate: requirements.txt
 	python3 -m venv .venv

@@ -1,5 +1,5 @@
 """
-This script deletes all bids from the MongoDB collection.
+This script deletes all bids from the Bids collection.
 
 """
 
@@ -25,13 +25,12 @@ def delete_bids():
 
         if collection.count_documents({}) == 0:
             print("No bids to delete.")
+        else:
+            delete_result = collection.delete_many({})
+            print(f"Deleted {delete_result.deleted_count} bids from the collection.")
 
-        delete_result = collection.delete_many({})
-
-        print(f"Deleted {delete_result.deleted_count} bids from the collection.")
-
-    except ConnectionFailure as error:
-        print(f"Error: {error}")
+    except ConnectionFailure:
+        print(f"Error: Failed to connect to database")
         sys.exit(1)
 
     finally:
