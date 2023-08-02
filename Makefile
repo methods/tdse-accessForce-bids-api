@@ -23,6 +23,8 @@ help:
 	@echo "gmake dbclean - clean up the application database"
 	@echo "gmake format - format the code"
 	@echo "gmake lint - run linters"
+	@echo "gmake mongostart - run local mongodb instance"
+	@echo "gmake mongostop - stop local mongodb instance"
 	@echo "gmake run - run the application"
 	@echo "gmake swagger - open swagger documentation"
 	@echo "gmake setup - setup the application database"
