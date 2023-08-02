@@ -443,11 +443,9 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-
 # --------------------------------------------
 # Components
 components:
-# --------------------------------------------
 # Schemas
   schemas:
     Bid:
@@ -845,7 +843,6 @@ components:
                 score: 10
                 out_of: 20
                 respondents: 'ONS'
-
 # --------------------------------------------
 # Error responses
   responses:
