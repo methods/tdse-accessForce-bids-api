@@ -636,17 +636,17 @@ components:
     QuestionsLink:
       description: A link to a collection of questions for a bid
       type: string
-      example: 'https://{hostname}/api//bids/96d69775-29af-46b1-aaf4-bfbdb1543412/questions'
+      example: 'http://{hostname}/api//bids/96d69775-29af-46b1-aaf4-bfbdb1543412/questions'
 # --------------------------------------------
     SelfLink:
       description: A link to the current resource
       type: string
-      example: "https://{hostname}/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428"
+      example: 'http://{hostname}/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428'
 # --------------------------------------------
     SelfQuestionLink:
       description: A link to the current resource
       type: string
-      example: "https://{hostname}/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428/questions/471fea1f-705c-4851-9a5b-df7bc2651428"
+      example: 'http://{hostname}/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428/questions/471fea1f-705c-4851-9a5b-df7bc2651428'
     
 # --------------------------------------------
     BidRequestBody:
