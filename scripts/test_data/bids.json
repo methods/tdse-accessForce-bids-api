@@ -18,8 +18,8 @@
         },
         "last_updated": "2023-07-20T17:00:40.510224",
         "links": {
-          "questions": "/bids/be15c306-c85b-4e67-a9f6-682553c065a1/questions",
-          "self": "/bids/be15c306-c85b-4e67-a9f6-682553c065a1"
+          "questions": "/api/bids/be15c306-c85b-4e67-a9f6-682553c065a1/questions",
+          "self": "/api/bids/be15c306-c85b-4e67-a9f6-682553c065a1"
         },
         "status": "in_progress",
         "success": [
@@ -51,8 +51,8 @@
         },
         "last_updated": "2023-07-20T17:03:12.972780",
         "links": {
-          "questions": "/bids/b4846631-9135-4208-8e37-70eba8f77e15/questions",
-          "self": "/bids/b4846631-9135-4208-8e37-70eba8f77e15"
+          "questions": "/api/bids/b4846631-9135-4208-8e37-70eba8f77e15/questions",
+          "self": "/api/bids/b4846631-9135-4208-8e37-70eba8f77e15"
         },
         "status": "completed",
         "success": [
@@ -84,8 +84,8 @@
         },
         "last_updated": "2023-07-20T17:03:19.452381",
         "links": {
-          "questions": "/bids/2529a0be-6e1c-4202-92c7-65c3742dfd4e/questions",
-          "self": "/bids/2529a0be-6e1c-4202-92c7-65c3742dfd4e"
+          "questions": "/api/bids/2529a0be-6e1c-4202-92c7-65c3742dfd4e/questions",
+          "self": "/api/bids/2529a0be-6e1c-4202-92c7-65c3742dfd4e"
         },
         "status": "deleted",
         "success": [

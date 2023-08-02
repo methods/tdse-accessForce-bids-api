@@ -50,5 +50,5 @@ class LinksModel:
     """
 
     def __init__(self, question_id, bid_id):
-        self.self = f"/bids/{bid_id}/questions/{question_id}"
-        self.bid = f"/bids/{bid_id}"
+        self.self = f"/api/bids/{bid_id}/questions/{question_id}"
+        self.bid = f"/api/bids/{bid_id}"
