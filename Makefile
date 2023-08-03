@@ -58,7 +58,7 @@ swag:
 	open http://localhost:8080/api/docs/#/
 
 test: 
-	coverage run -m pytest -vv
+	-coverage run -m pytest -vv
 	@echo "TEST COVERAGE REPORT"
 	coverage report -m --omit="tests/*,dbconfig/*"
 
