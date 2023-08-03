@@ -124,6 +124,7 @@ def update_question(bid_id, question_id):
         # Return 404 response if not found / returns None
         if len(data) == 0:
             return showNotFoundError(), 404
+
         updated_question = validate_question_update(request.get_json(), data)
         db["questions"].replace_one({"_id": question_id}, updated_question)
         return updated_question, 200
