@@ -10,20 +10,20 @@ class QuestionModel:
         description,
         question_url,
         feedback,
-        bid_id,
+        bid_id=None,
         response=None,
         score=None,
         out_of=None,
         respondents=[],
         status=None,
-        question_id=None,
         links=None,
         last_updated=None,
+        _id=None,
     ):
-        if question_id is None:
+        if _id is None:
             self._id = uuid4()
         else:
-            self._id = question_id
+            self._id = _id
         if status is None:
             self.status = Status.IN_PROGRESS
         else:
@@ -35,7 +35,11 @@ class QuestionModel:
         self.score = score
         self.out_of = out_of
         self.respondents = respondents
-        self.links = LinksModel(self._id, bid_id)
+        if bid_id is None:
+            self.links = links
+        else:
+            self.links = LinksModel(self._id, bid_id)
+
         self.last_updated = datetime.now()
 
 

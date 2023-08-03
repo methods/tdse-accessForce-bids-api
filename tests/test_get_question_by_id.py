@@ -168,3 +168,17 @@ def test_no_question_found_by_id(mock_db, test_client, basic_jwt):
     assert response.status_code == 404
     response_data = response.get_json()
     assert response_data == {"Error": "Resource not found"}
+
+
+# Case 6: Validation error
+@patch("api.controllers.question_controller.db")
+def test_get_question_by_id_validation_error(mock_db, test_client, basic_jwt):
+    # Set up the sample question ID
+    sample_bid_id = "Invalid bid Id"
+    sample_question_id = "2b18f477-627f-4d48-a008-ca0d9cea3791"
+    response = test_client.get(
+        f"api/bids/{sample_bid_id}/questions/{sample_question_id}",
+        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+    )
+    assert response.status_code == 400
+    assert response.get_json() == {"Error": "{'bid_id': ['Invalid bid Id']}"}
