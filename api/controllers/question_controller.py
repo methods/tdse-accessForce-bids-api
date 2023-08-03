@@ -12,7 +12,7 @@ from helpers.helpers import (
     validate_and_create_question_document,
     validate_id_path,
     validate_bid_update,
-    validate_status_update,
+    validate_status_update_question,
     prepend_host_to_links,
     require_api_key,
     require_jwt,
@@ -58,11 +58,11 @@ def get_questions(bid_id):
                 }
             )
         )
-        if data is None:
+        if len(data) == 0:
             return showNotFoundError(), 404
-        else:
-            for question in data:
-                prepend_host_to_links(question, hostname)
+
+        for question in data:
+            prepend_host_to_links(question, hostname)
         return {"total_count": len(data), "items": data}, 200
     except ValidationError as e:
         return showValidationError(e), 400
@@ -78,17 +78,23 @@ def get_question(bid_id, question_id):
         question_id = validate_id_path(question_id)
         hostname = request.headers.get("host")
         data = db["questions"].find_one(
-            {"_id": question_id, "links.bid": f"/bids/{bid_id}"}
+            {
+                "_id": question_id,
+                "links.self": f"/bids/{bid_id}/questions/{question_id}",
+                "status": {"$ne": Status.DELETED.value},
+            }
         )
-        if data is None:
+        if len(data) == 0:
             return showNotFoundError(), 404
-        else:
-            prepend_host_to_links(data, hostname)
+
+        prepend_host_to_links(data, hostname)
+
         return data, 200
     except ValidationError as e:
         return showValidationError(e), 400
     except Exception as e:
         return showInternalServerError(), 500
+
 
 
 @question.route("/bids/<bid_id>/questions/<question_id>", methods=["DELETE"])
@@ -106,3 +112,33 @@ def delete_question(bid_id, question_id):
         return showValidationError(e), 400
     except Exception:
         return showInternalServerError(), 500
+
+      
+@question.route("/bids/<bid_id>/questions/<question_id>", methods=["PUT"])
+@require_jwt
+def update_question(bid_id, question_id):
+    try:
+        bid_id = validate_bid_id_path(bid_id)
+        question_id = validate_bid_id_path(question_id)
+        data = db["questions"].find_one(
+            {
+                "_id": question_id,
+                "links.self": f"/bids/{bid_id}/questions/{question_id}",
+                "status": {"$ne": Status.DELETED.value},
+            }
+        )
+        # Return 404 response if not found / returns None
+        if len(data) == 0:
+            return showNotFoundError(), 404
+
+        updated_question = validate_status_update_question(request.get_json(), data)
+        db["questions"].replace_one({"_id": question_id}, updated_question)
+
+        return updated_question, 200
+    except ValidationError as e:
+        return showValidationError(e), 400
+    except UnprocessableEntity as e:
+        return showUnprocessableEntityError(e), 422
+    except Exception as e:
+        return str(e), 500
+

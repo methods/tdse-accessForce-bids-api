@@ -21,11 +21,11 @@ class QuestionSchema(Schema):
         required=True,
         error_messages={"required": {"message": "Missing mandatory field"}},
     )
-    bid_id = fields.UUID(required=True)
-    response = fields.Str()
-    score = fields.Integer()
-    out_of = fields.Integer()
-    respondents = fields.List(fields.Str())
+    bid_id = fields.UUID()
+    response = fields.Str(allow_none=True)
+    score = fields.Integer(allow_none=True)
+    out_of = fields.Integer(allow_none=True)
+    respondents = fields.List(fields.Str(allow_none=True))
     status = fields.Enum(Status, by_value=True)
     links = fields.Nested(QuestionLinksSchema)
     last_updated = fields.DateTime()

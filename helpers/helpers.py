@@ -150,3 +150,12 @@ def validate_and_create_question_document(request, bid_id):
     # Serialize to a JSON object
     data = QuestionSchema().dump(question_document)
     return data
+
+
+def validate_status_update_question(request, resource):
+    if request == {}:
+        raise UnprocessableEntity("Request must not be empty")
+    resource.update(request)
+    question_document = QuestionSchema().load(resource, partial=True)
+    data = QuestionSchema().dump(question_document)
+    return data
