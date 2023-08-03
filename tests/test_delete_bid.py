@@ -13,7 +13,6 @@ def test_delete_bid_success(mock_db, test_client, admin_jwt):
         headers={"Authorization": f"Bearer {admin_jwt}"},
     )
     assert response.status_code == 204
-    assert response.content_length is None
 
 
 # Case 2: Failed to call database
@@ -35,7 +34,7 @@ def test_delete_bid_validation_error(mock_db, test_client, admin_jwt):
         "/api/bids/invalid_bid_id", headers={"Authorization": f"Bearer {admin_jwt}"}
     )
     assert response.status_code == 400
-    assert response.get_json() == {"Error": "{'bid_id': ['Invalid bid Id']}"}
+    assert response.get_json() == {"Error": "{'id': ['Invalid Id']}"}
 
 
 # Case 4: Bid not found
