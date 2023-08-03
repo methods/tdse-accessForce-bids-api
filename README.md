@@ -39,12 +39,12 @@ This API stores and serves information about Methods bids for client tenders.
 6. Run the following command to have all the commands to use the API with Makefile:
 
       ```bash
-      gmake help
+      make help
       ```
 7. Run the following command to start the API:
 
       ```bash
-      gmake run
+      make run
       ```
  * The API will be available at http://localhost:8080/api/bids
 
@@ -54,9 +54,25 @@ This API stores and serves information about Methods bids for client tenders.
 9. In a new terminal enter the following command to run authorization server if not already running. This will be needed to generate a token:
 
       ```bash
-      gmake authserver
+      make auth
       ```
  * The API will be available at http://localhost:5000/authorise
+
+--------------
+
+## Database Setup
+
+To set up the application database, run the following command:
+
+      ```bash
+      make setup
+      ```
+
+This will perform the following steps:
+
+1. Clean up the existing database
+2. Populate the bids collection with test data
+3. Populate the questions collection with test data, using existing bid IDs
 
 --------------
 
@@ -65,12 +81,12 @@ This API stores and serves information about Methods bids for client tenders.
 1. Run the following command to start the API:
 
       ```bash
-      gmake run
+      make run
       ```
 2. In a new terminal run the following command to open the Swagger UI in your default web browser:
       
       ```bash
-      gmake swag
+      make swag
       ```
 --------------
 
@@ -79,26 +95,13 @@ This API stores and serves information about Methods bids for client tenders.
 1. Run the following command to start the API:
 
       ```bash
-      gmake run
+      make run
       ```
 2. In a new terminal enter the following command to run the test suites and generate a test coverage report:
       
       ```bash
-      gmake test
+      make test
       ```
---------------
-
-## Using auth playground to generate a token
-
-1. Follow the steps in the section above to start the API and authorization server.
-
-2. In a new terminal enter the following command to open the auth playground in your default web browser:
-
-      ```bash
-      gmake authplay
-      ```
-3. Follow the steps in the auth playground to generate a token and much more.
-
 --------------
 
 ## Installing and running an instance of MongoDB on your local machine (MacOS)
@@ -148,6 +151,19 @@ This API stores and serves information about Methods bids for client tenders.
       exit
       ``` 
 OPTIONAL - Download MongoDB Compass to view the database in a GUI. You can download it from [here](https://www.mongodb.com/try/download/compass)
+
+--------------
+
+## Using auth playground to generate a token and make authenticated requests to the Bids API
+
+1. Follow the steps in the section above to start the API and authorization server.
+
+2. In a new terminal enter the following command to open the auth playground in your default web browser:
+
+      ```bash
+      make authplay
+      ```
+3. Follow the steps in the auth playground to generate a token and much more.
 
 --------------
 

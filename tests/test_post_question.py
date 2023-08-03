@@ -44,7 +44,7 @@ def test_post_is_successful(mock_db, test_client, basic_jwt):
 
 # Case 2: Missing mandatory fields
 @patch("api.controllers.question_controller.db")
-def testpost_question_field_missing(mock_db, test_client, basic_jwt):
+def test_post_question_field_missing(mock_db, test_client, basic_jwt):
     data = {
         "question_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
         "feedback": {
