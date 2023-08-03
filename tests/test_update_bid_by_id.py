@@ -26,6 +26,7 @@ def test_update_bid_by_id_success(mock_db, test_client, basic_jwt):
     )
     mock_db["bids"].replace_one.assert_called_once()
     assert response.status_code == 200
+    assert response.get_json()["tender"] == "UPDATED TENDER"
 
 
 # Case 2: Invalid user input

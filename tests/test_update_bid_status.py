@@ -33,6 +33,7 @@ def test_update_bid_status_success(mock_db, test_client, admin_jwt):
     mock_db["bids"].find_one.assert_called_once_with({"_id": bid_id})
     mock_db["bids"].replace_one.assert_called_once()
     assert response.status_code == 200
+    assert response.get_json()["status"] == "completed"
 
 
 # Case 2: Invalid status

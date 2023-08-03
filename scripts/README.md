@@ -12,7 +12,7 @@
 
 To run the database cleanup script, execute the following command:
 ```bash
-gmake dbclean
+make dbclean
 ```
 
 Or to run the cleanup script for only the bids collection, execute:
@@ -33,19 +33,4 @@ python3 create_bids.py
 To run the sample questions data population script, execute the following command:
 ```bash
 python3 create_questions.py
-```
-
-## Database Setup
-
-### Script Description
-The setup target in the Makefile sets up the application database by performing the following steps:
-
-1. Cleaning up the existing database using the dbclean target.
-2. Creating sample data using the bids target.
-3. Creating sample data using the questions target.
-
-### Usage
-To set up the application database, run the following command:
-```bash
-gmake setup
 ```

@@ -134,6 +134,7 @@ def main():
                 print("Invalid choice. Try again.")
         else:
             print("Login failed. Try again.")
+            return
 
 
 if __name__ == "__main__":

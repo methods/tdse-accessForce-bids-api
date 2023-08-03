@@ -132,5 +132,5 @@ def update_question(bid_id, question_id):
         return showValidationError(e), 400
     except UnprocessableEntity as e:
         return showUnprocessableEntityError(e), 422
-    except Exception as e:
+    except Exception:
         return showInternalServerError(), 500
