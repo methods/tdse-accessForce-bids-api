@@ -11,10 +11,8 @@ from helpers.helpers import (
     showValidationError,
     validate_and_create_question_document,
     validate_id_path,
-    validate_bid_update,
-    validate_status_update_question,
+    validate_question_update,
     prepend_host_to_links,
-    require_api_key,
     require_jwt,
     require_admin_access,
 )
@@ -60,7 +58,6 @@ def get_questions(bid_id):
         )
         if len(data) == 0:
             return showNotFoundError(), 404
-
         for question in data:
             prepend_host_to_links(question, hostname)
         return {"total_count": len(data), "items": data}, 200
@@ -86,15 +83,12 @@ def get_question(bid_id, question_id):
         )
         if len(data) == 0:
             return showNotFoundError(), 404
-
         prepend_host_to_links(data, hostname)
-
         return data, 200
     except ValidationError as e:
         return showValidationError(e), 400
     except Exception as e:
         return showInternalServerError(), 500
-
 
 
 @question.route("/bids/<bid_id>/questions/<question_id>", methods=["DELETE"])
@@ -103,7 +97,7 @@ def delete_question(bid_id, question_id):
     try:
         bid_id = validate_id_path(bid_id)
         question_id = validate_id_path(question_id)
-        bid = db["bids"].find_one({"_id": bid_id, "status": Status.IN_PROGRESS.value})
+        bid = db["bids"].find_one({"_id": bid_id})
         if bid is None:
             return showNotFoundError(), 404
         data = db["questions"].delete_one({"_id": question_id})
@@ -113,13 +107,13 @@ def delete_question(bid_id, question_id):
     except Exception:
         return showInternalServerError(), 500
 
-      
+
 @question.route("/bids/<bid_id>/questions/<question_id>", methods=["PUT"])
 @require_jwt
 def update_question(bid_id, question_id):
     try:
-        bid_id = validate_bid_id_path(bid_id)
-        question_id = validate_bid_id_path(question_id)
+        bid_id = validate_id_path(bid_id)
+        question_id = validate_id_path(question_id)
         data = db["questions"].find_one(
             {
                 "_id": question_id,
@@ -130,15 +124,12 @@ def update_question(bid_id, question_id):
         # Return 404 response if not found / returns None
         if len(data) == 0:
             return showNotFoundError(), 404
-
-        updated_question = validate_status_update_question(request.get_json(), data)
+        updated_question = validate_question_update(request.get_json(), data)
         db["questions"].replace_one({"_id": question_id}, updated_question)
-
         return updated_question, 200
     except ValidationError as e:
         return showValidationError(e), 400
     except UnprocessableEntity as e:
         return showUnprocessableEntityError(e), 422
     except Exception as e:
-        return str(e), 500
-
+        return showInternalServerError(), 500

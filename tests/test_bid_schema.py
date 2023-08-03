@@ -32,9 +32,9 @@ def test_bid_model():
     # Test that links object is generated and URLs are correct
     assert to_post["links"] is not None
     assert "self" in to_post["links"]
-    assert to_post["links"]["self"] == f"/bids/{bid_id}"
+    assert to_post["links"]["self"] == f"/api/bids/{bid_id}"
     assert "questions" in to_post["links"]
-    assert to_post["links"]["questions"] == f"/bids/{bid_id}/questions"
+    assert to_post["links"]["questions"] == f"/api/bids/{bid_id}/questions"
 
     # Test that status is set to in_progress
     assert to_post["status"] == "in_progress"

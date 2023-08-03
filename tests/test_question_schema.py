@@ -29,9 +29,9 @@ def test_question_model():
     # Test that links object is generated and URLs are correct
     assert to_post["links"] is not None
     assert "self" in to_post["links"]
-    assert to_post["links"]["self"] == f"/bids/{bid_id}/questions/{question_id}"
+    assert to_post["links"]["self"] == f"/api/bids/{bid_id}/questions/{question_id}"
     assert "bid" in to_post["links"]
-    assert to_post["links"]["bid"] == f"/bids/{bid_id}"
+    assert to_post["links"]["bid"] == f"/api/bids/{bid_id}"
 
     # Test that status is set to in_progress
     assert to_post["status"] == "in_progress"
