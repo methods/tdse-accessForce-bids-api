@@ -23,7 +23,7 @@ def test_delete_question_success(mock_db, test_client, admin_jwt):
         headers={"Authorization": f"Bearer {admin_jwt}"},
     )
     mock_db["bids"].find_one.assert_called_once_with(
-        {"_id": "1ff45b42-b72a-464c-bde9-9bead14a07b9", "status": "in_progress"}
+        {"_id": "1ff45b42-b72a-464c-bde9-9bead14a07b9"}
     )
     mock_db["questions"].delete_one.assert_called_once_with(
         {"_id": "6e7d3f8a-fab3-4ebf-8348-96d0808d325e"}
@@ -64,7 +64,7 @@ def test_delete_question_bid_not_found(mock_db, test_client, admin_jwt):
     )
 
     mock_db["bids"].find_one.assert_called_once_with(
-        {"_id": "1ff45b42-b72a-464c-bde9-9bead14a07b9", "status": "in_progress"}
+        {"_id": "1ff45b42-b72a-464c-bde9-9bead14a07b9"}
     )
     assert response.status_code == 404
     mock_db["questions"].delete_one.assert_not_called()

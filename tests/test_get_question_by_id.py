@@ -181,4 +181,4 @@ def test_get_question_by_id_validation_error(mock_db, test_client, basic_jwt):
         headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
     )
     assert response.status_code == 400
-    assert response.get_json() == {"Error": "{'bid_id': ['Invalid bid Id']}"}
+    assert response.get_json() == {"Error": "{'id': ['Invalid Id']}"}

@@ -152,7 +152,7 @@ def validate_and_create_question_document(request, bid_id):
     return data
 
 
-def validate_status_update_question(request, resource):
+def validate_question_update(request, resource):
     if request == {}:
         raise UnprocessableEntity("Request must not be empty")
     resource.update(request)
