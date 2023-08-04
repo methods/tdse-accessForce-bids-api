@@ -60,48 +60,18 @@ This API stores and serves information about Methods bids for client tenders.
 
 --------------
 
-## Database Setup
+## Environmental Variables
 
-To set up the application database, run the following command:
+In order to validate your credentials and configure the database connection, you will have to set up the environmental variables locally.
 
-      ```bash
-      make setup
-      ```
+To do this, create a `.env` file in your root folder, with the following key/value pairs:
 
-This will perform the following steps:
+      API_KEY=THIS_IS_THE_API_KEY
+      SECRET_KEY=THIS_IS_A_SECRET
+      DB_HOST=localhost
+      DB_NAME=bidsAPI
+      TEST_DB_NAME=testAPI
 
-1. Clean up the existing database
-2. Populate the bids collection with test data
-3. Populate the questions collection with test data, using existing bid IDs
-
---------------
-
-## Accessing API Documentation (Swagger Specification)
-
-1. Run the following command to start the API:
-
-      ```bash
-      make run
-      ```
-2. In a new terminal run the following command to open the Swagger UI in your default web browser:
-      
-      ```bash
-      make swag
-      ```
---------------
-
-## Testing the application
-
-1. Run the following command to start the API:
-
-      ```bash
-      make run
-      ```
-2. In a new terminal enter the following command to run the test suites and generate a test coverage report:
-      
-      ```bash
-      make test
-      ```
 --------------
 
 ## Installing and running an instance of MongoDB on your local machine (MacOS)
@@ -145,12 +115,77 @@ This will perform the following steps:
       ```bash
       use bidsAPI
       ```
+8. To create a test database called `testAPI`, run:
+
+      ```bash
+      use testAPI
+      ```
 8. To exit the MongoDB shell, run the following command:
 
       ```bash
       exit
       ``` 
 OPTIONAL - Download MongoDB Compass to view the database in a GUI. You can download it from [here](https://www.mongodb.com/try/download/compass)
+
+--------------
+
+## Database Setup
+
+To set up the application database, run the following command:
+
+      ```bash
+      make setup
+      ```
+
+This will perform the following steps:
+
+1. Clean up the existing database
+2. Populate the bids collection with dummy data
+3. Populate the questions collection with dummy data, using existing bid IDs
+
+--------------
+
+## Accessing API Documentation (Swagger Specification)
+
+1. Run the following command to start the API:
+
+      ```bash
+      make run
+      ```
+2. In a new terminal run the following command to open the Swagger UI in your default web browser:
+      
+      ```bash
+      make swag
+      ```
+--------------
+
+## Testing the application
+
+1. Run the following command to start the API (if not already started):
+
+      ```bash
+      make run
+      ```
+2. Run the following command to start the Auth stub (if not already started):
+
+      ```bash
+      make auth
+      ```
+3. Run the following command to start the MongoDB instance (if not already started):
+
+      ```bash
+      make mongostart
+      ```
+4. Run the following command to setup the test database:
+
+      ```bash
+      make test-setup
+      ```
+5. In a new terminal enter the following command to run the test suites and generate a test coverage report:
+      
+      ```bash
+      make test
+      ```
 
 --------------
 
