@@ -10,10 +10,10 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
-project = "BidsApi Documentation"
-copyright = "2023, Julio - Pira"
-author = "Julio - Pira"
-release = "0.4.0"
+PROJECT = "BidsApi Documentation"
+COPYRIGHT = "2023, Julio - Pira"
+AUTHOR = "Julio - Pira"
+RELEASE = "0.4.0"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -27,5 +27,5 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "sphinx_rtd_theme"
+HTML_THEME = "sphinx_rtd_theme"
 html_static_path = ["_static"]
