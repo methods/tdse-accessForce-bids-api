@@ -6,7 +6,7 @@ PYTHON = ./.venv/bin/python3
 PIP = ./.venv/bin/pip
 
 
-.PHONY: help auth clean mongostart mongostop run setup swag test
+.PHONY: help auth clean mongostart mongostop run setup swag test test-setup
 
 help:
 	@echo "make help - display this help"
@@ -19,6 +19,7 @@ help:
 	@echo "make swag - open swagger documentation"
 	@echo "make setup - setup the application database"
 	@echo "make test - run tests and coverage report"
+	@echo "make test-setup - setup the test database"
 	@echo "make helptools - display help for tools"
 
 auth:
@@ -60,8 +61,15 @@ swag:
 test: 
 	-coverage run -m pytest -vv
 	@echo "TEST COVERAGE REPORT"
-	coverage report -m --omit="tests/*,dbconfig/*"
+	coverage report -m --omit="app.py,tests/*,dbconfig/*"
 
+test-setup:
+	export TEST_ENVIRONMENT=true; \
+	cd ./scripts/; \
+	make dbclean; \
+	make bids; \
+	make questions; \
+	export TEST_ENVIRONMENT=
 
 .PHONY: helptools authplay branch check commit format lint
 

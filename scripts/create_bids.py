@@ -13,7 +13,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-MONGO_URI = os.getenv("MONGO_URL") or "mongodb://localhost:27017/bidsAPI"
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = 27017
+DB_NAME = os.getenv("DB_NAME")
+
+if os.environ.get("TEST_ENVIRONMENT"):
+    DB_NAME = os.getenv("TEST_DB_NAME")
 
 
 def populate_bids():
@@ -21,8 +26,8 @@ def populate_bids():
     Populates the MongoDB database with sample bids data from bids.json file.
     """
     try:
-        client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=10000)
-        data_base = client["bidsAPI"]
+        client = MongoClient(DB_HOST, DB_PORT, serverSelectionTimeoutMS=10000)
+        data_base = client[DB_NAME]
         collection = data_base["bids"]
 
         # Get the current script's directory
