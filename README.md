@@ -115,7 +115,7 @@ To do this, create a `.env` file in your root folder, with the following key/val
       ```bash
       use bidsAPI
       ```
-8. To create a test database called `testAPI`, run:
+8. To create a new test database called `testAPI`, run:
 
       ```bash
       use testAPI
@@ -145,14 +145,14 @@ This will perform the following steps:
 
 --------------
 
-## Accessing API Documentation (Swagger Specification)
+## Accessing API Documentation (OAS)
 
-1. Run the following command to start the API:
+1. Run the following command to start the API (if you haven't already):
 
       ```bash
       make run
       ```
-2. In a new terminal run the following command to open the Swagger UI in your default web browser:
+2. In a new terminal run the following command to view the Swagger UI in your default web browser:
       
       ```bash
       make swag
@@ -161,37 +161,23 @@ This will perform the following steps:
 
 ## Testing the application
 
-1. Run the following command to start the API (if not already started):
+1. Follow the steps above to start the API, authorization server and database connection (if you haven't already).
 
-      ```bash
-      make run
-      ```
-2. Run the following command to start the Auth stub (if not already started):
-
-      ```bash
-      make auth
-      ```
-3. Run the following command to start the MongoDB instance (if not already started):
-
-      ```bash
-      make mongostart
-      ```
-4. Run the following command to setup the test database:
+2. Run the following command to setup the test database:
 
       ```bash
       make test-setup
       ```
-5. In a new terminal enter the following command to run the test suites and generate a test coverage report:
+3. Enter the following command to run the test suites and generate a test coverage report:
       
       ```bash
       make test
       ```
-
 --------------
 
 ## Using auth playground to generate a token and make authenticated requests to the Bids API
 
-1. Follow the steps in the section above to start the API and authorization server.
+1. Follow the steps above to start the API, authorization server and database connection (if you haven't already).
 
 2. In a new terminal enter the following command to open the auth playground in your default web browser:
 
