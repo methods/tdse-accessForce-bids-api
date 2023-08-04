@@ -1,0 +1,104 @@
+{
+    "items": [
+      {
+        "_id": "be15c306-c85b-4e67-a9f6-682553c065a1",
+        "alias": "ONS",
+        "bid_date": "2023-06-23",
+        "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+        "client": "Office for National Statistics",
+        "failed": {
+          "has_score": true,
+          "out_of": 36,
+          "phase": 2,
+          "score": 20
+        },
+        "feedback": {
+          "description": "Feedback from client in detail",
+          "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
+        },
+        "last_updated": "2023-07-20T17:00:40.510224",
+        "links": {
+          "questions": "/api/bids/be15c306-c85b-4e67-a9f6-682553c065a1/questions",
+          "self": "/api/bids/be15c306-c85b-4e67-a9f6-682553c065a1"
+        },
+        "status": "in_progress",
+        "success": [
+          {
+            "has_score": true,
+            "out_of": 36,
+            "phase": 1,
+            "score": 30
+          }
+        ],
+        "tender": "Business Intelligence and Data Warehousing",
+        "was_successful": false
+      },
+      {
+        "_id": "b4846631-9135-4208-8e37-70eba8f77e15",
+        "alias": "ONS",
+        "bid_date": "2023-06-23",
+        "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+        "client": "Office for National Statistics",
+        "failed": {
+          "has_score": true,
+          "out_of": 36,
+          "phase": 2,
+          "score": 20
+        },
+        "feedback": {
+          "description": "Feedback from client in detail",
+          "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
+        },
+        "last_updated": "2023-07-20T17:03:12.972780",
+        "links": {
+          "questions": "/api/bids/b4846631-9135-4208-8e37-70eba8f77e15/questions",
+          "self": "/api/bids/b4846631-9135-4208-8e37-70eba8f77e15"
+        },
+        "status": "completed",
+        "success": [
+          {
+            "has_score": true,
+            "out_of": 36,
+            "phase": 1,
+            "score": 30
+          }
+        ],
+        "tender": "Business Intelligence and Data Warehousing",
+        "was_successful": false
+      },
+      {
+        "_id": "2529a0be-6e1c-4202-92c7-65c3742dfd4e",
+        "alias": "ONS",
+        "bid_date": "2023-06-23",
+        "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+        "client": "Office for National Statistics",
+        "failed": {
+          "has_score": true,
+          "out_of": 36,
+          "phase": 2,
+          "score": 20
+        },
+        "feedback": {
+          "description": "Feedback from client in detail",
+          "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
+        },
+        "last_updated": "2023-07-20T17:03:19.452381",
+        "links": {
+          "questions": "/api/bids/2529a0be-6e1c-4202-92c7-65c3742dfd4e/questions",
+          "self": "/api/bids/2529a0be-6e1c-4202-92c7-65c3742dfd4e"
+        },
+        "status": "deleted",
+        "success": [
+          {
+            "has_score": true,
+            "out_of": 36,
+            "phase": 1,
+            "score": 30
+          }
+        ],
+        "tender": "Business Intelligence and Data Warehousing",
+        "was_successful": false
+      }
+    ],
+    "total_count": 3
+  }

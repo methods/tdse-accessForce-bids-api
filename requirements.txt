@@ -1,0 +1,20 @@
+blinker
+click
+Flask
+itsdangerous
+Jinja2
+MarkupSafe
+Werkzeug
+pip == 23.2.0
+flask_swagger_ui
+marshmallow
+pymongo
+python-dotenv
+black
+flake8
+pylint
+coverage
+pytest
+sphinx
+sphinx-rtd-theme
+pyjwt
