@@ -1,3 +1,6 @@
+"""
+This module contains tests for the bid schema.
+"""
 import pytest
 from marshmallow import ValidationError
 from api.schemas.bid_schema import BidSchema

@@ -1,3 +1,7 @@
+"""
+This file contains tests for the GET /bids endpoint.
+"""
+
 from unittest.mock import patch
 
 

@@ -1,3 +1,7 @@
+"""
+This module contains the BidSchema class, which is a Marshmallow schema for the bid object.
+"""
+
 from marshmallow import Schema, fields, post_load, validates_schema, ValidationError
 from api.models.status_enum import Status
 from api.models.bid_model import BidModel

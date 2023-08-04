@@ -1,3 +1,7 @@
+"""
+This script simulates a login to the API and then allows the user to perform
+"""
+
 import requests
 
 
@@ -11,11 +15,11 @@ def simulate_login(username):
         token = token_data["jwt"]
 
         return token
-    except requests.exceptions.RequestException as e:
-        print("Request Error:", e)
+    except requests.exceptions.RequestException as error:
+        print("Request Error:", error)
         return None
-    except ValueError as e:
-        print("Value Error:", e)
+    except ValueError as error:
+        print("Value Error:", error)
         return None
 
 
@@ -39,8 +43,8 @@ def post_bid(jwt_token):
 
         data = response.json()
         print("Post Success (id):", data["_id"])
-    except requests.exceptions.RequestException as e:
-        print("Request Error:", e)
+    except requests.exceptions.RequestException as error:
+        print("Request Error:", error)
         return None
 
 
@@ -54,14 +58,14 @@ def delete_bid(jwt_token):
         response.raise_for_status()  # Raise an exception for any HTTP errors
 
         print(f"Bid with ID {bid_id} deleted successfully.")
-    except requests.exceptions.RequestException as e:
-        print("Request Error:", e)
+    except requests.exceptions.RequestException as error:
+        print("Request Error:", error)
 
 
 def find_bid_by_id():
     try:
-        API_KEY = input("Enter the API key (THIS_IS_THE_API_KEY): ")
-        headers = {"X-API-Key": API_KEY}
+        api_key = input("Enter the API key (THIS_IS_THE_API_KEY): ")
+        headers = {"X-API-Key": api_key}
         bid_id = input("Enter the bid ID to find: ")
         response = requests.get(
             f"http://localhost:8080/api/bids/{bid_id}", headers=headers
@@ -71,22 +75,22 @@ def find_bid_by_id():
         bid_data = response.json()
         print("Bid Data:")
         print(bid_data)
-    except requests.exceptions.RequestException as e:
-        print("Request Error:", e)
+    except requests.exceptions.RequestException as error:
+        print("Request Error:", error)
 
 
 def find_all_bids():
     try:
-        API_KEY = input("Enter the API key (THIS_IS_THE_API_KEY): ")
-        headers = {"X-API-Key": API_KEY}
+        api_key = input("Enter the API key (THIS_IS_THE_API_KEY): ")
+        headers = {"X-API-Key": api_key}
         response = requests.get("http://localhost:8080/api/bids", headers=headers)
         response.raise_for_status()  # Raise an exception for any HTTP errors
 
         all_bids_data = response.json()
         print("All Bids Data:")
         print(all_bids_data)
-    except requests.exceptions.RequestException as e:
-        print("Request Error:", e)
+    except requests.exceptions.RequestException as error:
+        print("Request Error:", error)
 
 
 def access_level(admin):

@@ -1,3 +1,7 @@
+"""
+This script is used to test the API endpoint for posting a bid.
+"""
+
 import json
 import requests
 

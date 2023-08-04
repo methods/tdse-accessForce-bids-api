@@ -1,3 +1,6 @@
+"""
+This module contains the schema for validating path param IDs.
+"""
 from marshmallow import Schema, fields, validate
 
 

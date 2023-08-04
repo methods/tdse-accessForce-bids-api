@@ -1,3 +1,6 @@
+"""
+This file contains the tests for the POST /api/bids endpoint
+"""
 from unittest.mock import patch
 
 

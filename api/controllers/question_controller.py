@@ -1,4 +1,6 @@
-from datetime import datetime
+"""
+This module implements the Question Controller blueprint.
+"""
 from flask import Blueprint, request
 from marshmallow import ValidationError
 from werkzeug.exceptions import UnprocessableEntity
@@ -35,8 +37,8 @@ def post_question(bid_id):
         db["questions"].insert_one(data)
         return data, 201
     # Return 400 response if input validation fails
-    except ValidationError as e:
-        return showValidationError(e), 400
+    except ValidationError as error:
+        return showValidationError(error), 400
     # Return 500 response in case of connection failure
     except Exception:
         return showInternalServerError(), 500
@@ -61,8 +63,8 @@ def get_questions(bid_id):
         for question in data:
             prepend_host_to_links(question, hostname)
         return {"total_count": len(data), "items": data}, 200
-    except ValidationError as e:
-        return showValidationError(e), 400
+    except ValidationError as error:
+        return showValidationError(error), 400
     except Exception:
         return showInternalServerError(), 500
 
@@ -85,9 +87,9 @@ def get_question(bid_id, question_id):
             return showNotFoundError(), 404
         prepend_host_to_links(data, hostname)
         return data, 200
-    except ValidationError as e:
-        return showValidationError(e), 400
-    except Exception as e:
+    except ValidationError as error:
+        return showValidationError(error), 400
+    except Exception:
         return showInternalServerError(), 500
 
 
@@ -102,8 +104,8 @@ def delete_question(bid_id, question_id):
             return showNotFoundError(), 404
         data = db["questions"].delete_one({"_id": question_id})
         return data.raw_result, 204
-    except ValidationError as e:
-        return showValidationError(e), 400
+    except ValidationError as error:
+        return showValidationError(error), 400
     except Exception:
         return showInternalServerError(), 500
 
@@ -127,9 +129,9 @@ def update_question(bid_id, question_id):
         updated_question = validate_question_update(request.get_json(), data)
         db["questions"].replace_one({"_id": question_id}, updated_question)
         return updated_question, 200
-    except ValidationError as e:
-        return showValidationError(e), 400
-    except UnprocessableEntity as e:
-        return showUnprocessableEntityError(e), 422
+    except ValidationError as error:
+        return showValidationError(error), 400
+    except UnprocessableEntity as error:
+        return showUnprocessableEntityError(error), 422
     except Exception:
         return showInternalServerError(), 500

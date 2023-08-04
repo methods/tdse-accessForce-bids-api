@@ -1,3 +1,6 @@
+"""
+This module contains the schema for validating question data.
+"""
 import pytest
 from marshmallow import ValidationError
 from api.schemas.question_schema import QuestionSchema
@@ -60,7 +63,7 @@ def test_validate_description():
 
 
 # Case 3: Field validation - question_url
-def test_validate_description():
+def test_validate_question_url():
     data = {
         "description": "This is a question",
         "question_url": "Not a valid url",

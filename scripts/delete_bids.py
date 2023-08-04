@@ -35,7 +35,7 @@ def delete_bids():
             print(f"Deleted {delete_result.deleted_count} bids from the collection.")
 
     except ConnectionFailure:
-        print(f"Error: Failed to connect to database")
+        print("Error: Failed to connect to database")
         sys.exit(1)
 
     finally:

@@ -76,7 +76,7 @@ def populate_questions():
                 print(f"Inserted question with _id: {question['_id']}")
 
     except ConnectionFailure:
-        print(f"Error: Failed to connect to database")
+        print("Error: Failed to connect to database")
         sys.exit(1)
 
     finally:

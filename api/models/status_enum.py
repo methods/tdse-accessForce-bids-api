@@ -1,3 +1,6 @@
+"""
+This module contains the Status enum.
+"""
 from enum import Enum, unique
 
 

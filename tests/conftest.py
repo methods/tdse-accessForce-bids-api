@@ -1,6 +1,10 @@
+"""
+This file contains fixtures that are used by multiple tests.
+"""
+
+import os
 import jwt
 import pytest
-import os
 from app import app
 from dotenv import load_dotenv
 

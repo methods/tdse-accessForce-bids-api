@@ -1,3 +1,6 @@
+"""
+This file contains tests for the update_bid_by_id endpoint
+"""
 from unittest.mock import patch
 
 

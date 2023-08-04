@@ -1,3 +1,6 @@
+"""
+This module contains the schema for representing links in a question resource.
+"""
 from marshmallow import Schema, fields
 
 

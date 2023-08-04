@@ -1,3 +1,7 @@
+"""
+This module implements the bid controller.
+"""
+
 from datetime import datetime
 from flask import Blueprint, request
 from marshmallow import ValidationError
@@ -46,8 +50,8 @@ def post_bid():
         db["bids"].insert_one(data)
         return data, 201
     # Return 400 response if input validation fails
-    except ValidationError as e:
-        return showValidationError(e), 400
+    except ValidationError as error:
+        return showValidationError(error), 400
     # Return 500 response in case of connection failure
     except Exception:
         return showInternalServerError(), 500
@@ -70,8 +74,8 @@ def get_bid_by_id(bid_id):
         data = prepend_host_to_links(data, hostname)
         return data, 200
     # Return 400 if bid_id is invalid
-    except ValidationError as e:
-        return showValidationError(e), 400
+    except ValidationError as error:
+        return showValidationError(error), 400
     # Return 500 response in case of connection failure
     except Exception:
         return showInternalServerError(), 500
@@ -96,10 +100,10 @@ def update_bid_by_id(bid_id):
         )
         return updated_bid, 200
     # Return 400 response if input validation fails
-    except ValidationError as e:
-        return showValidationError(e), 400
-    except UnprocessableEntity as e:
-        return showUnprocessableEntityError(e), 422
+    except ValidationError as error:
+        return showValidationError(error), 400
+    except UnprocessableEntity as error:
+        return showUnprocessableEntityError(error), 422
     # Return 500 response in case of connection failure
     except Exception:
         return showInternalServerError(), 500
@@ -123,8 +127,8 @@ def change_status_to_deleted(bid_id):
             return showNotFoundError(), 404
         return data, 204
     # Return 400 response if input validation fails
-    except ValidationError as e:
-        return showValidationError(e), 400
+    except ValidationError as error:
+        return showValidationError(error), 400
     # Return 500 response in case of connection failure
     except Exception:
         return showInternalServerError(), 500
@@ -147,10 +151,10 @@ def update_bid_status(bid_id):
         )
         return updated_bid, 200
     # Return 400 response if input validation fails
-    except ValidationError as e:
-        return showValidationError(e), 400
-    except UnprocessableEntity as e:
-        return showUnprocessableEntityError(e), 422
+    except ValidationError as error:
+        return showValidationError(error), 400
+    except UnprocessableEntity as error:
+        return showUnprocessableEntityError(error), 422
     # Return 500 response in case of connection failure
     except Exception:
         return showInternalServerError(), 500

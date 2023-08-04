@@ -1,3 +1,6 @@
+"""
+This module contains the marshmallow schema for the question resource.
+"""
 from marshmallow import Schema, fields, post_load
 from api.models.status_enum import Status
 from api.models.question_model import QuestionModel

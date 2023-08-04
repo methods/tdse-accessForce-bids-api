@@ -1,11 +1,14 @@
-import jwt
-from jwt.exceptions import InvalidTokenError
+"""
+This module contains helper functions for the API.
+"""
 import os
 import uuid
-from dotenv import load_dotenv
-from datetime import datetime
-from flask import jsonify, request
 from functools import wraps
+from datetime import datetime
+import jwt
+from jwt.exceptions import InvalidTokenError
+from dotenv import load_dotenv
+from flask import jsonify, request
 from werkzeug.exceptions import UnprocessableEntity
 from api.schemas.bid_schema import BidSchema
 from api.schemas.id_schema import IdSchema
@@ -28,12 +31,12 @@ def showUnauthorizedError():
     return jsonify({"Error": "Unauthorized"})
 
 
-def showUnprocessableEntityError(e):
-    return jsonify({"Error": str(e.description)})
+def showUnprocessableEntityError(error):
+    return jsonify({"Error": str(error.description)})
 
 
-def showValidationError(e):
-    return jsonify({"Error": str(e)})
+def showValidationError(error):
+    return jsonify({"Error": str(error)})
 
 
 def is_valid_uuid(string):
@@ -132,11 +135,11 @@ def require_admin_access(fn):
 
 
 def validate_token(request):
-    PREFIX = "Bearer "
+    prefix = "Bearer "
     auth_header = request.headers.get("Authorization")
     assert auth_header is not None
-    assert auth_header.startswith(PREFIX) is True
-    token = auth_header[len(PREFIX) :]
+    assert auth_header.startswith(prefix) is True
+    token = auth_header[len(prefix) :]
     load_dotenv()
     key = os.getenv("SECRET_KEY")
     decoded = jwt.decode(token, key, algorithms="HS256")
