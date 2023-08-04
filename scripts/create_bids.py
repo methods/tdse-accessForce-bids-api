@@ -46,7 +46,7 @@ def populate_bids():
                 print(f"Inserted bid with _id: {bid['_id']}")
 
     except ConnectionFailure:
-        print(f"Error: Failed to connect to database")
+        print("Error: Failed to connect to database")
         sys.exit(1)
 
     finally:

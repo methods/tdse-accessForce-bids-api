@@ -35,8 +35,8 @@ def test_get_questions_success(mock_db, test_client, basic_jwt):
             },
             "last_updated": "2023-08-02T09:35:58.295052",
             "links": {
-                "bid": f"/bids/another-bid-id",
-                "self": f"/bids/another-bid-id/questions/bef5c1fb-46b4-4707-868a-c7719cfcc5ec",
+                "bid": "/bids/another-bid-id",
+                "self": "/bids/another-bid-id/questions/bef5c1fb-46b4-4707-868a-c7719cfcc5ec",
             },
             "out_of": None,
             "question_url": "https://organisation.sharepoint.com/Docs/dummyfolder",

@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask import Blueprint, request
 from marshmallow import ValidationError
 from werkzeug.exceptions import UnprocessableEntity
@@ -87,7 +86,7 @@ def get_question(bid_id, question_id):
         return data, 200
     except ValidationError as e:
         return showValidationError(e), 400
-    except Exception as e:
+    except Exception:
         return showInternalServerError(), 500
 
 

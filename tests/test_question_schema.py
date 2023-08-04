@@ -60,7 +60,7 @@ def test_validate_description():
 
 
 # Case 3: Field validation - question_url
-def test_validate_description():
+def test_validate_question_url():
     data = {
         "description": "This is a question",
         "question_url": "Not a valid url",
