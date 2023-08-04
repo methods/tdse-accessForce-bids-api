@@ -5,19 +5,17 @@ This file contains fixtures that are used by multiple tests.
 import os
 import jwt
 import pytest
+import os
+from app import app
 from dotenv import load_dotenv
-from flask import Flask
-from api.controllers.bid_controller import bid
-from api.controllers.question_controller import question
 
 
 @pytest.fixture(scope="session")
 def test_client():
-    app = Flask(__name__)
-    app.register_blueprint(bid, url_prefix="/api")
-    app.register_blueprint(question, url_prefix="/api")
+    os.environ["TEST_ENVIRONMENT"] = "True"
     with app.test_client() as client:
         yield client
+    os.environ.pop("TEST_ENVIRONMENT")
 
 
 @pytest.fixture(scope="session")

@@ -6,19 +6,21 @@ PYTHON = ./.venv/bin/python3
 PIP = ./.venv/bin/pip
 
 
-.PHONY: help auth clean mongostart mongostop run setup swag test
+.PHONY: help auth clean dbclean mongostart mongostop run setup swag test test-setup
 
 help:
 	@echo "make help - display this help"
 	@echo "make auth - run auth api application"
 	@echo "make build - create and activate virtual environment"
 	@echo "make clean - remove all generated files"
+	@echo "make dbclean - clear the application database"
 	@echo "make mongostart - start local mongodb instance"
 	@echo "make mongostop - stop local mongodb instance"
 	@echo "make run - run the application"
 	@echo "make swag - open swagger documentation"
 	@echo "make setup - setup the application database"
 	@echo "make test - run tests and coverage report"
+	@echo "make test-setup - setup the test database"
 	@echo "make helptools - display help for tools"
 
 auth:
@@ -34,6 +36,12 @@ clean:
 	@find . -name "__pycache__" -type d -exec rm -rf {} +
 	@find . -name ".pytest_cache" -exec rm -rf {} +
 	@find . -name ".venv" -exec rm -rf {} +	
+
+dbclean:
+	@echo "Cleaning up database..."
+	cd ./scripts/; \
+	make dbclean
+	@echo "Database cleared."
 
 mongostart:
 	@echo "Starting MongoDB..."
@@ -60,8 +68,17 @@ swag:
 test: 
 	-coverage run -m pytest -vv
 	@echo "TEST COVERAGE REPORT"
-	coverage report -m --omit="tests/*,dbconfig/*"
+	coverage report -m --omit="app.py,tests/*,dbconfig/*"
 
+test-setup:
+	@echo "Setting up test database..."
+	export TEST_ENVIRONMENT=true; \
+	cd ./scripts/; \
+	make dbclean; \
+	make bids; \
+	make questions; \
+	export TEST_ENVIRONMENT=
+	@echo "Test database setup complete."
 
 .PHONY: helptools authplay branch check commit format lint
 

@@ -120,7 +120,6 @@ def update_question(bid_id, question_id):
             {
                 "_id": question_id,
                 "links.self": f"/bids/{bid_id}/questions/{question_id}",
-                "status": {"$ne": Status.DELETED.value},
             }
         )
         # Return 404 response if not found / returns None
