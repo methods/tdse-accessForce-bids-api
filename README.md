@@ -14,44 +14,39 @@ This API stores and serves information about Methods bids for client tenders.
 1. Clone the repository to your local machine:
 
       ```bash
-      git clone
+      git clone <REMOTE_URL>
       ```
 2. Navigate to the root directory of the project:
 
       ```bash
       cd tdse-accessForce-bids-api
       ```
-3. Install python 3.x if not already installed. You can check if it is installed by running the following command:
-
-      ```bash
-      python3 --version
-      ```
-4. Install Makefile if not already installed. You can check if it is installed by running the following command:
+3. Install Makefile if not already installed. You can check if it is installed by running the following command:
 
       ```bash
       make --version
       ```
-5. Version 3.81 or higher is required. If you do not have Make installed, you can install it with Homebrew:
+4. Version 3.81 or higher is required. If you do not have Make installed, you can install it with Homebrew:
 
       ```bash
       brew install make
       ```
-6. Run the following command to have all the commands to use the API with Makefile:
+5. Run the following command to have all the commands to use the API with Makefile:
 
       ```bash
       make help
       ```
-7. Run the following command to start the API:
+6. Run the following command to start the API:
 
       ```bash
       make run
       ```
  * The API will be available at http://localhost:8080/api/bids
 
-8. Follow this link to go to the authorization documentation: [Authorization Documentation](https://github.com/methods/tdse-accessForce-auth-stub/blob/main/README.md)
+7. Follow this link to go to the authorization documentation: [Authorization Documentation](https://github.com/methods/tdse-accessForce-auth-stub/blob/main/README.md)
 
 
-9. In a new terminal enter the following command to run authorization server if not already running. This will be needed to generate a token:
+8. In a new terminal enter the following command to run authorization server if not already running. This will be needed to generate a token:
 
       ```bash
       make auth
@@ -78,44 +73,39 @@ To do this, create a `.env` file in your root folder, with the following key/val
 
 ### To install on Windows please see [here](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/)
 
-1. Install Homebrew if not already installed. You can check if it is installed by running the following command:
-
-      ```bash
-      brew --version
-      ```
-2. Install MongoDB by running the following commands:
+1. Install MongoDB by running the following commands:
 
       ```bash
       brew tap mongodb/brew
       brew install mongodb-community
       ```
-3. To run MongoDB (i.e. the mongod process) as a macOS service, run:
+2. To run MongoDB (i.e. the mongod process) as a macOS service, run:
 
       ```bash
       make mongostart
       ```
-4. To verify that MongoDB is running, run:
+3. To verify that MongoDB is running, run:
 
       ```bash
       brew services list
       ```
    You should see the service `mongodb-community` listed as `started`.
-5. Run the following command to stop the MongoDB instance, as needed:
+4. Run the following command to stop the MongoDB instance, as needed:
 
       ```bash
       make mongostop
       ```
-6. To begin using MongoDB, connect the MongoDB shell (mongosh) to the running instance. From a new terminal, issue the following:
+5. To begin using MongoDB, connect the MongoDB shell (mongosh) to the running instance. From a new terminal, issue the following:
 
       ```bash
       mongosh
       ```
-7. To create a new database called `bidsAPI`, run:
+6. To create a new database called `bidsAPI`, run:
 
       ```bash
       use bidsAPI
       ```
-8. To create a new test database called `testAPI`, run:
+7. To create a new test database called `testAPI`, run:
 
       ```bash
       use testAPI
