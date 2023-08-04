@@ -31,20 +31,19 @@ This API stores and serves information about Methods bids for client tenders.
       ```bash
       brew install make
       ```
-5. Run the following command to have all the commands to use the API with Makefile:
-
-      ```bash
-      make help
-      ```
-6. Run the following command to start the API:
+5. Run the following command to start the API:
 
       ```bash
       make run
       ```
  * The API will be available at http://localhost:8080/api/bids
 
-7. Follow this link to go to the authorization documentation: [Authorization Documentation](https://github.com/methods/tdse-accessForce-auth-stub/blob/main/README.md)
+6. To see all available Make targets, run the following command in a new terminal:
 
+      ```bash
+      make help
+      ```
+7. Follow this link to go to the authorization documentation: [Authorization Documentation](https://github.com/methods/tdse-accessForce-auth-stub/blob/main/README.md)
 
 8. In a new terminal enter the following command to run authorization server if not already running. This will be needed to generate a token:
 
