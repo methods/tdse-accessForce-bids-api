@@ -64,12 +64,14 @@ test:
 	coverage report -m --omit="app.py,tests/*,dbconfig/*"
 
 test-setup:
+	@echo "Setting up test database..."
 	export TEST_ENVIRONMENT=true; \
 	cd ./scripts/; \
 	make dbclean; \
 	make bids; \
 	make questions; \
 	export TEST_ENVIRONMENT=
+	@echo "Test database setup complete."
 
 .PHONY: helptools authplay branch check commit format lint
 
