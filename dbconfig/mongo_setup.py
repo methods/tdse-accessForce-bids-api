@@ -8,9 +8,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-MONGO_URI = os.getenv("MONGO_URL") or "mongodb://localhost:27017/bidsAPI"
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = 27017
+DB_NAME = os.getenv("DB_NAME")
 
+if os.environ.get("TEST_ENVIRONMENT"):
+    DB_NAME = os.getenv("TEST_DB_NAME")
 
 # Create a new client and connect to the server
-client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=10000)
-db = client["bidsAPI"]
+client = MongoClient(DB_HOST, DB_PORT, serverSelectionTimeoutMS=10000)
+db = client[DB_NAME]
