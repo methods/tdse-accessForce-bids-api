@@ -2,9 +2,9 @@
 This file contains fixtures that are used by multiple tests.
 """
 
+import os
 import jwt
 import pytest
-import os
 from dotenv import load_dotenv
 from flask import Flask
 from api.controllers.bid_controller import bid
