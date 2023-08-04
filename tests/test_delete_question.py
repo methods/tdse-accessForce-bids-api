@@ -1,3 +1,6 @@
+"""
+This file contains the tests for the delete_question endpoint
+"""
 from unittest.mock import patch
 
 

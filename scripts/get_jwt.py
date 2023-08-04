@@ -1,3 +1,7 @@
+"""
+This script simulates a login to the API and then allows the user to perform
+"""
+
 import requests
 
 

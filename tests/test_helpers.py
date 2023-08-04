@@ -1,3 +1,6 @@
+"""
+This file contains tests for the helper functions in helpers.py
+"""
 from helpers.helpers import prepend_host_to_links
 
 

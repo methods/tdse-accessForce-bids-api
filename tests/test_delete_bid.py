@@ -1,3 +1,6 @@
+"""
+This file contains the tests for the DELETE /api/bids/<bid_id> endpoint
+"""
 from unittest.mock import patch
 
 

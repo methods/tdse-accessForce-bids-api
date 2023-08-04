@@ -1,3 +1,7 @@
+"""
+This module contains the schema for representing links in a bid resource.
+"""
+
 from marshmallow import Schema, fields
 
 

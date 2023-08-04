@@ -1,3 +1,6 @@
+"""
+This module contains the data model for the bid resource.
+"""
 from uuid import uuid4
 from datetime import datetime
 from api.models.status_enum import Status

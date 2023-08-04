@@ -1,3 +1,7 @@
+"""
+This module implements the bid controller.
+"""
+
 from datetime import datetime
 from flask import Blueprint, request
 from marshmallow import ValidationError

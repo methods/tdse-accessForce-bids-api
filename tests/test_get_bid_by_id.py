@@ -1,3 +1,7 @@
+"""
+This file contains the tests for the get_bid_by_id endpoint.
+"""
+
 from unittest.mock import patch
 
 

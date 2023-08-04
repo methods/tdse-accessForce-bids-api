@@ -1,3 +1,6 @@
+"""
+This script is used to test the get bids endpoint with an API key.
+"""
 import requests
 
 response = requests.get("http://localhost:5000/authorise/")

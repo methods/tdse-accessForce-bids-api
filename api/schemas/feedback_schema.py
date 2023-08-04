@@ -1,3 +1,7 @@
+"""
+This module contains the schema for the feedback data in a bid.
+"""
+
 from marshmallow import Schema, fields
 
 

@@ -1,3 +1,6 @@
+"""
+This module implements the Question Controller blueprint.
+"""
 from flask import Blueprint, request
 from marshmallow import ValidationError
 from werkzeug.exceptions import UnprocessableEntity

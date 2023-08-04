@@ -1,3 +1,7 @@
+"""
+This file contains fixtures that are used by multiple tests.
+"""
+
 import jwt
 import pytest
 import os

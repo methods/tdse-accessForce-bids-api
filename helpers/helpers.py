@@ -1,3 +1,6 @@
+"""
+This module contains helper functions for the API.
+"""
 import jwt
 from jwt.exceptions import InvalidTokenError
 import os

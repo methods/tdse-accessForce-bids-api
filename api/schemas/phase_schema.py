@@ -1,3 +1,6 @@
+"""
+This module contains the schema for representing a bid phase.
+"""
 from enum import Enum, unique
 from marshmallow import Schema, fields, validates_schema, ValidationError
 

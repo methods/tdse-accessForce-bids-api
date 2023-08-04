@@ -1,3 +1,6 @@
+"""
+This file contains tests for the phase schema.
+"""
 from unittest.mock import patch
 
 

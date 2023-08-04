@@ -1,3 +1,6 @@
+"""
+This module contains the schema for validating question data.
+"""
 import pytest
 from marshmallow import ValidationError
 from api.schemas.question_schema import QuestionSchema

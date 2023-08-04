@@ -1,3 +1,7 @@
+"""
+This script is used to test the post and delete functionality of the API.
+"""
+
 import json
 import requests
 

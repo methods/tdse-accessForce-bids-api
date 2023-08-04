@@ -6,8 +6,8 @@ max-line-length=120
 [MESSAGES CONTROL]
 disable=
     C0103,
-    ; C0116,
-    C0114,
+    C0116,
+    ; C0114,
     C0115,
     C0411,
     R0801,
@@ -24,7 +24,7 @@ disable=
     W3101
 # C0103: doesn't conform to snake_case naming style (invalid-name)<- missing just helper functions
 # C0116: Missing function or method docstring
-# C0114: Missing module docstring
+# C0114: Missing module docstring (missing-module-docstring)
 # C0115: Missing class docstring
 # C0411: Wrong import order %s
 # R0801: Similar lines in %s files
