@@ -6,13 +6,14 @@ PYTHON = ./.venv/bin/python3
 PIP = ./.venv/bin/pip
 
 
-.PHONY: help auth clean mongostart mongostop run setup swag test test-setup
+.PHONY: help auth clean dbclean mongostart mongostop run setup swag test test-setup
 
 help:
 	@echo "make help - display this help"
 	@echo "make auth - run auth api application"
 	@echo "make build - create and activate virtual environment"
 	@echo "make clean - remove all generated files"
+	@echo "make dbclean - clear the application database"
 	@echo "make mongostart - start local mongodb instance"
 	@echo "make mongostop - stop local mongodb instance"
 	@echo "make run - run the application"
@@ -35,6 +36,12 @@ clean:
 	@find . -name "__pycache__" -type d -exec rm -rf {} +
 	@find . -name ".pytest_cache" -exec rm -rf {} +
 	@find . -name ".venv" -exec rm -rf {} +	
+
+dbclean:
+	@echo "Cleaning up database..."
+	cd ./scripts/; \
+	make dbclean
+	@echo "Database cleared."
 
 mongostart:
 	@echo "Starting MongoDB..."
