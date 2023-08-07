@@ -1,7 +1,7 @@
 """
 This module implements the Question Controller blueprint.
 """
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from marshmallow import ValidationError
 from werkzeug.exceptions import UnprocessableEntity
 from api.models.status_enum import Status
@@ -17,6 +17,7 @@ from helpers.helpers import (
     prepend_host_to_links,
     require_jwt,
     require_admin_access,
+    validate_pagination,
 )
 
 question = Blueprint("question", __name__)
@@ -50,23 +51,44 @@ def get_questions(bid_id):
     try:
         bid_id = validate_id_path(bid_id)
         hostname = request.headers.get("host")
+        valid_limit_offset = validate_pagination(
+            request.args.get("limit"), request.args.get("offset")
+        )
+        limit = valid_limit_offset[0]
+        offset = valid_limit_offset[1]
         data = list(
-            db["questions"].find(
+            db["questions"]
+            .find(
                 {
                     "status": {"$ne": Status.DELETED.value},
-                    "links.bid": f"/bids/{bid_id}",
+                    "links.bid": f"/api/bids/{bid_id}",
                 }
             )
+            .skip(offset)
+            .limit(limit)
         )
         if len(data) == 0:
             return showNotFoundError(), 404
         for question in data:
             prepend_host_to_links(question, hostname)
-        return {"total_count": len(data), "items": data}, 200
+        return {
+            "total_count": db["questions"].count_documents(
+                {
+                    "status": {"$ne": Status.DELETED.value},
+                    "links.bid": f"/api/bids/{bid_id}",
+                }
+            ),
+            "count": len(data),
+            "offset": offset,
+            "limit": limit,
+            "items": data,
+        }, 200
     except ValidationError as error:
         return showValidationError(error), 400
-    except Exception:
-        return showInternalServerError(), 500
+    except ValueError as error:
+        return jsonify({"Error": str(error)}), 400
+    except Exception as e:
+        return str(e), 500
 
 
 @question.route("/bids/<bid_id>/questions/<question_id>", methods=["GET"])
@@ -79,7 +101,7 @@ def get_question(bid_id, question_id):
         data = db["questions"].find_one(
             {
                 "_id": question_id,
-                "links.self": f"/bids/{bid_id}/questions/{question_id}",
+                "links.self": f"/api/bids/{bid_id}/questions/{question_id}",
                 "status": {"$ne": Status.DELETED.value},
             }
         )
@@ -119,7 +141,7 @@ def update_question(bid_id, question_id):
         data = db["questions"].find_one(
             {
                 "_id": question_id,
-                "links.self": f"/bids/{bid_id}/questions/{question_id}",
+                "links.self": f"/api/bids/{bid_id}/questions/{question_id}",
             }
         )
         # Return 404 response if not found / returns None

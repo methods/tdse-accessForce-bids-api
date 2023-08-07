@@ -45,8 +45,23 @@ paths:
     get:
       tags:
         - bids
-      summary: Returns all bids
+      summary: Returns a list of bids
       description: A JSON with item count and array of all bids
+      parameters:
+        - name: limit
+          in: query
+          description: number of results to return per page
+          required: false
+          schema:
+            type: string
+            format: integer
+        - name: offset
+          in: query
+          description: number of items skipped from start of dataset on current page
+          required: false
+          schema:
+            type: string
+            format: integer
       security:
         - ApiKeyAuth: []
       responses:
@@ -244,7 +259,7 @@ paths:
     get:
       tags:
         - questions
-      summary: Returns all questions for a bid
+      summary: Returns a list of questions for a bid
       description: A JSON with item count and array of all questions for a bid
       operationId: get_questions
       parameters:
@@ -255,6 +270,20 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: limit
+          in: query
+          description: number of results to return per page
+          required: false
+          schema:
+            type: string
+            format: integer
+        - name: offset
+          in: query
+          description: number of items skipped from start of dataset on current page
+          required: false
+          schema:
+            type: string
+            format: integer
       security:
         - BearerAuth: []
       responses:

@@ -162,3 +162,25 @@ def validate_question_update(request, resource):
     question_document = QuestionSchema().load(resource, partial=True)
     data = QuestionSchema().dump(question_document)
     return data
+
+
+def validate_pagination(limit, offset):
+    load_dotenv()
+
+    def validate_param(value, default_value, max_value, param_name):
+        maximum = int(os.getenv(max_value))
+        if value is not None:
+            try:
+                valid_value = int(value)
+                assert maximum > valid_value >= 0
+            except (ValueError, AssertionError):
+                raise ValueError(
+                    f"{param_name} value must be a positive integer less than {maximum}"
+                )
+        else:
+            valid_value = int(os.getenv(default_value))
+        return valid_value
+
+    valid_limit = validate_param(limit, "DEFAULT_LIMIT", "MAX_LIMIT", "Limit")
+    valid_offset = validate_param(offset, "DEFAULT_OFFSET", "MAX_OFFSET", "Offset")
+    return valid_limit, valid_offset
