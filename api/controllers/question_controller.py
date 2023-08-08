@@ -51,11 +51,9 @@ def get_questions(bid_id):
     try:
         bid_id = validate_id_path(bid_id)
         hostname = request.headers.get("host")
-        valid_limit_offset = validate_pagination(
+        limit, offset = validate_pagination(
             request.args.get("limit"), request.args.get("offset")
         )
-        limit = valid_limit_offset[0]
-        offset = valid_limit_offset[1]
         data = list(
             db["questions"]
             .find(
@@ -67,17 +65,18 @@ def get_questions(bid_id):
             .skip(offset)
             .limit(limit)
         )
+        total_count = db["questions"].count_documents(
+            {
+                "status": {"$ne": Status.DELETED.value},
+                "links.bid": f"/api/bids/{bid_id}",
+            }
+        )
         if len(data) == 0:
             return showNotFoundError(), 404
         for question in data:
             prepend_host_to_links(question, hostname)
         return {
-            "total_count": db["questions"].count_documents(
-                {
-                    "status": {"$ne": Status.DELETED.value},
-                    "links.bid": f"/api/bids/{bid_id}",
-                }
-            ),
+            "total_count": total_count,
             "count": len(data),
             "offset": offset,
             "limit": limit,
@@ -87,8 +86,8 @@ def get_questions(bid_id):
         return showValidationError(error), 400
     except ValueError as error:
         return jsonify({"Error": str(error)}), 400
-    except Exception as e:
-        return str(e), 500
+    except Exception:
+        return showInternalServerError(), 500
 
 
 @question.route("/bids/<bid_id>/questions/<question_id>", methods=["GET"])

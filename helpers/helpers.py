@@ -175,7 +175,7 @@ def validate_pagination(limit, offset):
                 assert maximum > valid_value >= 0
             except (ValueError, AssertionError):
                 raise ValueError(
-                    f"{param_name} value must be a positive integer less than {maximum}"
+                    f"{param_name} value must be a number between 0 and {maximum}"
                 )
         else:
             valid_value = int(os.getenv(default_value))
