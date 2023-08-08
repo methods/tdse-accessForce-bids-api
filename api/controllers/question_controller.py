@@ -71,7 +71,7 @@ def get_questions(bid_id):
                 "links.bid": f"/api/bids/{bid_id}",
             }
         )
-        if len(data) == 0:
+        if not data:
             return showNotFoundError(), 404
         for question in data:
             prepend_host_to_links(question, hostname)
@@ -104,7 +104,7 @@ def get_question(bid_id, question_id):
                 "status": {"$ne": Status.DELETED.value},
             }
         )
-        if len(data) == 0:
+        if not data:
             return showNotFoundError(), 404
         prepend_host_to_links(data, hostname)
         return data, 200
@@ -121,7 +121,7 @@ def delete_question(bid_id, question_id):
         bid_id = validate_id_path(bid_id)
         question_id = validate_id_path(question_id)
         bid = db["bids"].find_one({"_id": bid_id})
-        if bid is None:
+        if not bid:
             return showNotFoundError(), 404
         data = db["questions"].delete_one({"_id": question_id})
         return data.raw_result, 204
@@ -144,7 +144,7 @@ def update_question(bid_id, question_id):
             }
         )
         # Return 404 response if not found / returns None
-        if len(data) == 0:
+        if not data:
             return showNotFoundError(), 404
 
         updated_question = validate_question_update(request.get_json(), data)

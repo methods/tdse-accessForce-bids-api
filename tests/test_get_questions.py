@@ -31,7 +31,11 @@ def test_get_questions_success(mock_db, test_client, basic_jwt):
         },
     ]
 
-    mock_db["questions"].find.return_value = sample_data
+    mock_db[
+        "questions"
+    ].find.return_value.skip.return_value.limit.return_value = sample_data
+
+    mock_db["questions"].count_documents.return_value = len(sample_data)
 
     # Make a request to the endpoint to get the questions
     response = test_client.get(
@@ -74,7 +78,11 @@ def test_links_with_host(mock_db, test_client, basic_jwt):
     ]
 
     # Mock the database find method to return the filtered sample data
-    mock_db["questions"].find.return_value = sample_data
+    mock_db[
+        "questions"
+    ].find.return_value.skip.return_value.limit.return_value = sample_data
+
+    mock_db["questions"].count_documents.return_value = len(sample_data)
 
     # Make a request to the endpoint to get the questions
     response = test_client.get(
@@ -154,7 +162,7 @@ def test_no_questions_found(mock_db, test_client, basic_jwt):
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
 
     # Mock the database find method to return an empty list
-    mock_db["questions"].find.return_value = []
+    mock_db["questions"].find.return_value.skip.return_value.limit.return_value = []
 
     # Make a request to the endpoint to get the questions
     response = test_client.get(
