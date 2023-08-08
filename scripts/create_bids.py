@@ -41,7 +41,7 @@ def populate_bids():
             bids_data = json.load(bids_file)
 
         # Insert bids into the database
-        for bid in bids_data["items"]:
+        for bid in bids_data:
             # Check if the bid already exists in the database
             existing_bid = collection.find_one({"_id": bid["_id"]})
             if existing_bid:

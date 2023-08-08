@@ -4,9 +4,11 @@ This script creates sample data for the Questions collection.
 
 """
 
-import os
+import copy
 import json
+import os
 import sys
+import uuid
 from itertools import zip_longest
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
@@ -49,20 +51,20 @@ def populate_questions():
             questions_data = json.load(questions_file)
 
         # Update questions data with existing bid ids from bids.json
+
         updated_questions = []
 
-        bids = bids_data["items"]
-        questions_groups = [
-            questions_data[i : i + 3] for i in range(0, len(questions_data), 3)
-        ]
-
-        for bid, questions in zip_longest(bids, questions_groups, fillvalue=None):
+        for bid in bids_data:
             bid_url = bid["links"]["self"]
+            bid_status = bid["status"]
+            questions = copy.deepcopy(questions_data)
 
             for question in questions:
-                self_url = question["links"]["self"]
+                question_id = uuid.uuid4()
                 question["links"]["bid"] = bid_url
-                question["links"]["self"] = f"{bid_url}{self_url}"
+                question["links"]["self"] = f"{bid_url}/questions/{question_id}"
+                question["status"] = bid_status
+                question["_id"] = str(question_id)
                 updated_questions.append(question)
 
         # Insert questions into the database
@@ -74,6 +76,8 @@ def populate_questions():
             else:
                 collection.insert_one(question)
                 print(f"Inserted question with _id: {question['_id']}")
+
+        collection.create_index("description")
 
     except ConnectionFailure:
         print("Error: Failed to connect to database")

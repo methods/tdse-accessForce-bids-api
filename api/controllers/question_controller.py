@@ -18,6 +18,7 @@ from helpers.helpers import (
     require_jwt,
     require_admin_access,
     validate_pagination,
+    validate_sort,
 )
 
 question = Blueprint("question", __name__)
@@ -51,6 +52,7 @@ def get_questions(bid_id):
     try:
         bid_id = validate_id_path(bid_id)
         hostname = request.headers.get("host")
+        field, order = validate_sort(request.args.get("sort"))
         limit, offset = validate_pagination(
             request.args.get("limit"), request.args.get("offset")
         )
@@ -62,6 +64,7 @@ def get_questions(bid_id):
                     "links.bid": f"/api/bids/{bid_id}",
                 }
             )
+            .sort(field, order)
             .skip(offset)
             .limit(limit)
         )
@@ -86,8 +89,8 @@ def get_questions(bid_id):
         return showValidationError(error), 400
     except ValueError as error:
         return jsonify({"Error": str(error)}), 400
-    except Exception:
-        return showInternalServerError(), 500
+    except Exception as e:
+        return str(e), 500
 
 
 @question.route("/bids/<bid_id>/questions/<question_id>", methods=["GET"])
