@@ -186,14 +186,13 @@ def validate_pagination(limit, offset):
     return valid_limit, valid_offset
 
 
-def validate_sort(sort_value):
+def validate_questions_sort(sort_value):
+    field = "description"
+    order = 1
     if sort_value:
         if sort_value[0] == "-":
             field = sort_value[1:]
             order = -1
         else:
             field = sort_value
-            order = 1
-        return field, order
-    else:
-        return "description", 1
+    return field, order
