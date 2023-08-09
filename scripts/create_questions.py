@@ -9,8 +9,7 @@ import json
 import os
 import sys
 import uuid
-from itertools import zip_longest
-from pymongo import MongoClient
+from pymongo import MongoClient, operations
 from pymongo.errors import ConnectionFailure
 from dotenv import load_dotenv
 
@@ -50,8 +49,16 @@ def populate_questions():
         with open(questions_path, encoding="utf-8") as questions_file:
             questions_data = json.load(questions_file)
 
-        # Update questions data with existing bid ids from bids.json
+        # Define index models
+        index_models = [
+            operations.IndexModel([("description", 1)]),
+            operations.IndexModel([("last_updated", -1)]),
+        ]
 
+        # Create index on default sort field
+        collection.create_indexes(index_models)
+
+        # Update questions data with existing bid ids from bids.json
         updated_questions = []
 
         for bid in bids_data:
@@ -76,8 +83,6 @@ def populate_questions():
             else:
                 collection.insert_one(question)
                 print(f"Inserted question with _id: {question['_id']}")
-
-        collection.create_index("description")
 
     except ConnectionFailure:
         print("Error: Failed to connect to database")

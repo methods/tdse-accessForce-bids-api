@@ -56,24 +56,17 @@ def get_questions(bid_id):
         limit, offset = validate_pagination(
             request.args.get("limit"), request.args.get("offset")
         )
-        data = list(
-            db["questions"]
-            .find(
-                {
-                    "status": {"$ne": Status.DELETED.value},
-                    "links.bid": f"/api/bids/{bid_id}",
-                }
-            )
-            .sort(field, order)
-            .skip(offset)
-            .limit(limit)
-        )
-        total_count = db["questions"].count_documents(
-            {
-                "status": {"$ne": Status.DELETED.value},
-                "links.bid": f"/api/bids/{bid_id}",
-            }
-        )
+        # Prepare query filter and options
+        query_filter = {
+            "status": {"$ne": Status.DELETED.value},
+            "links.bid": f"/api/bids/{bid_id}",
+        }
+        query_options = {"sort": [(field, order)], "skip": offset, "limit": limit}
+
+        # Fetch data and count documents
+        data = list(db["questions"].find(query_filter, **query_options))
+        total_count = db["questions"].count_documents(query_filter)
+
         if not data:
             return showNotFoundError(), 404
         for question in data:

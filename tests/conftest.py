@@ -44,22 +44,22 @@ def admin_jwt():
 @pytest.fixture(scope="session")
 def max_offset():
     max_offset = os.getenv("MAX_OFFSET")
-    return max_offset
+    return int(max_offset)
 
 
 @pytest.fixture(scope="session")
 def max_limit():
     max_limit = os.getenv("MAX_LIMIT")
-    return max_limit
+    return int(max_limit)
 
 
 @pytest.fixture(scope="session")
 def default_offset():
     default_offset = os.getenv("DEFAULT_OFFSET")
-    return default_offset
+    return int(default_offset)
 
 
 @pytest.fixture(scope="session")
 def default_limit():
     default_limit = os.getenv("DEFAULT_LIMIT")
-    return default_limit
+    return int(default_limit)

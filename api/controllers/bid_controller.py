@@ -20,6 +20,8 @@ from helpers.helpers import (
     require_api_key,
     require_jwt,
     require_admin_access,
+    validate_sort,
+    validate_pagination,
 )
 
 bid = Blueprint("bid", __name__)
@@ -29,38 +31,20 @@ bid = Blueprint("bid", __name__)
 @require_api_key
 def get_bids():
     try:
-        # Validate and process the limit parameter
-        limit = int(request.args.get("limit", 5))
-        if limit < 1:
-            return jsonify({"error": "Limit must be a positive number"}), 400
-
-        offset = int(request.args.get("offset", 0))
-        if offset < 0 or offset >= 1000:
-            return jsonify({"error": "Offset must be between 0 and 999"}), 400
-
-        sort = request.args.get("sort", "last_updated")
-        order = int(request.args.get("order", 1))  # Default to ascending (1)
+        hostname = request.headers.get("host")
+        field, order = validate_sort(request.args.get("sort"), "questions")
+        limit, offset = validate_pagination(
+            request.args.get("limit"), request.args.get("offset")
+        )
 
         # Prepare query filter and options
         query_filter = {"status": {"$ne": Status.DELETED.value}}
-        query_options = {"sort": [(sort, order)], "skip": offset, "limit": limit}
+        query_options = {"sort": [(field, order)], "skip": offset, "limit": limit}
 
         # Fetch data and count documents
         data = list(db["bids"].find(query_filter, **query_options))
         total_count = db["bids"].count_documents(query_filter)
 
-        # explain_result = (
-        #     db["bids"]
-        #     .find({"status": {"$ne": Status.DELETED.value}})
-        #     .sort("alias", order)
-        #     .explain()
-        # )
-        # print(explain_result["queryPlanner"]["winningPlan"])
-        # Return the response
-        if not data:
-            return showNotFoundError(), 404
-
-        hostname = request.headers.get("host")
         for resource in data:
             prepend_host_to_links(resource, hostname)
 
@@ -69,10 +53,10 @@ def get_bids():
             "total_count": total_count,
             "limit": limit,
             "offset": offset,
-            "data": data,
+            "items": data,
         }, 200
-    except ValueError:  # Handle non-integer values
-        return jsonify({"error": "Page and limit must be valid integer values"}), 400
+    except ValueError as error:
+        return jsonify({"Error": str(error)}), 400
     except Exception:
         return showInternalServerError(), 500
 

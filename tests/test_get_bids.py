@@ -1,13 +1,9 @@
 from unittest.mock import patch
 
 
-# Import the necessary modules
-from unittest.mock import patch
-
-
 # Case 1: Successful get
 @patch("api.controllers.bid_controller.db")
-def test_get_bids_success(mock_db, test_client, api_key):
+def test_get_bids_success(mock_db, test_client, api_key, default_limit, default_offset):
     # Mock the find method of the db object
     sample_data = [
         {
@@ -23,7 +19,6 @@ def test_get_bids_success(mock_db, test_client, api_key):
         }
     ]
     mock_db["bids"].find.return_value = sample_data
-    # mock_db["bids"].find.return_value.skip.return_value.limit.return_value = sample_data
     mock_db["bids"].count_documents.return_value = len(sample_data)
 
     response = test_client.get(
@@ -36,8 +31,8 @@ def test_get_bids_success(mock_db, test_client, api_key):
     response_data = response.get_json()
     assert response_data["total_count"] == len(sample_data)
     assert response_data["data"] == sample_data
-    assert response_data["limit"] == 5
-    assert response_data["offset"] == 0
+    assert response_data["limit"] == default_limit
+    assert response_data["offset"] == default_offset
 
 
 # Case 2: Links prepended with hostname
@@ -67,8 +62,6 @@ def test_links_with_host(mock_db, test_client, api_key):
     response_data = response.get_json()
     assert response_data["total_count"] == len(sample_data)
     assert response_data["data"] == sample_data
-    assert response_data["limit"] == 5
-    assert response_data["offset"] == 0
     assert (
         response_data["data"][0]["links"]["questions"]
         == "http://localhost:8080/bids/faaf8ef5-5db4-459d-8d24-bc39492e1301/questions"

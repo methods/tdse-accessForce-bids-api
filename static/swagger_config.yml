@@ -81,6 +81,15 @@ paths:
                   total_count:
                     type: integer
                     example: 1
+                  count:
+                    type: integer
+                    example: 1
+                  offset:
+                    type: integer
+                    example: 0
+                  limit:
+                    type: integer
+                    example: 20
                   items:
                     type: array
                     items:
@@ -309,6 +318,15 @@ paths:
                   total_count:
                     type: integer
                     example: 1
+                  count:
+                    type: integer
+                    example: 1
+                  offset:
+                    type: integer
+                    example: 0
+                  limit:
+                    type: integer
+                    example: 20
                   items:
                     type: array
                     items:

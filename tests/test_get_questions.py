@@ -1,14 +1,15 @@
 """
 This file contains tests for the GET /bids/{bid_id}/questions endpoint.
 """
-import os
-from dotenv import load_dotenv
+
 from unittest.mock import patch
 
 
 # Case 1: Successful get
 @patch("api.controllers.question_controller.db")
-def test_get_questions_success(mock_db, test_client, basic_jwt):
+def test_get_questions_success(
+    mock_db, test_client, basic_jwt, default_limit, default_offset
+):
     # Set up the sample data and expected result
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
     sample_data = [
@@ -33,11 +34,7 @@ def test_get_questions_success(mock_db, test_client, basic_jwt):
         },
     ]
 
-    mock_db[
-        "questions"
-    ].find.return_value.sort.return_value.skip.return_value.limit.return_value = (
-        sample_data
-    )
+    mock_db["questions"].find.return_value = sample_data
 
     mock_db["questions"].count_documents.return_value = len(sample_data)
 
@@ -52,6 +49,8 @@ def test_get_questions_success(mock_db, test_client, basic_jwt):
     response_data = response.get_json()
     assert response_data["total_count"] == len(sample_data)
     assert response_data["items"] == sample_data
+    assert response_data["limit"] == default_limit
+    assert response_data["offset"] == default_offset
 
 
 # Case 2: Links prepended with hostname
@@ -82,11 +81,7 @@ def test_links_with_host(mock_db, test_client, basic_jwt):
     ]
 
     # Mock the database find method to return the filtered sample data
-    mock_db[
-        "questions"
-    ].find.return_value.sort.return_value.skip.return_value.limit.return_value = (
-        sample_data
-    )
+    mock_db["questions"].find.return_value = sample_data
 
     mock_db["questions"].count_documents.return_value = len(sample_data)
 
@@ -168,7 +163,7 @@ def test_no_questions_found(mock_db, test_client, basic_jwt):
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
 
     # Mock the database find method to return an empty list
-    mock_db["questions"].find.return_value.skip.return_value.limit.return_value = []
+    mock_db["questions"].find.return_value = []
 
     # Make a request to the endpoint to get the questions
     response = test_client.get(
@@ -223,11 +218,7 @@ def test_get_questions_max_offset(mock_db, test_client, basic_jwt, max_offset):
         },
     ]
 
-    mock_db[
-        "questions"
-    ].find.return_value.sort.return_value.skip.return_value.limit.return_value = (
-        sample_data
-    )
+    mock_db["questions"].find.return_value = sample_data
 
     mock_db["questions"].count_documents.return_value = len(sample_data)
 
@@ -271,11 +262,7 @@ def test_get_questions_nan_offset(mock_db, test_client, basic_jwt, max_offset):
         },
     ]
 
-    mock_db[
-        "questions"
-    ].find.return_value.sort.return_value.skip.return_value.limit.return_value = (
-        sample_data
-    )
+    mock_db["questions"].find.return_value = sample_data
 
     mock_db["questions"].count_documents.return_value = len(sample_data)
 
@@ -319,11 +306,7 @@ def test_get_questions_negative_offset(mock_db, test_client, basic_jwt, max_offs
         },
     ]
 
-    mock_db[
-        "questions"
-    ].find.return_value.sort.return_value.skip.return_value.limit.return_value = (
-        sample_data
-    )
+    mock_db["questions"].find.return_value = sample_data
 
     mock_db["questions"].count_documents.return_value = len(sample_data)
 
@@ -367,11 +350,7 @@ def test_get_questions_max_limit(mock_db, test_client, basic_jwt, max_limit):
         },
     ]
 
-    mock_db[
-        "questions"
-    ].find.return_value.sort.return_value.skip.return_value.limit.return_value = (
-        sample_data
-    )
+    mock_db["questions"].find.return_value = sample_data
 
     mock_db["questions"].count_documents.return_value = len(sample_data)
 
@@ -415,11 +394,7 @@ def test_get_questions_nan_limit(mock_db, test_client, basic_jwt, max_limit):
         },
     ]
 
-    mock_db[
-        "questions"
-    ].find.return_value.sort.return_value.skip.return_value.limit.return_value = (
-        sample_data
-    )
+    mock_db["questions"].find.return_value = sample_data
 
     mock_db["questions"].count_documents.return_value = len(sample_data)
 
@@ -463,11 +438,7 @@ def test_get_questions_negative_limit(mock_db, test_client, basic_jwt, max_limit
         },
     ]
 
-    mock_db[
-        "questions"
-    ].find.return_value.sort.return_value.skip.return_value.limit.return_value = (
-        sample_data
-    )
+    mock_db["questions"].find.return_value = sample_data
 
     mock_db["questions"].count_documents.return_value = len(sample_data)
 

@@ -36,6 +36,7 @@ def test_prepend_host():
     }
 
 
+# Case 2: pagination values are validated correctly
 def test_validate_pagination(default_limit, max_limit, default_offset, max_offset):
     valid_limit = 10
     valid_offset = 20
@@ -65,4 +66,5 @@ def test_validate_pagination(default_limit, max_limit, default_offset, max_offse
         validate_pagination(valid_limit, negative_offset)
 
 
+# Case 3: sort value is validated correctly
 # def test_validate_sort():

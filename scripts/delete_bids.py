@@ -33,7 +33,7 @@ def delete_bids():
         else:
             delete_result = collection.delete_many({})
             print(f"Deleted {delete_result.deleted_count} bids from the collection.")
-
+        collection.drop_indexes()
     except ConnectionFailure:
         print("Error: Failed to connect to database")
         sys.exit(1)
