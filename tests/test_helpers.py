@@ -1,8 +1,14 @@
 """
 This file contains tests for the helper functions in helpers.py
 """
+import os
 import pytest
-from helpers.helpers import prepend_host_to_links, validate_pagination
+from dotenv import load_dotenv
+from helpers.helpers import (
+    prepend_host_to_links,
+    validate_pagination,
+    validate_questions_sort,
+)
 
 
 # Case 1: Host is prepended to values in links object
@@ -33,6 +39,11 @@ def test_prepend_host():
 
 
 def test_validate_pagination():
+    load_dotenv()
+    default_limit = os.getenv("DEFAULT_LIMIT")
+    max_limit = os.getenv("MAX_LIMIT")
+    default_offset = os.getenv("DEFAULT_OFFSET")
+    max_offset = os.getenv("MAX_OFFSET")
     valid_limit = 10
     valid_offset = 20
     nan_limit = "five"
@@ -40,22 +51,25 @@ def test_validate_pagination():
     negative_limit = -5
     negative_offset = -10
 
-    assert validate_pagination(valid_limit, valid_offset) == (10, 20)
-    assert validate_pagination(None, valid_offset) == (20, 20)
-    assert validate_pagination(valid_limit, None) == (10, 0)
+    assert validate_pagination(valid_limit, valid_offset) == (valid_limit, valid_offset)
+    assert validate_pagination(None, valid_offset) == (int(default_limit), valid_offset)
+    assert validate_pagination(valid_limit, None) == (valid_limit, int(default_offset))
     with pytest.raises(
-        ValueError, match="Limit value must be a number between 0 and 1000"
+        ValueError, match=f"Limit value must be a number between 0 and {max_limit}"
     ):
         validate_pagination(nan_limit, valid_offset)
     with pytest.raises(
-        ValueError, match="Limit value must be a number between 0 and 1000"
+        ValueError, match=f"Limit value must be a number between 0 and {max_limit}"
     ):
         validate_pagination(negative_limit, valid_offset)
     with pytest.raises(
-        ValueError, match="Offset value must be a number between 0 and 2000"
+        ValueError, match=f"Offset value must be a number between 0 and {max_offset}"
     ):
         validate_pagination(valid_limit, nan_offset)
     with pytest.raises(
-        ValueError, match="Offset value must be a number between 0 and 2000"
+        ValueError, match=f"Offset value must be a number between 0 and {max_offset}"
     ):
         validate_pagination(valid_limit, negative_offset)
+
+
+# def test_validate_questions_sort():

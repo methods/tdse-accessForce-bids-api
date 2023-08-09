@@ -8,6 +8,8 @@ import pytest
 from app import app
 from dotenv import load_dotenv
 
+load_dotenv()
+
 
 @pytest.fixture(scope="session")
 def test_client():
@@ -19,7 +21,6 @@ def test_client():
 
 @pytest.fixture(scope="session")
 def api_key():
-    load_dotenv()
     api_key = os.getenv("API_KEY")
     return api_key
 
@@ -27,7 +28,6 @@ def api_key():
 @pytest.fixture(scope="session")
 def basic_jwt():
     payload = {"username": "User McTestface", "admin": False}
-    load_dotenv()
     key = os.getenv("SECRET_KEY")
     token = jwt.encode(payload=payload, key=key)
     return token
@@ -36,7 +36,18 @@ def basic_jwt():
 @pytest.fixture(scope="session")
 def admin_jwt():
     payload = {"username": "Admin McTestface", "admin": True}
-    load_dotenv()
     key = os.getenv("SECRET_KEY")
     token = jwt.encode(payload=payload, key=key)
     return token
+
+
+@pytest.fixture(scope="session")
+def max_offset():
+    max_offset = os.getenv("MAX_OFFSET")
+    return max_offset
+
+
+@pytest.fixture(scope="session")
+def max_limit():
+    max_limit = os.getenv("MAX_LIMIT")
+    return max_limit
