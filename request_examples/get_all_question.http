@@ -1,0 +1,2 @@
+GET http://localhost:8080/api/bids/be15c306-c85b-4e67-a9f6-682553c065a1/questions HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBpcmEiLCJhZG1pbiI6dHJ1ZSwiZXhwIjoxNjkyMTkxNjM1fQ.nyWHYtF4PCz7FLThu3gjHF7D5_JirwuOUWggDP73TBs

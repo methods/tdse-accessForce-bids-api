@@ -1,0 +1,332 @@
+[
+  {
+    "_id": "be15c306-c85b-4e67-a9f6-682553c065a1",
+    "alias": "ONS",
+    "bid_date": "2023-06-23",
+    "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+    "client": "Office for National Statistics",
+    "failed": {
+      "has_score": true,
+      "out_of": 36,
+      "phase": 2,
+      "score": 20
+    },
+    "feedback": {
+      "description": "Feedback from client in detail",
+      "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
+    },
+    "last_updated": "2023-07-20T17:00:40.510224",
+    "links": {
+      "questions": "/api/bids/be15c306-c85b-4e67-a9f6-682553c065a1/questions",
+      "self": "/api/bids/be15c306-c85b-4e67-a9f6-682553c065a1"
+    },
+    "status": "in_progress",
+    "success": [
+      {
+        "has_score": true,
+        "out_of": 36,
+        "phase": 1,
+        "score": 30
+      }
+    ],
+    "tender": "Business Intelligence and Data Warehousing",
+    "was_successful": false
+  },
+  {
+    "_id": "a5e8f31b-d848-4e87-b5c9-8db5a9d72bc7",
+    "alias": "ACME",
+    "bid_date": "2023-07-05",
+    "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+    "client": "ACME Corporation",
+    "failed": {
+      "has_score": true,
+      "out_of": 36,
+      "phase": 2,
+      "score": 15
+    },
+    "feedback": {
+      "description": "Feedback from client in detail",
+      "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
+    },
+    "last_updated": "2023-08-01T14:30:20.123456",
+    "links": {
+      "questions": "/api/bids/a5e8f31b-d848-4e87-b5c9-8db5a9d72bc7/questions",
+      "self": "/api/bids/a5e8f31b-d848-4e87-b5c9-8db5a9d72bc7"
+    },
+    "status": "in_progress",
+    "success": [
+      {
+        "has_score": true,
+        "out_of": 36,
+        "phase": 1,
+        "score": 28
+      }
+    ],
+    "tender": "Data Analytics Solution",
+    "was_successful": false
+  },
+  {
+    "_id": "e2c91b49-76ac-4d23-a4e3-109d65b8ac6f",
+    "alias": "XYZ",
+    "bid_date": "2023-07-10",
+    "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+    "client": "XYZ Innovations",
+    "failed": {
+      "has_score": true,
+      "out_of": 36,
+      "phase": 2,
+      "score": 18
+    },
+    "feedback": {
+      "description": "Feedback from client in detail",
+      "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
+    },
+    "last_updated": "2023-07-20T17:03:19.452381",
+    "links": {
+      "questions": "/api/bids/e2c91b49-76ac-4d23-a4e3-109d65b8ac6f/questions",
+      "self": "/api/bids/e2c91b49-76ac-4d23-a4e3-109d65b8ac6f"
+    },
+    "status": "in_progress",
+    "success": [
+      {
+        "has_score": true,
+        "out_of": 36,
+        "phase": 1,
+        "score": 32
+      }
+    ],
+    "tender": "Advanced Analytics Platform",
+    "was_successful": false
+  },
+  {
+    "_id": "f73e6c4d-9f2d-4e66-8c57-7ae8d20a558e",
+    "alias": "TechSolutions",
+    "bid_date": "2023-07-15",
+    "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+    "client": "Technology Solutions Ltd.",
+    "failed": {
+      "has_score": true,
+      "out_of": 36,
+      "phase": 2,
+      "score": 22
+    },
+    "feedback": {
+      "description": "Feedback from client in detail",
+      "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
+    },
+    "last_updated": "2023-08-05T09:15:30.765432",
+    "links": {
+      "questions": "/api/bids/f73e6c4d-9f2d-4e66-8c57-7ae8d20a558e/questions",
+      "self": "/api/bids/f73e6c4d-9f2d-4e66-8c57-7ae8d20a558e"
+    },
+    "status": "in_progress",
+    "success": [
+      {
+        "has_score": true,
+        "out_of": 36,
+        "phase": 1,
+        "score": 34
+      }
+    ],
+    "tender": "Data Integration and Reporting",
+    "was_successful": false
+  },
+  {
+    "_id": "d4e0f4d7-89a1-23b4-c5d6-e7f8a9b0c1d2",
+    "alias": "GlobeTech",
+    "bid_date": "2023-07-20",
+    "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+    "client": "GlobeTech Innovations",
+    "failed": {
+      "has_score": true,
+      "out_of": 36,
+      "phase": 2,
+      "score": 24
+    },
+    "feedback": {
+      "description": "Feedback from client in detail",
+      "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
+    },
+    "last_updated": "2023-08-07T16:45:10.987654",
+    "links": {
+      "questions": "/api/bids/d4e0f4d7-89a1-23b4-c5d6-e7f8a9b0c1d2/questions",
+      "self": "/api/bids/d4e0f4d7-89a1-23b4-c5d6-e7f8a9b0c1d2"
+    },
+    "status": "in_progress",
+    "success": [
+      {
+        "has_score": true,
+        "out_of": 36,
+        "phase": 1,
+        "score": 26
+      }
+    ],
+    "tender": "Data Solutions Architecture",
+    "was_successful": false
+  },
+  {
+    "_id": "c3a2b1d5-e8f7-4c6d-a9b8-7f6e5d4c3b2a",
+    "alias": "DataCo",
+    "bid_date": "2023-07-25",
+    "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+    "client": "DataCo Services",
+    "failed": {
+      "has_score": true,
+      "out_of": 36,
+      "phase": 2,
+      "score": 19
+    },
+    "feedback": {
+      "description": "Feedback from client in detail",
+      "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
+    },
+    "last_updated": "2023-08-09T10:30:00.123456",
+    "links": {
+      "questions": "/api/bids/c3a2b1d5-e8f7-4c6d-a9b8-7f6e5d4c3b2a/questions",
+      "self": "/api/bids/c3a2b1d5-e8f7-4c6d-a9b8-7f6e5d4c3b2a"
+    },
+    "status": "in_progress",
+    "success": [
+      {
+        "has_score": true,
+        "out_of": 36,
+        "phase": 1,
+        "score": 31
+      }
+    ],
+    "tender": "Data Governance and Compliance",
+    "was_successful": false
+  },
+  {
+    "_id": "d9e8f7c6-b5a4-1d3c-7e6f-9b8a0c2d4e5f",
+    "alias": "TechConnect",
+    "bid_date": "2023-07-30",
+    "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+    "client": "TechConnect Solutions",
+    "failed": {
+      "has_score": true,
+      "out_of": 36,
+      "phase": 2,
+      "score": 21
+    },
+    "feedback": {
+      "description": "Feedback from client in detail",
+      "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
+    },
+    "last_updated": "2023-08-11T08:15:30.987654",
+    "links": {
+      "questions": "/api/bids/d9e8f7c6-b5a4-1d3c-7e6f-9b8a0c2d4e5f/questions",
+      "self": "/api/bids/d9e8f7c6-b5a4-1d3c-7e6f-9b8a0c2d4e5f"
+    },
+    "status": "in_progress",
+    "success": [
+      {
+        "has_score": true,
+        "out_of": 36,
+        "phase": 1,
+        "score": 33
+      }
+    ],
+    "tender": "Data Infrastructure Modernization",
+    "was_successful": false
+  },
+  {
+    "_id": "f2e4d6c8-a0b1-42c3-d4e5-f6a7b8c9d0e1",
+    "alias": "DataGenius",
+    "bid_date": "2023-08-05",
+    "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+    "client": "DataGenius Labs",
+    "failed": {
+      "has_score": true,
+      "out_of": 36,
+      "phase": 2,
+      "score": 23
+    },
+    "feedback": {
+      "description": "Feedback from client in detail",
+      "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
+    },
+    "last_updated": "2023-08-13T16:30:00.654321",
+    "links": {
+      "questions": "/api/bids/f2e4d6c8-a0b1-42c3-d4e5-f6a7b8c9d0e1/questions",
+      "self": "/api/bids/f2e4d6c8-a0b1-42c3-d4e5-f6a7b8c9d0e1"
+    },
+    "status": "in_progress",
+    "success": [
+      {
+        "has_score": true,
+        "out_of": 36,
+        "phase": 1,
+        "score": 35
+      }
+    ],
+    "tender": "Data Science and Analytics",
+    "was_successful": false
+  },
+  {
+    "_id": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6f",
+    "alias": "InnoTech",
+    "bid_date": "2023-07-15",
+    "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+    "client": "Innovative Technologies Ltd.",
+    "failed": {
+      "has_score": true,
+      "out_of": 36,
+      "phase": 2,
+      "score": 10
+    },
+    "feedback": {
+      "description": "Feedback from client in detail",
+      "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
+    },
+    "last_updated": "2023-08-05T15:30:40.987654",
+    "links": {
+      "questions": "/api/bids/1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6f/questions",
+      "self": "/api/bids/1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6f"
+    },
+    "status": "completed",
+    "success": [
+      {
+        "has_score": true,
+        "out_of": 36,
+        "phase": 1,
+        "score": 30
+      }
+    ],
+    "tender": "Innovative Solutions Development",
+    "was_successful": false
+  },
+  {
+    "_id": "9a8b7c6d-5e4f-3a2b-1c0d-9e8f7a6b5c4e",
+    "alias": "TechBiz",
+    "bid_date": "2023-07-18",
+    "bid_folder_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+    "client": "TechBiz Solutions",
+    "failed": {
+      "has_score": true,
+      "out_of": 36,
+      "phase": 2,
+      "score": 19
+    },
+    "feedback": {
+      "description": "Feedback from client in detail",
+      "url": "https://organisation.sharepoint.com/Docs/dummyfolder/feedback"
+    },
+    "last_updated": "2023-08-07T12:30:15.987654",
+    "links": {
+      "questions": "/api/bids/9a8b7c6d-5e4f-3a2b-1c0d-9e8f7a6b5c4e/questions",
+      "self": "/api/bids/9a8b7c6d-5e4f-3a2b-1c0d-9e8f7a6b5c4e"
+    },
+    "status": "deleted",
+    "success": [
+      {
+        "has_score": true,
+        "out_of": 36,
+        "phase": 1,
+        "score": 27
+      }
+    ],
+    "tender": "Technology Consulting Services",
+    "was_successful": false
+  }
+]
