@@ -186,8 +186,12 @@ def validate_pagination(limit, offset):
     return valid_limit, valid_offset
 
 
-def validate_questions_sort(sort_value):
-    field = "description"
+def validate_sort(sort_value, resource):
+    load_dotenv()
+    if resource == "bids":
+        field = os.getenv("DEFAULT_SORT_BIDS")
+    elif resource == "questions":
+        field = os.getenv("DEFAULT_SORT_QUESTIONS")
     order = 1
     if sort_value:
         if sort_value[0] == "-":

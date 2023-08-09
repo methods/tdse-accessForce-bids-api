@@ -5,7 +5,7 @@ import pytest
 from helpers.helpers import (
     prepend_host_to_links,
     validate_pagination,
-    validate_questions_sort,
+    validate_sort,
 )
 
 
@@ -65,4 +65,4 @@ def test_validate_pagination(default_limit, max_limit, default_offset, max_offse
         validate_pagination(valid_limit, negative_offset)
 
 
-# def test_validate_questions_sort():
+# def test_validate_sort():

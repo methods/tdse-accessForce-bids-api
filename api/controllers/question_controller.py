@@ -18,7 +18,7 @@ from helpers.helpers import (
     require_jwt,
     require_admin_access,
     validate_pagination,
-    validate_questions_sort,
+    validate_sort,
 )
 
 question = Blueprint("question", __name__)
@@ -52,7 +52,7 @@ def get_questions(bid_id):
     try:
         bid_id = validate_id_path(bid_id)
         hostname = request.headers.get("host")
-        field, order = validate_questions_sort(request.args.get("sort"))
+        field, order = validate_sort(request.args.get("sort"), "questions")
         limit, offset = validate_pagination(
             request.args.get("limit"), request.args.get("offset")
         )
