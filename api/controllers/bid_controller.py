@@ -49,13 +49,13 @@ def get_bids():
         data = list(db["bids"].find(query_filter, **query_options))
         total_count = db["bids"].count_documents(query_filter)
 
-        explain_result = (
-            db["bids"]
-            .find({"status": {"$ne": Status.DELETED.value}})
-            .sort("alias", order)
-            .explain()
-        )
-        print(explain_result["queryPlanner"]["winningPlan"])
+        # explain_result = (
+        #     db["bids"]
+        #     .find({"status": {"$ne": Status.DELETED.value}})
+        #     .sort("alias", order)
+        #     .explain()
+        # )
+        # print(explain_result["queryPlanner"]["winningPlan"])
         # Return the response
         if not data:
             return showNotFoundError(), 404
@@ -103,7 +103,7 @@ def get_bid_by_id(bid_id):
             {"_id": bid_id, "status": {"$ne": Status.DELETED.value}}
         )
         # Return 404 response if not found / returns None
-        if data is None:
+        if not data:
             return showNotFoundError(), 404
         # Get hostname from request headers
         hostname = request.headers.get("host")
@@ -128,7 +128,7 @@ def update_bid_by_id(bid_id):
             {"_id": bid_id, "status": Status.IN_PROGRESS.value}
         )
         # Return 404 response if not found / returns None
-        if current_bid is None:
+        if not current_bid:
             return showNotFoundError(), 404
         updated_bid = validate_bid_update(request.get_json(), current_bid)
         db["bids"].replace_one(
@@ -160,7 +160,7 @@ def change_status_to_deleted(bid_id):
                 }
             },
         )
-        if data is None:
+        if not data:
             return showNotFoundError(), 404
         return data, 204
     # Return 400 response if input validation fails
