@@ -1,9 +1,8 @@
 """
 This module implements the bid controller.
 """
-
 from datetime import datetime
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from marshmallow import ValidationError
 from werkzeug.exceptions import UnprocessableEntity
 from api.models.status_enum import Status
@@ -29,13 +28,51 @@ bid = Blueprint("bid", __name__)
 @bid.route("/bids", methods=["GET"])
 @require_api_key
 def get_bids():
-    # Get all bids from database collection
     try:
-        data = list(db["bids"].find({"status": {"$ne": Status.DELETED.value}}))
+        # Validate and process the limit parameter
+        limit = int(request.args.get("limit", 5))
+        if limit < 1:
+            return jsonify({"error": "Limit must be a positive number"}), 400
+
+        offset = int(request.args.get("offset", 0))
+        if offset < 0 or offset >= 1000:
+            return jsonify({"error": "Offset must be between 0 and 999"}), 400
+
+        sort = request.args.get("sort", "last_updated")
+        order = int(request.args.get("order", 1))  # Default to ascending (1)
+
+        # Prepare query filter and options
+        query_filter = {"status": {"$ne": Status.DELETED.value}}
+        query_options = {"sort": [(sort, order)], "skip": offset, "limit": limit}
+
+        # Fetch data and count documents
+        data = list(db["bids"].find(query_filter, **query_options))
+        total_count = db["bids"].count_documents(query_filter)
+
+        # explain_result = (
+        #     db["bids"]
+        #     .find({"status": {"$ne": Status.DELETED.value}})
+        #     .sort("alias", order)
+        #     .explain()
+        # )
+        # print(explain_result["queryPlanner"]["winningPlan"])
+        # Return the response
+        if not data:
+            return showNotFoundError(), 404
+
         hostname = request.headers.get("host")
         for resource in data:
             prepend_host_to_links(resource, hostname)
-        return {"total_count": len(data), "items": data}, 200
+
+        return {
+            "count": len(data),
+            "total_count": total_count,
+            "limit": limit,
+            "offset": offset,
+            "data": data,
+        }, 200
+    except ValueError:  # Handle non-integer values
+        return jsonify({"error": "Page and limit must be valid integer values"}), 400
     except Exception:
         return showInternalServerError(), 500
 
@@ -66,7 +103,7 @@ def get_bid_by_id(bid_id):
             {"_id": bid_id, "status": {"$ne": Status.DELETED.value}}
         )
         # Return 404 response if not found / returns None
-        if data is None:
+        if not data:
             return showNotFoundError(), 404
         # Get hostname from request headers
         hostname = request.headers.get("host")
@@ -91,7 +128,7 @@ def update_bid_by_id(bid_id):
             {"_id": bid_id, "status": Status.IN_PROGRESS.value}
         )
         # Return 404 response if not found / returns None
-        if current_bid is None:
+        if not current_bid:
             return showNotFoundError(), 404
         updated_bid = validate_bid_update(request.get_json(), current_bid)
         db["bids"].replace_one(
@@ -123,7 +160,7 @@ def change_status_to_deleted(bid_id):
                 }
             },
         )
-        if data is None:
+        if not data:
             return showNotFoundError(), 404
         return data, 204
     # Return 400 response if input validation fails
