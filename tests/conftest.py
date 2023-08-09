@@ -51,3 +51,15 @@ def max_offset():
 def max_limit():
     max_limit = os.getenv("MAX_LIMIT")
     return max_limit
+
+
+@pytest.fixture(scope="session")
+def default_offset():
+    default_offset = os.getenv("DEFAULT_OFFSET")
+    return default_offset
+
+
+@pytest.fixture(scope="session")
+def default_limit():
+    default_limit = os.getenv("DEFAULT_LIMIT")
+    return default_limit

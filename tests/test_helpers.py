@@ -38,12 +38,7 @@ def test_prepend_host():
     }
 
 
-def test_validate_pagination():
-    load_dotenv()
-    default_limit = os.getenv("DEFAULT_LIMIT")
-    max_limit = os.getenv("MAX_LIMIT")
-    default_offset = os.getenv("DEFAULT_OFFSET")
-    max_offset = os.getenv("MAX_OFFSET")
+def test_validate_pagination(default_limit, max_limit, default_offset, max_offset):
     valid_limit = 10
     valid_offset = 20
     nan_limit = "five"
