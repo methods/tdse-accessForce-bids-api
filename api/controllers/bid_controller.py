@@ -1,9 +1,8 @@
 """
 This module implements the bid controller.
 """
-
 from datetime import datetime
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from marshmallow import ValidationError
 from werkzeug.exceptions import UnprocessableEntity
 from api.models.status_enum import Status
@@ -21,6 +20,8 @@ from helpers.helpers import (
     require_api_key,
     require_jwt,
     require_admin_access,
+    validate_sort,
+    validate_pagination,
 )
 
 bid = Blueprint("bid", __name__)
@@ -29,13 +30,33 @@ bid = Blueprint("bid", __name__)
 @bid.route("/bids", methods=["GET"])
 @require_api_key
 def get_bids():
-    # Get all bids from database collection
     try:
-        data = list(db["bids"].find({"status": {"$ne": Status.DELETED.value}}))
         hostname = request.headers.get("host")
+        field, order = validate_sort(request.args.get("sort"), "bids")
+        limit, offset = validate_pagination(
+            request.args.get("limit"), request.args.get("offset")
+        )
+
+        # Prepare query filter and options
+        query_filter = {"status": {"$ne": Status.DELETED.value}}
+        query_options = {"sort": [(field, order)], "skip": offset, "limit": limit}
+
+        # Fetch data and count documents
+        data = list(db["bids"].find(query_filter, **query_options))
+        total_count = db["bids"].count_documents(query_filter)
+
         for resource in data:
             prepend_host_to_links(resource, hostname)
-        return {"total_count": len(data), "items": data}, 200
+
+        return {
+            "count": len(data),
+            "total_count": total_count,
+            "limit": limit,
+            "offset": offset,
+            "items": data,
+        }, 200
+    except ValueError as error:
+        return jsonify({"Error": str(error)}), 400
     except Exception:
         return showInternalServerError(), 500
 
@@ -66,7 +87,7 @@ def get_bid_by_id(bid_id):
             {"_id": bid_id, "status": {"$ne": Status.DELETED.value}}
         )
         # Return 404 response if not found / returns None
-        if data is None:
+        if not data:
             return showNotFoundError(), 404
         # Get hostname from request headers
         hostname = request.headers.get("host")
@@ -91,7 +112,7 @@ def update_bid_by_id(bid_id):
             {"_id": bid_id, "status": Status.IN_PROGRESS.value}
         )
         # Return 404 response if not found / returns None
-        if current_bid is None:
+        if not current_bid:
             return showNotFoundError(), 404
         updated_bid = validate_bid_update(request.get_json(), current_bid)
         db["bids"].replace_one(
@@ -123,7 +144,7 @@ def change_status_to_deleted(bid_id):
                 }
             },
         )
-        if data is None:
+        if not data:
             return showNotFoundError(), 404
         return data, 204
     # Return 400 response if input validation fails

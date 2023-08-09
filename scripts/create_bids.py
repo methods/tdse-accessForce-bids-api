@@ -7,7 +7,7 @@ This script creates sample data for the Bids collection.
 import os
 import json
 import sys
-from pymongo import MongoClient
+from pymongo import MongoClient, operations
 from pymongo.errors import ConnectionFailure
 from dotenv import load_dotenv
 
@@ -40,8 +40,18 @@ def populate_bids():
         with open(file_path, encoding="utf-8") as bids_file:
             bids_data = json.load(bids_file)
 
+        # Define the index models
+        index_models = [
+            operations.IndexModel([("client", 1)]),
+            operations.IndexModel([("tender", 1)]),
+            operations.IndexModel([("bid_date", 1)]),
+            operations.IndexModel([("last_updated", -1)]),
+        ]
+
+        # Create the indexes
+        collection.create_indexes(index_models)
         # Insert bids into the database
-        for bid in bids_data["items"]:
+        for bid in bids_data:
             # Check if the bid already exists in the database
             existing_bid = collection.find_one({"_id": bid["_id"]})
             if existing_bid:

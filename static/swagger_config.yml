@@ -45,8 +45,29 @@ paths:
     get:
       tags:
         - bids
-      summary: Returns all bids
+      summary: Returns a list of bids
       description: A JSON with item count and array of all bids
+      parameters:
+        - name: sort
+          in: query
+          description: field for sorting list of results in ascending order ("-" before the field will denote descending order)
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: number of results to return per page
+          required: false
+          schema:
+            type: string
+            format: integer
+        - name: offset
+          in: query
+          description: number of items skipped from start of dataset on current page
+          required: false
+          schema:
+            type: string
+            format: integer
       security:
         - ApiKeyAuth: []
       responses:
@@ -60,6 +81,15 @@ paths:
                   total_count:
                     type: integer
                     example: 1
+                  count:
+                    type: integer
+                    example: 1
+                  offset:
+                    type: integer
+                    example: 0
+                  limit:
+                    type: integer
+                    example: 20
                   items:
                     type: array
                     items:
@@ -244,7 +274,7 @@ paths:
     get:
       tags:
         - questions
-      summary: Returns all questions for a bid
+      summary: Returns a list of questions for a bid
       description: A JSON with item count and array of all questions for a bid
       operationId: get_questions
       parameters:
@@ -255,6 +285,26 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: sort
+          in: query
+          description: field for sorting list of results in ascending order ("-" before the field will denote descending order)
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: number of results to return per page
+          required: false
+          schema:
+            type: string
+            format: integer
+        - name: offset
+          in: query
+          description: number of items skipped from start of dataset on current page
+          required: false
+          schema:
+            type: string
+            format: integer
       security:
         - BearerAuth: []
       responses:
@@ -268,6 +318,15 @@ paths:
                   total_count:
                     type: integer
                     example: 1
+                  count:
+                    type: integer
+                    example: 1
+                  offset:
+                    type: integer
+                    example: 0
+                  limit:
+                    type: integer
+                    example: 20
                   items:
                     type: array
                     items:

@@ -56,7 +56,7 @@ This API stores and serves information about Methods bids for client tenders.
 
 ## Environmental Variables
 
-In order to validate your credentials and configure the database connection, you will have to set up the environmental variables locally.
+In order to validate your credentials, configure the database connection and utilise pagination you will have to set up the environmental variables locally.
 
 To do this, create a `.env` file in your root folder, with the following key/value pairs:
 
@@ -65,6 +65,12 @@ To do this, create a `.env` file in your root folder, with the following key/val
       DB_HOST=localhost
       DB_NAME=bidsAPI
       TEST_DB_NAME=testAPI
+      DEFAULT_OFFSET=0
+      DEFAULT_LIMIT=20
+      MAX_OFFSET=2000
+      MAX_LIMIT=1000
+      DEFAULT_SORT_BIDS=bid_date
+      DEFAULT_SORT_QUESTIONS=description    
 
 --------------
 
