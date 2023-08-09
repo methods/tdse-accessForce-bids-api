@@ -1,9 +1,7 @@
 """
 This file contains tests for the helper functions in helpers.py
 """
-import os
 import pytest
-from dotenv import load_dotenv
 from helpers.helpers import (
     prepend_host_to_links,
     validate_pagination,

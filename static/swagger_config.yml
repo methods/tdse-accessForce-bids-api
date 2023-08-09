@@ -48,6 +48,12 @@ paths:
       summary: Returns a list of bids
       description: A JSON with item count and array of all bids
       parameters:
+        - name: sort
+          in: query
+          description: field for sorting list of results in ascending order ("-" before the field will denote descending order)
+          required: false
+          schema:
+            type: string
         - name: limit
           in: query
           description: number of results to return per page
@@ -270,6 +276,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: sort
+          in: query
+          description: field for sorting list of results in ascending order ("-" before the field will denote descending order)
+          required: false
+          schema:
+            type: string
         - name: limit
           in: query
           description: number of results to return per page
