@@ -68,7 +68,9 @@ To do this, create a `.env` file in your root folder, with the following key/val
       DEFAULT_OFFSET=0
       DEFAULT_LIMIT=20
       MAX_OFFSET=2000
-      MAX_LIMIT=1000    
+      MAX_LIMIT=1000
+      DEFAULT_SORT_BIDS=bid_date
+      DEFAULT_SORT_QUESTIONS=description    
 
 --------------
 

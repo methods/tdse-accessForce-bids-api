@@ -15,6 +15,7 @@ from helpers.helpers import (
     validate_id_path,
     validate_question_update,
     prepend_host_to_links,
+    require_api_key,
     require_jwt,
     require_admin_access,
     validate_pagination,
@@ -47,7 +48,7 @@ def post_question(bid_id):
 
 
 @question.route("/bids/<bid_id>/questions", methods=["GET"])
-@require_jwt
+@require_api_key
 def get_questions(bid_id):
     try:
         bid_id = validate_id_path(bid_id)
@@ -87,7 +88,7 @@ def get_questions(bid_id):
 
 
 @question.route("/bids/<bid_id>/questions/<question_id>", methods=["GET"])
-@require_jwt
+@require_api_key
 def get_question(bid_id, question_id):
     try:
         bid_id = validate_id_path(bid_id)

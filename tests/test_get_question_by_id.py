@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 # Case 1: Successful get
 @patch("api.controllers.question_controller.db")
-def test_get_single_question_success(mock_db, test_client, basic_jwt):
+def test_get_single_question_success(mock_db, test_client, api_key):
     # Set up the sample bid ID and question ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
     sample_question_id = "2b18f477-627f-4d48-a008-ca0d9cea3791"
@@ -38,7 +38,7 @@ def test_get_single_question_success(mock_db, test_client, basic_jwt):
     # Make a request to the endpoint to get the single question
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions/{sample_question_id}",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
 
     # Assert the response status code and content
@@ -49,7 +49,7 @@ def test_get_single_question_success(mock_db, test_client, basic_jwt):
 
 # Case 2: Links prepended with hostname
 @patch("api.controllers.question_controller.db")
-def test_single_question_links_with_host(mock_db, test_client, basic_jwt):
+def test_single_question_links_with_host(mock_db, test_client, api_key):
     # Set up the sample bid ID and question ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
     sample_question_id = "2b18f477-627f-4d48-a008-ca0d9cea3791"
@@ -81,7 +81,7 @@ def test_single_question_links_with_host(mock_db, test_client, basic_jwt):
     # Make a request to the endpoint to get the single question with hostname in the headers
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions/{sample_question_id}",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
 
     # Assert the response status code and content
@@ -98,7 +98,7 @@ def test_single_question_links_with_host(mock_db, test_client, basic_jwt):
 
 # Case 3: Connection error
 @patch("api.controllers.question_controller.db")
-def test_get_single_question_connection_error(mock_db, test_client, basic_jwt):
+def test_get_single_question_connection_error(mock_db, test_client, api_key):
     # Set up the sample bid ID and question ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
     sample_question_id = "2b18f477-627f-4d48-a008-ca0d9cea3791"
@@ -109,7 +109,7 @@ def test_get_single_question_connection_error(mock_db, test_client, basic_jwt):
     # Make a request to the endpoint to get the single question
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions/{sample_question_id}",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
 
     # Assert the response status code and content
@@ -153,7 +153,7 @@ def test_get_single_question_unauthorized(mock_db, test_client):
 
 # Case 5: No question found for the given ID
 @patch("api.controllers.question_controller.db")
-def test_no_question_found_by_id(mock_db, test_client, basic_jwt):
+def test_no_question_found_by_id(mock_db, test_client, api_key):
     # Set up the sample question ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
     sample_question_id = "2b18f477-627f-4d48-a008-ca0d9cea3791"
@@ -164,7 +164,7 @@ def test_no_question_found_by_id(mock_db, test_client, basic_jwt):
     # Make a request to the endpoint to get the question by ID
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions/{sample_question_id}",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
 
     # Assert the response status code and content
@@ -175,13 +175,13 @@ def test_no_question_found_by_id(mock_db, test_client, basic_jwt):
 
 # Case 6: Validation error
 @patch("api.controllers.question_controller.db")
-def test_get_question_by_id_validation_error(mock_db, test_client, basic_jwt):
+def test_get_question_by_id_validation_error(mock_db, test_client, api_key):
     # Set up the sample question ID
     sample_bid_id = "Invalid bid Id"
     sample_question_id = "2b18f477-627f-4d48-a008-ca0d9cea3791"
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions/{sample_question_id}",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
     assert response.status_code == 400
     assert response.get_json() == {"Error": "{'id': ['Invalid Id']}"}

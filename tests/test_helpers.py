@@ -67,4 +67,18 @@ def test_validate_pagination(default_limit, max_limit, default_offset, max_offse
 
 
 # Case 3: sort value is validated correctly
-# def test_validate_sort():
+def test_validate_sort(default_sort_bids, default_sort_questions):
+    valid_field_asc = "last_updated"
+    valid_field_desc = "-last_updated"
+    invalid_field = "invalid"
+
+    assert validate_sort(valid_field_asc, "bids") == (valid_field_asc, 1)
+    assert validate_sort(valid_field_asc, "questions") == (valid_field_asc, 1)
+    assert validate_sort(valid_field_desc, "bids") == (valid_field_desc[1:], -1)
+    assert validate_sort(valid_field_desc, "questions") == (valid_field_desc[1:], -1)
+    assert validate_sort(None, "bids") == (default_sort_bids, 1)
+    assert validate_sort(None, "questions") == (default_sort_questions, 1)
+    with pytest.raises(ValueError, match="Invalid sort criteria"):
+        validate_sort(invalid_field, "bids")
+    with pytest.raises(ValueError, match="Invalid sort criteria"):
+        validate_sort(invalid_field, "questions")

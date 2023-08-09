@@ -3,10 +3,10 @@
 ## Database Cleanup Script
 
 ### Script Description
-- The delete_bids.py script is used to delete all bids from the MongoDB collection.
-- The delete_questions.py script is used to delete all questions from the MongoDB collection.
-- The create_bids.py script is used to populate the MongoDB database with sample bids data from the bids.json file.
-- The create_questions.py script is used to populate the MongoDB database with sample questions data from the questions.json file, using existing bid Ids from the bids.json file.
+- The delete_bids.py script is used to delete all bids and drop all indexes from the MongoDB collection.
+- The delete_questions.py script is used to delete all questions  and drop all indexes from the MongoDB collection.
+- The create_bids.py script is used to populate the MongoDB database with sample bids data from the bids.json file and create indexes.
+- The create_questions.py script is used to populate the MongoDB database with sample questions data from the questions.json file, using existing bid Ids from the bids.json file and create indexes.
 
 ### Usage
 

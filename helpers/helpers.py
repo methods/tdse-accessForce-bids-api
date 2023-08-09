@@ -190,13 +190,27 @@ def validate_sort(sort_value, resource):
     load_dotenv()
     if resource == "bids":
         field = os.getenv("DEFAULT_SORT_BIDS")
+        valid_fields = [
+            "client",
+            "tender",
+            "bid_date",
+            "alias",
+            "status",
+            "last_updated",
+            "was_successful",
+        ]
     elif resource == "questions":
         field = os.getenv("DEFAULT_SORT_QUESTIONS")
+        valid_fields = ["description", "score", "respondents", "status", "last_updated"]
     order = 1
-    if sort_value:
-        if sort_value[0] == "-":
-            field = sort_value[1:]
-            order = -1
-        else:
-            field = sort_value
+    try:
+        if sort_value:
+            if sort_value[0] == "-":
+                field = sort_value[1:]
+                order = -1
+            else:
+                field = sort_value
+        assert field in valid_fields
+    except AssertionError:
+        raise ValueError("Invalid sort criteria")
     return field, order

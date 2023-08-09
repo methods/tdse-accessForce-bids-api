@@ -32,7 +32,7 @@ bid = Blueprint("bid", __name__)
 def get_bids():
     try:
         hostname = request.headers.get("host")
-        field, order = validate_sort(request.args.get("sort"), "questions")
+        field, order = validate_sort(request.args.get("sort"), "bids")
         limit, offset = validate_pagination(
             request.args.get("limit"), request.args.get("offset")
         )

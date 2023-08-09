@@ -8,7 +8,7 @@ from unittest.mock import patch
 # Case 1: Successful get
 @patch("api.controllers.question_controller.db")
 def test_get_questions_success(
-    mock_db, test_client, basic_jwt, default_limit, default_offset
+    mock_db, test_client, api_key, default_limit, default_offset
 ):
     # Set up the sample data and expected result
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
@@ -41,7 +41,7 @@ def test_get_questions_success(
     # Make a request to the endpoint to get the questions
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
 
     # Assert the response status code and content
@@ -55,7 +55,7 @@ def test_get_questions_success(
 
 # Case 2: Links prepended with hostname
 @patch("api.controllers.question_controller.db")
-def test_links_with_host(mock_db, test_client, basic_jwt):
+def test_links_with_host(mock_db, test_client, api_key):
     # Set up the sample data and expected result
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
     sample_data = [
@@ -88,7 +88,7 @@ def test_links_with_host(mock_db, test_client, basic_jwt):
     # Make a request to the endpoint to get the questions
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
 
     # Assert the response status code and content
@@ -106,7 +106,7 @@ def test_links_with_host(mock_db, test_client, basic_jwt):
 
 # Case 3: Connection error
 @patch("api.controllers.question_controller.db")
-def test_get_questions_connection_error(mock_db, test_client, basic_jwt):
+def test_get_questions_connection_error(mock_db, test_client, api_key):
     # Set up the sample bid ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
 
@@ -116,7 +116,7 @@ def test_get_questions_connection_error(mock_db, test_client, basic_jwt):
     # Make a request to the endpoint to get the questions
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
 
     # Assert the response status code and content
@@ -158,7 +158,7 @@ def test_get_questions_unauthorized(mock_db, test_client):
 
 # Case 5: No questions found
 @patch("api.controllers.question_controller.db")
-def test_no_questions_found(mock_db, test_client, basic_jwt):
+def test_no_questions_found(mock_db, test_client, api_key):
     # Set up the sample bid ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
 
@@ -168,7 +168,7 @@ def test_no_questions_found(mock_db, test_client, basic_jwt):
     # Make a request to the endpoint to get the questions
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
 
     # Assert the response status code and content
@@ -179,13 +179,13 @@ def test_no_questions_found(mock_db, test_client, basic_jwt):
 
 # Case 6: Validation error
 @patch("api.controllers.question_controller.db")
-def test_get_questions_bid_id_validation_error(mock_db, test_client, basic_jwt):
+def test_get_questions_bid_id_validation_error(mock_db, test_client, api_key):
     # Set up the sample question ID
     sample_bid_id = "Invalid bid Id"
     # Make a request to the endpoint to get the questions
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
     assert response.status_code == 400
     assert response.get_json() == {"Error": "{'id': ['Invalid Id']}"}
@@ -193,7 +193,7 @@ def test_get_questions_bid_id_validation_error(mock_db, test_client, basic_jwt):
 
 # Case 7: Invalid offset - greater than maximum
 @patch("api.controllers.question_controller.db")
-def test_get_questions_max_offset(mock_db, test_client, basic_jwt, max_offset):
+def test_get_questions_max_offset(mock_db, test_client, api_key, max_offset):
     invalid_offset = int(max_offset) + 1
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
     sample_data = [
@@ -225,7 +225,7 @@ def test_get_questions_max_offset(mock_db, test_client, basic_jwt, max_offset):
     # Make a request to the endpoint to get the questions
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions?offset={invalid_offset}",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
 
     assert response.status_code == 400
@@ -237,7 +237,7 @@ def test_get_questions_max_offset(mock_db, test_client, basic_jwt, max_offset):
 
 # Case 8: Invalid offset - not a number
 @patch("api.controllers.question_controller.db")
-def test_get_questions_nan_offset(mock_db, test_client, basic_jwt, max_offset):
+def test_get_questions_nan_offset(mock_db, test_client, api_key, max_offset):
     invalid_offset = "five"
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
     sample_data = [
@@ -269,7 +269,7 @@ def test_get_questions_nan_offset(mock_db, test_client, basic_jwt, max_offset):
     # Make a request to the endpoint to get the questions
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions?offset={invalid_offset}",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
 
     assert response.status_code == 400
@@ -281,7 +281,7 @@ def test_get_questions_nan_offset(mock_db, test_client, basic_jwt, max_offset):
 
 # Case 9: Invalid offset - negative number
 @patch("api.controllers.question_controller.db")
-def test_get_questions_negative_offset(mock_db, test_client, basic_jwt, max_offset):
+def test_get_questions_negative_offset(mock_db, test_client, api_key, max_offset):
     invalid_offset = -1
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
     sample_data = [
@@ -313,7 +313,7 @@ def test_get_questions_negative_offset(mock_db, test_client, basic_jwt, max_offs
     # Make a request to the endpoint to get the questions
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions?offset={invalid_offset}",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
 
     assert response.status_code == 400
@@ -325,7 +325,7 @@ def test_get_questions_negative_offset(mock_db, test_client, basic_jwt, max_offs
 
 # Case 10: Invalid limit - greater than maximum
 @patch("api.controllers.question_controller.db")
-def test_get_questions_max_limit(mock_db, test_client, basic_jwt, max_limit):
+def test_get_questions_max_limit(mock_db, test_client, api_key, max_limit):
     invalid_limit = int(max_limit) + 1
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
     sample_data = [
@@ -357,7 +357,7 @@ def test_get_questions_max_limit(mock_db, test_client, basic_jwt, max_limit):
     # Make a request to the endpoint to get the questions
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions?limit={invalid_limit}",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
 
     assert response.status_code == 400
@@ -369,7 +369,7 @@ def test_get_questions_max_limit(mock_db, test_client, basic_jwt, max_limit):
 
 # Case 11: Invalid limit - not a number
 @patch("api.controllers.question_controller.db")
-def test_get_questions_nan_limit(mock_db, test_client, basic_jwt, max_limit):
+def test_get_questions_nan_limit(mock_db, test_client, api_key, max_limit):
     invalid_limit = "ten"
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
     sample_data = [
@@ -401,7 +401,7 @@ def test_get_questions_nan_limit(mock_db, test_client, basic_jwt, max_limit):
     # Make a request to the endpoint to get the questions
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions?limit={invalid_limit}",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
 
     assert response.status_code == 400
@@ -413,7 +413,7 @@ def test_get_questions_nan_limit(mock_db, test_client, basic_jwt, max_limit):
 
 # Case 12: Invalid limit - negative number
 @patch("api.controllers.question_controller.db")
-def test_get_questions_negative_limit(mock_db, test_client, basic_jwt, max_limit):
+def test_get_questions_negative_limit(mock_db, test_client, api_key, max_limit):
     invalid_limit = -1
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
     sample_data = [
@@ -445,7 +445,7 @@ def test_get_questions_negative_limit(mock_db, test_client, basic_jwt, max_limit
     # Make a request to the endpoint to get the questions
     response = test_client.get(
         f"api/bids/{sample_bid_id}/questions?limit={invalid_limit}",
-        headers={"host": "localhost:8080", "Authorization": f"Bearer {basic_jwt}"},
+        headers={"host": "localhost:8080", "X-API-Key": api_key},
     )
 
     assert response.status_code == 400

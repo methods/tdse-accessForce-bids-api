@@ -63,3 +63,15 @@ def default_offset():
 def default_limit():
     default_limit = os.getenv("DEFAULT_LIMIT")
     return int(default_limit)
+
+
+@pytest.fixture(scope="session")
+def default_sort_bids():
+    default_sort_bids = os.getenv("DEFAULT_SORT_BIDS")
+    return default_sort_bids
+
+
+@pytest.fixture(scope="session")
+def default_sort_questions():
+    default_sort_questions = os.getenv("DEFAULT_SORT_QUESTIONS")
+    return default_sort_questions
