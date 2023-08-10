@@ -306,7 +306,7 @@ paths:
             type: string
             format: integer
       security:
-        - BearerAuth: []
+        - ApiKeyAuth: []
       responses:
         '200':  
           description: Successful operation
@@ -402,7 +402,7 @@ paths:
             type: string
             format: uuid
       security:
-        - BearerAuth: []
+        - ApiKeyAuth: []
       responses:
         '200':
           description: A single question
@@ -615,7 +615,6 @@ components:
           description: Summary of feedback
           type: string
           example: 'Feedback from client in detail'
-
 # --------------------------------------------
     BidLink:
       description: A link to a bid
@@ -686,9 +685,6 @@ components:
               $ref: '#/components/schemas/SelfQuestionLink'
             bid:
               $ref: '#/components/schemas/SelfLink'
-
-
-
 # --------------------------------------------
     QuestionsLink:
       description: A link to a collection of questions for a bid
@@ -704,7 +700,6 @@ components:
       description: A link to the current resource
       type: string
       example: 'http://{hostname}/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428/questions/471fea1f-705c-4851-9a5b-df7bc2651428'
-    
 # --------------------------------------------
     BidRequestBody:
       type: object
@@ -741,7 +736,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Phase'
-
+# --------------------------------------------
     QuestionRequestBody:
       type: object
       required:
