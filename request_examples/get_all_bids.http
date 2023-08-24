@@ -1,2 +1,2 @@
-GET http://localhost:8080/api/bids HTTP/1.1
+GET http://localhost:8080/api/bids//9d68f57c-0298-4061-a2d7-39de60696e8d HTTP/1.1
 X-API-Key: THIS_IS_THE_API_KEY

@@ -34,7 +34,7 @@ class BidModel:
         feedback=None,
         failed=None,
         was_successful=False,
-        success=None,
+        success=[],
         status=None,
         _id=None,
         links=None,

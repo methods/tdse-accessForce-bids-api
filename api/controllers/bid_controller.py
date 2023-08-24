@@ -1,7 +1,7 @@
 """
 This module implements the bid controller.
 """
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import Blueprint, request, jsonify
 from marshmallow import ValidationError
 from werkzeug.exceptions import UnprocessableEntity
@@ -26,6 +26,29 @@ from helpers.helpers import (
 
 bid = Blueprint("bid", __name__)
 
+# request_history = {}  # Store request history for throttling
+
+# @bid.before_request
+# def backend_throttling_middleware():
+#     user_ip = request.remote_addr
+#     current_time = datetime.now()
+
+#     # Define the maximum requests per second (configurable)
+#     max_requests_per_second = 2
+
+#     # Check if user IP exists in the request history
+#     if user_ip in request_history:
+#         # Calculate the time elapsed since the last request
+#         time_elapsed = current_time - request_history[user_ip]
+#         if time_elapsed < timedelta(seconds=1 / max_requests_per_second):
+#             # Throttle the request and return an error response with Retry-After header
+#             retry_after = (1 / max_requests_per_second) - time_elapsed.total_seconds()
+#             response = jsonify({"error": "Too many requests. Please try again later."})
+#             return response, 429, {'Retry-After': int(retry_after)}
+
+#     # Update the request history with the current time
+#     request_history[user_ip] = current_time
+
 
 @bid.route("/bids", methods=["GET"])
 @require_api_key
@@ -38,15 +61,50 @@ def get_bids():
         )
 
         # Prepare query filter and options
-        query_filter = {"status": {"$ne": Status.DELETED.value}}
+        query_filter = {}
         query_options = {"sort": [(field, order)], "skip": offset, "limit": limit}
+        # Define allowed search fields
+        allowed_filter_fields = [
+            "was_successful",
+            "tender",
+            "status",
+            "alias",
+            "description",
+            "client",
+        ]
+        # Apply search filters from query string
+        for param, value in request.args.items():
+            if param == "sort" or param == "limit" or param == "offset":
+                continue
+
+            if param in allowed_filter_fields:
+                if ":" in value:
+                    key, value = value.split(":")
+                    if key == "partial":
+                        query_filter[param] = {"$regex": value, "$options": "i"}
+                    if key == "not":
+                        query_filter[param] = {"$ne": value}
+                else:
+                    query_filter[param] = value
+            else:
+                raise ValueError(f"Invalid search field: {param}")
 
         # Fetch data and count documents
         data = list(db["bids"].find(query_filter, **query_options))
-        total_count = db["bids"].count_documents(query_filter)
+        total_count = db["bids"].count_documents({})
 
         for resource in data:
             prepend_host_to_links(resource, hostname)
+
+        deleted_items_count = db["bids"].count_documents(
+            {"status": Status.DELETED.value}
+        )
+        in_progress_items_count = db["bids"].count_documents(
+            {"status": Status.IN_PROGRESS.value}
+        )
+        successful_items_count = db["bids"].count_documents(
+            {"status": Status.COMPLETED.value}
+        )
 
         return {
             "count": len(data),
@@ -54,6 +112,9 @@ def get_bids():
             "limit": limit,
             "offset": offset,
             "items": data,
+            "deleted_items": deleted_items_count,
+            "in_progress_items": in_progress_items_count,
+            "successful_items": successful_items_count,
         }, 200
     except ValueError as error:
         return jsonify({"Error": str(error)}), 400
