@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "formatters": {
+    "JSONFormatter": {
+      "()": "logconfig.custom_formatter.CustomJSONFormatter"
+  }
+  },
+  "handlers": {
+    "fileHandler": {
+      "class": "logging.FileHandler",
+      "level": "DEBUG",
+      "formatter": "JSONFormatter",
+      "filename": "log.log",
+      "mode": "a"
+    }
+  },
+  "loggers": {
+    "root": {
+      "level": "DEBUG",
+      "handlers": ["fileHandler"]
+    }
+  }
+}

@@ -1,6 +1,7 @@
 """
 This module implements the bid controller.
 """
+import logging
 from datetime import datetime
 from flask import Blueprint, request, jsonify
 from marshmallow import ValidationError
@@ -25,12 +26,14 @@ from helpers.helpers import (
 )
 
 bid = Blueprint("bid", __name__)
+logger = logging.getLogger()
 
 
 @bid.route("/bids", methods=["GET"])
 @require_api_key
 def get_bids():
     try:
+        logger.info("Handling get bids request")
         hostname = request.headers.get("host")
         field, order = validate_sort(request.args.get("sort"), "bids")
         limit, offset = validate_pagination(
@@ -58,6 +61,7 @@ def get_bids():
     except ValueError as error:
         return jsonify({"Error": str(error)}), 400
     except Exception:
+        logger.error("Get bids failed", exc_info=True)
         return showInternalServerError(), 500
 
 
