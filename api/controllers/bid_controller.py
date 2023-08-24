@@ -1,7 +1,6 @@
 """
 This module implements the bid controller.
 """
-from datetime import datetime, timedelta
 from flask import Blueprint, request, jsonify
 from marshmallow import ValidationError
 from werkzeug.exceptions import UnprocessableEntity
@@ -25,29 +24,6 @@ from helpers.helpers import (
 )
 
 bid = Blueprint("bid", __name__)
-
-# request_history = {}  # Store request history for throttling
-
-# @bid.before_request
-# def backend_throttling_middleware():
-#     user_ip = request.remote_addr
-#     current_time = datetime.now()
-
-#     # Define the maximum requests per second (configurable)
-#     max_requests_per_second = 2
-
-#     # Check if user IP exists in the request history
-#     if user_ip in request_history:
-#         # Calculate the time elapsed since the last request
-#         time_elapsed = current_time - request_history[user_ip]
-#         if time_elapsed < timedelta(seconds=1 / max_requests_per_second):
-#             # Throttle the request and return an error response with Retry-After header
-#             retry_after = (1 / max_requests_per_second) - time_elapsed.total_seconds()
-#             response = jsonify({"error": "Too many requests. Please try again later."})
-#             return response, 429, {'Retry-After': int(retry_after)}
-
-#     # Update the request history with the current time
-#     request_history[user_ip] = current_time
 
 
 @bid.route("/bids", methods=["GET"])
