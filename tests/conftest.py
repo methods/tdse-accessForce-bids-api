@@ -12,6 +12,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+@pytest.fixture(autouse=True)
+def before_and_after_test():
+    logging.disable(logging.CRITICAL)
+    yield
+    logging.disable(logging.NOTSET)
+
+
 @pytest.fixture(scope="session")
 def test_client():
     os.environ["TEST_ENVIRONMENT"] = "True"
