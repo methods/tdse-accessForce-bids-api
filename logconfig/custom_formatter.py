@@ -10,9 +10,9 @@ class CustomJSONFormatter(logging.Formatter):
     def format_traceback(self, exc_info):
         _, exception_value, tb = exc_info
         traceback_info = {
-            "path": tb.tb_frame.f_code.co_filename,
+            "exc_location": tb.tb_frame.f_code.co_filename,
             "line": tb.tb_lineno,
-            "location": tb.tb_frame.f_code.co_name,
+            "function": tb.tb_frame.f_code.co_name,
             "error": str(exception_value),
         }
         return traceback_info

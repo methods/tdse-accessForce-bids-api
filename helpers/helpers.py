@@ -99,22 +99,22 @@ def prepend_host_to_links(resource, hostname):
 
 def require_api_key(fn):
     @wraps(fn)
-    def wrapper(*args, **kwargs):
+    def validate_api_key(*args, **kwargs):
         try:
             load_dotenv()
             api_key = request.headers.get("X-API-Key")
-            assert api_key == os.getenv("API_KEY")
+            assert api_key == os.getenv("API_KEY"), "API Key is not valid"
         except AssertionError:
             logger.error(f"{g.request_id} failed", exc_info=True)
             return showUnauthorizedError(), 401
         return fn(*args, **kwargs)
 
-    return wrapper
+    return validate_api_key
 
 
 def require_jwt(fn):
     @wraps(fn)
-    def wrapper(*args, **kwargs):
+    def validate_jwt(*args, **kwargs):
         try:
             validate_token(request=request)
         except (AssertionError, InvalidTokenError):
@@ -122,29 +122,32 @@ def require_jwt(fn):
             return showUnauthorizedError(), 401
         return fn(*args, **kwargs)
 
-    return wrapper
+    return validate_jwt
 
 
 def require_admin_access(fn):
     @wraps(fn)
-    def wrapper(*args, **kwargs):
+    def validate_admin(*args, **kwargs):
         try:
             decoded = validate_token(request=request)
             if decoded["admin"] is False:
-                return showForbiddenError(), 403
+                raise PermissionError("Forbidden")
+        except PermissionError:
+            logger.error(f"{g.request_id} failed", exc_info=True)
+            return showForbiddenError(), 403
         except (AssertionError, InvalidTokenError):
             logger.error(f"{g.request_id} failed", exc_info=True)
             return showUnauthorizedError(), 401
         return fn(*args, **kwargs)
 
-    return wrapper
+    return validate_admin
 
 
 def validate_token(request):
     prefix = "Bearer "
     auth_header = request.headers.get("Authorization")
-    assert auth_header is not None
-    assert auth_header.startswith(prefix) is True
+    assert auth_header is not None, "Not authorized"
+    assert auth_header.startswith(prefix) is True, "Not authorized"
     token = auth_header[len(prefix) :]
     load_dotenv()
     key = os.getenv("SECRET_KEY")
