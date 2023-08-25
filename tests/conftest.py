@@ -12,21 +12,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-@pytest.fixture(scope="session", autouse=True)
-def disable_logging_before_tests(request):
-    """Fixture to disable logging before running tests."""
-    logging.disable(logging.CRITICAL)
-    yield
-    logging.disable(logging.NOTSET)
-
-
-@pytest.fixture(autouse=True)
-def enable_logging_after_tests(request):
-    """Fixture to re-enable logging after tests are completed."""
-    yield
-    logging.disable(logging.NOTSET)
-
-
 @pytest.fixture(scope="session")
 def test_client():
     os.environ["TEST_ENVIRONMENT"] = "True"
