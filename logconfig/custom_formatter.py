@@ -11,7 +11,6 @@ class CustomJSONFormatter(logging.Formatter):
         formatted_record = {
             "timestamp": self.formatTime(record, self.datefmt),
             "level": record.levelname,
-            "name": record.name,
             "message": record.getMessage(),
             "location": "{}:{}:line {}".format(
                 record.pathname, record.funcName, record.lineno

@@ -30,7 +30,7 @@ def log_request_info():
     request_id = uuid.uuid4()
     g.request_id = request_id
     logger.info(
-        f"Request: {g.request_id} {request.method} {request.url} {request.endpoint}"
+        f"New request {g.request_id}: {request.method} {request.url} - - {request.endpoint}"
     )
 
 
