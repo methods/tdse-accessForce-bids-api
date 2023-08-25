@@ -7,6 +7,16 @@ app_lang = os.getenv("APP_LANG")
 
 # Custom JSON Formatter
 class CustomJSONFormatter(logging.Formatter):
+    def format_traceback(self, exc_info):
+        _, exception_value, tb = exc_info
+        traceback_info = {
+            "path": tb.tb_frame.f_code.co_filename,
+            "line": tb.tb_lineno,
+            "location": tb.tb_frame.f_code.co_name,
+            "error": str(exception_value),
+        }
+        return traceback_info
+
     def format(self, record):
         formatted_record = {
             "timestamp": self.formatTime(record, self.datefmt),
@@ -20,13 +30,7 @@ class CustomJSONFormatter(logging.Formatter):
         }
 
         if record.exc_info:
-            formatted_record["exception"] = {
-                "error": formatted_record.get(
-                    "exception.error", record.exc_info[1].__class__.__name__
-                ),
-                "traceback": formatted_record.get(
-                    "exception.traceback", self.formatException(record.exc_info)
-                ),
-            }
+            traceback_info = self.format_traceback(record.exc_info)
+            formatted_record["exception"] = traceback_info
 
-        return json.dumps(formatted_record)
+        return json.dumps(formatted_record, default=str)
