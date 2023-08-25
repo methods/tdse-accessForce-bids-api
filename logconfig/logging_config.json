@@ -18,6 +18,10 @@
     "root": {
       "level": "DEBUG",
       "handlers": ["fileHandler"]
+    },
+    "werkzeug": {
+      "propagate": false,
+      "qualname": "werkzeug"
     }
   }
 }

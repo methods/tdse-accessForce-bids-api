@@ -31,21 +31,27 @@ logger = logging.getLogger()
 @require_jwt
 def post_question(bid_id):
     try:
+        logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         # Check if the bid exists in the database
         bid = db["bids"].find_one({"_id": bid_id})
         if not bid:
-            return showNotFoundError(), 404
+            raise NotFound("Resource not found")
         # Process input and create data model
         data = validate_and_create_question_document(request.get_json(), bid_id)
         # Insert document into database collection
         db["questions"].insert_one(data)
         return data, 201
+    except NotFound:
+        logger.error(f"{g.request_id} failed", exc_info=True)
+        return showNotFoundError(), 404
     # Return 400 response if input validation fails
     except ValidationError as error:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showValidationError(error), 400
     # Return 500 response in case of connection failure
     except Exception:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showInternalServerError(), 500
 
 
@@ -53,6 +59,7 @@ def post_question(bid_id):
 @require_api_key
 def get_questions(bid_id):
     try:
+        logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         hostname = request.headers.get("host")
         field, order = validate_sort(request.args.get("sort"), "questions")
@@ -71,7 +78,7 @@ def get_questions(bid_id):
         total_count = db["questions"].count_documents(query_filter)
 
         if not data:
-            return showNotFoundError(), 404
+            raise NotFound("Resource not found")
         for question in data:
             prepend_host_to_links(question, hostname)
         return {
@@ -81,11 +88,17 @@ def get_questions(bid_id):
             "limit": limit,
             "items": data,
         }, 200
+    except NotFound:
+        logger.error(f"{g.request_id} failed", exc_info=True)
+        return showNotFoundError(), 404
     except ValidationError as error:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showValidationError(error), 400
     except ValueError as error:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return jsonify({"Error": str(error)}), 400
     except Exception:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showInternalServerError(), 500
 
 
@@ -93,6 +106,7 @@ def get_questions(bid_id):
 @require_api_key
 def get_question(bid_id, question_id):
     try:
+        logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         question_id = validate_id_path(question_id)
         hostname = request.headers.get("host")
@@ -104,12 +118,17 @@ def get_question(bid_id, question_id):
             }
         )
         if not data:
-            return showNotFoundError(), 404
+            raise NotFound("Resource not found")
         prepend_host_to_links(data, hostname)
         return data, 200
+    except NotFound:
+        logger.error(f"{g.request_id} failed", exc_info=True)
+        return showNotFoundError(), 404
     except ValidationError as error:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showValidationError(error), 400
     except Exception:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showInternalServerError(), 500
 
 
@@ -117,16 +136,22 @@ def get_question(bid_id, question_id):
 @require_admin_access
 def delete_question(bid_id, question_id):
     try:
+        logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         question_id = validate_id_path(question_id)
         bid = db["bids"].find_one({"_id": bid_id})
         if not bid:
-            return showNotFoundError(), 404
+            raise NotFound("Resource not found")
         data = db["questions"].delete_one({"_id": question_id})
         return data.raw_result, 204
+    except NotFound:
+        logger.error(f"{g.request_id} failed", exc_info=True)
+        return showNotFoundError(), 404
     except ValidationError as error:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showValidationError(error), 400
     except Exception:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showInternalServerError(), 500
 
 
@@ -134,6 +159,7 @@ def delete_question(bid_id, question_id):
 @require_jwt
 def update_question(bid_id, question_id):
     try:
+        logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         question_id = validate_id_path(question_id)
         data = db["questions"].find_one(
@@ -143,13 +169,19 @@ def update_question(bid_id, question_id):
             }
         )
         if not data:
-            return showNotFoundError(), 404
+            raise NotFound("Resource not found")
         updated_question = validate_question_update(request.get_json(), data)
         db["questions"].replace_one({"_id": question_id}, updated_question)
         return updated_question, 200
+    except NotFound:
+        logger.error(f"{g.request_id} failed", exc_info=True)
+        return showNotFoundError(), 404
     except ValidationError as error:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showValidationError(error), 400
     except UnprocessableEntity as error:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showUnprocessableEntityError(error), 422
     except Exception:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showInternalServerError(), 500
