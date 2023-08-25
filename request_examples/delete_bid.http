@@ -1,2 +1,2 @@
-DELETE  http://localhost:8080/api/bids/643b0628-9d10-4174-af0a-4726eb5125b6 HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikp1bGlvIiwiYWRtaW4iOnRydWUsImV4cCI6MTY5MjgwMDIzOX0.YWYhaXsrB2RD-TOWifZmCuGrmdlVwpBCXNZZznsY_1U
+DELETE  http://localhost:8080/api/bids/f2e4d6c8-a0b1-42c3-d4e5-f6a7b8c9d0e1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBpcmEiLCJhZG1pbiI6dHJ1ZSwiZXhwIjoxNjkzNTE0MzkxfQ.D1PQcDSj5s_zrexEhyVNrjowCn-uVGvL0N0KFnN-6WM

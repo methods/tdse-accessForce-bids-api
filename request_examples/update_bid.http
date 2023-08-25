@@ -1,4 +1,4 @@
-PUT http://localhost:8080/api/bids/64a4223a-a75d-4a4b-8338-bf77feba631c HTTP/1.1
+PUT http://localhost:8080/api/bids/6ab0edbf-9410-49ff-a3c1-6244b86ca01f HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRlc3RlciBNY1Rlc3RmYWNlIiwiYWRtaW4iOmZhbHNlfQ.Dg7f8LVtALYWvjZH31re5C-Pc6Hp6Ra-U4LAy0ZQQ9M
 Content-Type: application/json
 

@@ -1,6 +1,7 @@
 """
 This module implements the bid controller.
 """
+from datetime import datetime
 from flask import Blueprint, request, jsonify
 from marshmallow import ValidationError
 from werkzeug.exceptions import UnprocessableEntity
@@ -37,7 +38,7 @@ def get_bids():
         )
 
         # Prepare query filter and options
-        query_filter = {}
+        query_filter = {"status": {"$ne": Status.DELETED.value}}
         query_options = {"sort": [(field, order)], "skip": offset, "limit": limit}
         # Define allowed search fields
         allowed_filter_fields = [
