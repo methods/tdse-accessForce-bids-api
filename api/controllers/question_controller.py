@@ -1,9 +1,10 @@
 """
 This module implements the Question Controller blueprint.
 """
-from flask import Blueprint, request, jsonify
+import logging
+from flask import Blueprint, g, request, jsonify
 from marshmallow import ValidationError
-from werkzeug.exceptions import UnprocessableEntity
+from werkzeug.exceptions import NotFound, UnprocessableEntity
 from api.models.status_enum import Status
 from dbconfig.mongo_setup import db
 from helpers.helpers import (
@@ -23,6 +24,7 @@ from helpers.helpers import (
 )
 
 question = Blueprint("question", __name__)
+logger = logging.getLogger()
 
 
 @question.route("/bids/<bid_id>/questions", methods=["POST"])

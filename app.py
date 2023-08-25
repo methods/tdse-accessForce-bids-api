@@ -2,11 +2,12 @@
 This is a simple Python application.
 
 """
+
 import json
 import logging
 import logging.config
-import traceback
-from flask import Flask, request
+import uuid
+from flask import Flask, g, request
 from flask_swagger_ui import get_swaggerui_blueprint
 from api.controllers.bid_controller import bid
 from api.controllers.question_controller import question
@@ -26,7 +27,11 @@ app = Flask(__name__)
 # Custom middleware to log requests
 @app.before_request
 def log_request_info():
-    logger.info(f"Request: {request.method} {request.url} {request.endpoint}")
+    request_id = uuid.uuid4()
+    g.request_id = request_id
+    logger.info(
+        f"Request: {g.request_id} {request.method} {request.url} {request.endpoint}"
+    )
 
 
 SWAGGER_URL = "/api/docs"  # URL for exposing Swagger UI

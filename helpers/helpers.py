@@ -1,18 +1,21 @@
 """
 This module contains helper functions for the API.
 """
+import jwt
+import logging
 import os
 import uuid
-from functools import wraps
 from datetime import datetime
-import jwt
-from jwt.exceptions import InvalidTokenError
 from dotenv import load_dotenv
-from flask import jsonify, request
+from flask import g, jsonify, request
+from functools import wraps
+from jwt.exceptions import InvalidTokenError
 from werkzeug.exceptions import UnprocessableEntity
 from api.schemas.bid_schema import BidSchema
 from api.schemas.id_schema import IdSchema
 from api.schemas.question_schema import QuestionSchema
+
+logger = logging.getLogger()
 
 
 def showForbiddenError():
@@ -102,6 +105,7 @@ def require_api_key(fn):
             api_key = request.headers.get("X-API-Key")
             assert api_key == os.getenv("API_KEY")
         except AssertionError:
+            logger.error(f"{g.request_id} failed", exc_info=True)
             return showUnauthorizedError(), 401
         return fn(*args, **kwargs)
 
@@ -114,6 +118,7 @@ def require_jwt(fn):
         try:
             validate_token(request=request)
         except (AssertionError, InvalidTokenError):
+            logger.error(f"{g.request_id} failed", exc_info=True)
             return showUnauthorizedError(), 401
         return fn(*args, **kwargs)
 
@@ -128,6 +133,7 @@ def require_admin_access(fn):
             if decoded["admin"] is False:
                 return showForbiddenError(), 403
         except (AssertionError, InvalidTokenError):
+            logger.error(f"{g.request_id} failed", exc_info=True)
             return showUnauthorizedError(), 401
         return fn(*args, **kwargs)
 
