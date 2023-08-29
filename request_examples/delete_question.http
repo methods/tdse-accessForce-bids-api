@@ -1,0 +1,2 @@
+DELETE  http://localhost:8080/api/bids/2529a0be-6e1c-4202-92c7-65c3742dfd4e/questions/b259a93e-7b08-4a80-8daa-8cbb5beebcd9 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBpcmEiLCJhZG1pbiI6dHJ1ZSwiZXhwIjoxNjkxNTg4NzAyfQ.xTrdupUL7LXt3TRO1EmtMA9M7k-Dt4OfW3RW3qwV3sw

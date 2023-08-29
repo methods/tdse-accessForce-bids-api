@@ -1,0 +1,962 @@
+# ---
+openapi: 3.0.3
+# --------------------------------------------
+# Info
+info:
+  title: Bids API
+  description: | 
+    This is a API for the Bids API.
+    You can find out more about
+    this API at [GitHub](https://github.com/methods/tdse-accessForce-bids-api).
+    You can now help us improve the API whether it's by making changes to the definition itself or to the code.
+    That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
+    Some useful links:
+    - [API repository](https://github.com/methods/tdse-accessForce-bids-api)
+  version: 1.0.0
+  termsOfService: 'https://github.com/methods/tdse-accessForce-bids-api'
+  contact:
+    email: accessForce@example.com
+  license:
+    name: MIT License
+    url: 'https://github.com/methods/tdse-accessForce-bids-api/blob/develop/LICENSE.md'
+# --------------------------------------------
+# Server
+servers:
+  - url: 'http://localhost:8080/api/'
+    description: Local server
+# --------------------------------------------
+# Tags
+tags:
+  - name: bids
+    description: Everything about BIDS
+    externalDocs:
+      description: Find out more
+      url: example.com
+  - name: questions
+    description: Everything about QUESTIONS
+    externalDocs:
+      description: Find out more
+      url: example.com
+# --------------------------------------------
+# Paths
+paths:
+  /bids:
+# --------------------------------------------
+    get:
+      tags:
+        - bids
+      summary: Returns a list of bids
+      description: A JSON with item count and array of all bids
+      parameters:
+        - name: sort
+          in: query
+          description: field for sorting list of results in ascending order ("-" before the field will denote descending order)
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: number of results to return per page
+          required: false
+          schema:
+            type: string
+            format: integer
+        - name: offset
+          in: query
+          description: number of items skipped from start of dataset on current page
+          required: false
+          schema:
+            type: string
+            format: integer
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':    # status code
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_count:
+                    type: integer
+                    example: 1
+                  count:
+                    type: integer
+                    example: 1
+                  offset:
+                    type: integer
+                    example: 0
+                  limit:
+                    type: integer
+                    example: 20
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Bid'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+# --------------------------------------------
+    post:
+      tags:
+        - bids
+      summary: Create a new bid
+      description: Create a new bid
+      operationId: post_bid
+      requestBody:
+        $ref: '#/components/requestBodies/PostBid'        
+        required: true
+      security:
+        - BearerAuth: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bid'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+# --------------------------------------------
+  /bids/{bid_id}:
+# --------------------------------------------
+    get:
+      tags:
+        - bids
+      summary: Returns a single bid
+      description: Returns a single bid
+      operationId: get_bid
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to return
+          required: true
+          schema:
+            type: string
+            format: uuid
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: A single bid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bid'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  # --------------------------------------------
+    put:
+      tags:
+        - bids
+      summary: Update an existing bid
+      description: Update an existing bid by id
+      operationId: update_bid
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateBid'
+        required: true
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bid'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  # --------------------------------------------
+    delete:
+      tags:
+        - bids
+      summary: Soft delete a bid
+      description: Soft delete a bid
+      operationId: delete_bid
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to delete
+          required: true
+          schema:
+            type: string
+            format: uuid
+      security:
+        - BearerAuth: []
+      responses:
+        # return 204 (No Content)
+        '204':
+          description: Bid deleted
+          content:
+            noContent: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+# -------------------------------------------- 
+  /bids/{bid_id}/status:
+# --------------------------------------------
+    put:
+      tags:
+        - bids
+      summary: Update status of an existing bid
+      description: Update status of an existing bid
+      operationId: update_bid_status
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateBid'
+        required: true
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bid'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+# --------------------------------------------
+  /bids/{bid_id}/questions:
+    # --------------------------------------------
+    get:
+      tags:
+        - questions
+      summary: Returns a list of questions for a bid
+      description: A JSON with item count and array of all questions for a bid
+      operationId: get_questions
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to return questions for
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: sort
+          in: query
+          description: field for sorting list of results in ascending order ("-" before the field will denote descending order)
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: number of results to return per page
+          required: false
+          schema:
+            type: string
+            format: integer
+        - name: offset
+          in: query
+          description: number of items skipped from start of dataset on current page
+          required: false
+          schema:
+            type: string
+            format: integer
+      security:
+        - BearerAuth: []
+      responses:
+        '200':  
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_count:
+                    type: integer
+                    example: 1
+                  count:
+                    type: integer
+                    example: 1
+                  offset:
+                    type: integer
+                    example: 0
+                  limit:
+                    type: integer
+                    example: 20
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Question'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    # --------------------------------------------
+    post:
+      tags:
+        - questions
+      summary: Create a new question for a bid
+      description: Create a new question for a bid
+      operationId: post_question
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to add question to
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        $ref: '#/components/requestBodies/PostQuestion'
+        required: true
+      security:
+        - BearerAuth: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_count:
+                    type: integer
+                    example: 1
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Question'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+# --------------------------------------------
+  /bids/{bid_id}/questions/{question_id}:
+    get:
+      tags:
+        - questions
+      summary: Returns a single question for a bid
+      description: Returns a single question for a bid
+      operationId: get_question
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to return question for
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: question_id
+          in: path
+          description: ID of question to return
+          required: true
+          schema:
+            type: string
+            format: uuid
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: A single question
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    # --------------------------------------------
+    put:
+      tags:
+        - questions
+      summary: Update an existing question for a bid
+      description: Update an existing question for a bid
+      operationId: update_question
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to update question for
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: question_id
+          in: path
+          description: ID of question to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        $ref: '#/components/requestBodies/PostQuestion'
+        required: true
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    # --------------------------------------------
+    delete:
+      tags:
+        - questions
+      summary: Hard delete a question for a bid
+      description: Hard delete a question for a bid
+      operationId: delete_question
+      parameters:
+        - name: bid_id
+          in: path
+          description: ID of bid to delete question for
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: question_id
+          in: path
+          description: ID of question to delete
+          required: true
+          schema:
+            type: string
+            format: uuid
+      security:
+        - BearerAuth: []
+      responses:
+        # return 204 (No Content)
+        '204':
+          description: Question deleted
+          content:
+            noContent: {}
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+# --------------------------------------------
+# Components
+components:
+# Schemas
+  schemas:
+    Bid:
+      description: Bid document
+      type: object
+      required:
+        - _id
+        - tender
+        - client
+        - bid_date
+      properties:
+        tender:
+          type: string
+          example: 'Business Intelligence and Data Warehousing'
+        bid_folder_url:
+          type: string
+          example: 'https://organisation.sharepoint.com/Docs/dummyfolder'
+        last_updated:
+          type: string
+          example: "2023-06-27T14:05:17.623827"
+        failed:
+          type: object
+          $ref: '#/components/schemas/Phase'
+          example: '#/components/schemas/Phase'
+        feedback:
+          type: object
+          $ref: '#/components/schemas/Feedback'
+        success:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/Phase'
+        alias:
+          type: string
+          example: 'ONS'
+        client:
+          type: string
+          example: 'Office for National Statistics'
+        links:
+          type: object
+          required:
+            - questions
+            - self
+          properties:
+            questions:
+              $ref: '#/components/schemas/QuestionsLink'
+            self:
+              $ref: '#/components/schemas/SelfLink'
+        _id:
+          type: string
+          format: uuid
+          example: "471fea1f-705c-4851-9a5b-df7bc2651428"
+        bid_date:
+          type: string
+          format: ISO-8601
+          example: '2023-06-21'
+        status:
+          type: string
+          description: Bid Status
+          example: in_progress
+          enum:
+            - in_progress
+            - deleted
+            - completed
+        was_successful:
+          type: boolean
+          example: true
+# --------------------------------------------
+    Phase:
+      description: Phase information
+      type: object
+      required:
+        - phase
+        - has_score
+      properties:
+        phase:
+          description: Phase of bid
+          type: integer
+          enum:
+            - 1
+            - 2
+          example: 2
+        score:
+          description: Score achieved at phase
+          type: integer
+          example: 22
+        has_score:
+          description: Score information available or not
+          type: boolean
+          example: true
+        out_of:
+          description: Maximum score
+          type: integer
+          example: 36
+# --------------------------------------------
+    Feedback:
+      description: Feedback from client (if provided)
+      type: object
+      required:
+        - url
+        - description
+      properties:
+        url:
+          description: Link to feedback
+          type: string
+          example: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
+        description:
+          description: Summary of feedback
+          type: string
+          example: 'Feedback from client in detail'
+
+# --------------------------------------------
+    BidLink:
+      description: A link to a bid
+      type: string
+      example: 'https://{hostname}/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428'
+# --------------------------------------------
+    Question:
+      description: Question for a bid
+      type: object
+      required:
+        - _id
+        - description
+        - question_url
+        - feedback
+        - last_updated
+        - links
+        - status
+      properties:
+        _id:
+          type: string
+          format: uuid
+          example: "471fea1f-705c-4851-9a5b-df7bc2651428"
+        description:
+          description: Question
+          type: string
+          example: 'THIS IS A QUESTION'
+        response:
+          description: Answer
+          type: string
+          example: 'THIS IS AN ANSWER'
+        question_url:
+          description: Link to question
+          type: string
+          example: 'https://organisation.sharepoint.com/Docs/dummyfolder/question'
+        score:
+          description: Score achieved at phase
+          type: string
+          example: "10"
+        out_of:
+          description: Maximum score
+          type: string
+          example: "20"
+        feedback:
+          type: object
+          $ref: '#/components/schemas/Feedback'
+        status:
+          type: string
+          description: Bid Status
+          example: in_progress
+          enum:
+            - in_progress
+            - deleted
+            - completed
+        respondents:
+          type: array
+          items:
+            type: string
+            example: 'ONS'
+        last_updated:
+          type: string
+          example: "2023-06-27T14:05:17.623827"
+        links:
+          type: object
+          required:
+            - self
+          properties:
+            self:
+              $ref: '#/components/schemas/SelfQuestionLink'
+            bid:
+              $ref: '#/components/schemas/SelfLink'
+
+
+
+# --------------------------------------------
+    QuestionsLink:
+      description: A link to a collection of questions for a bid
+      type: string
+      example: 'http://{hostname}/api//bids/96d69775-29af-46b1-aaf4-bfbdb1543412/questions'
+# --------------------------------------------
+    SelfLink:
+      description: A link to the current resource
+      type: string
+      example: 'http://{hostname}/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428'
+# --------------------------------------------
+    SelfQuestionLink:
+      description: A link to the current resource
+      type: string
+      example: 'http://{hostname}/api/bids/471fea1f-705c-4851-9a5b-df7bc2651428/questions/471fea1f-705c-4851-9a5b-df7bc2651428'
+    
+# --------------------------------------------
+    BidRequestBody:
+      type: object
+      required:
+        - tender
+        - client
+        - bid_date
+      properties:
+        tender:
+          description: Name of tender
+          type: string          
+        bid_folder_url:
+          description: Link to bid info
+          type: string        
+        feedback:
+          description: Feedback info
+          type: object
+          $ref: '#/components/schemas/Feedback'        
+        client:
+          description: Name of client tendering
+          type: string
+        alias:
+          description: Client alias
+          type: string
+        bid_date:
+          description: Date of bid
+          type: string
+        failed_phase:
+          description: Failed phase info
+          type: object
+          $ref: '#/components/schemas/Phase'
+        success_list:
+          description: List of successful phases
+          type: array
+          items:
+            $ref: '#/components/schemas/Phase'
+
+    QuestionRequestBody:
+      type: object
+      required:
+        - description
+        - feedback
+        - question_url
+      properties:
+        description:
+          description: Question
+          type: string
+        response:
+          description: Answer
+          type: string
+        question_url:
+          description: Link to question
+          type: string
+        score:
+          description: Score achieved at phase
+          type: integer
+        out_of:
+          description: Maximum score
+          type: integer
+        feedback:
+          type: object
+          $ref: '#/components/schemas/Feedback'
+        respondents:
+          type: string
+          example: 'ONS'
+# --------------------------------------------
+# Security schemes
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+# --------------------------------------------
+# Request bodies
+  requestBodies:
+    PostBid:
+      description: Bid object to be added to collection
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BidRequestBody'
+          examples:
+            200 OK:
+              summary: 200 OK
+              value:
+                tender: 'Business Intelligence and Data Warehousing'
+                bid_folder_url: 'https://organisation.sharepoint.com/Docs/dummyfolder'
+                feedback:
+                  url: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
+                  description: 'Feedback from client in detail'
+                client: 'Office for National Statistics'
+                alias: 'ONS'
+                bid_date: '2023-06-21'
+                success: [
+                  {
+                    "phase": 1,
+                    "has_score": true,
+                    "score": 28,
+                    "out_of": 36
+                  }
+                ]
+                failed: {
+                  "phase": 2,
+                  "has_score": true,
+                  "score": 20,
+                  "out_of": 36
+                }
+                was_successful: false
+            400 Bad Request:
+              summary: 400 Bad Request
+              value:
+                bid_folder_url: 'https://organisation.sharepoint.com/Docs/dummyfolder'
+                feedback:
+                  url: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
+                  description: 'Feedback from client in detail'
+                client: 'Office for National Statistics'
+                alias: 'ONS'
+                bid_date: '2023-06-21'
+    UpdateBid:
+      description: Bid object to replace bid by Id
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BidRequestBody'
+          examples:
+            200 OK:
+              summary: 200 OK
+              value:
+                tender: 'THIS HAS BEEN UPDATED'
+                bid_folder_url: 'https://organisation.sharepoint.com/Docs/dummyfolder'
+                feedback:
+                  url: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
+                  description: 'Feedback from client in detail'
+                client: 'Office for National Statistics'
+                alias: 'ONS'
+                bid_date: '2023-06-21'
+                success: [
+                  {
+                    "phase": 1,
+                    "has_score": true,
+                    "score": 28,
+                    "out_of": 36
+                  }
+                ]
+                failed: {
+                  "phase": 2,
+                  "has_score": true,
+                  "score": 20,
+                  "out_of": 36
+                }
+                was_successful: false
+    UpdateStatus:
+      description: Request body to update bid status
+      content:
+        application/json:
+          schema:
+            properties:
+              status:
+                description: Status of bid
+                type: string
+                format: enum
+          examples:
+            200 OK:
+              summary: 200 OK
+              value:
+                status: 'completed'
+    PostQuestion:
+      description: Question object to be added to collection
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/QuestionRequestBody'
+          examples:
+            200 OK:
+              summary: 200 OK
+              value:
+                description: 'THIS IS A QUESTION'
+                response: 'THIS IS AN ANSWER'
+                question_url: 'https://organisation.sharepoint.com/Docs/dummyfolder/question'
+                score: 10
+                out_of: 20
+                feedback:
+                  url: 'https://organisation.sharepoint.com/Docs/dummyfolder/feedback'
+                  description: 'Feedback from client in detail'
+                respondents: 'ONS'
+            400 Bad Request:
+              summary: 400 Bad Request
+              value:
+                description: 'THIS IS A QUESTION'
+                response: 'THIS IS AN ANSWER'
+                score: 10
+                out_of: 20
+                respondents: 'ONS'
+# --------------------------------------------
+# Error responses
+  responses:
+    BadRequest:
+      description: Bad Request Error
+      content:
+        application/json:
+          schema:
+            type: object
+            example: {
+              "Error": "{'{field}': ['{message}']}"
+            }
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            type: object
+            example: {
+              "Error": "Forbidden"
+            }
+    NotFound:
+      description: Not Found Error
+      content:
+        application/json:
+          schema:
+            type: object
+            example: {
+              "Error": "Resource not found"
+            }
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            example: {
+              "Error": "Could not connect to database"
+            }
+    Unauthorized:
+      description: Unauthorized - invalid or missing API key / token
+      content:
+        application/json:
+          schema:
+            type: object
+            example: {
+              "Error": "Unauthorised"
+            }
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            type: object
+            example: {
+              "Error": "Request must not be empty"
+            }
+# --------------------------------------------
