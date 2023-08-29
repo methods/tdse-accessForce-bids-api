@@ -68,7 +68,7 @@ swag:
 test: 
 	-coverage run -m pytest -vv
 	@echo "TEST COVERAGE REPORT"
-	coverage report -m --omit="app.py,tests/*,dbconfig/*"
+	coverage report -m --omit="app.py,tests/*,dbconfig/*,custom_formatter.py"
 
 test-setup:
 	@echo "Setting up test database..."
