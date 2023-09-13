@@ -1,8 +1,8 @@
-# import pytest
+import pytest
 import requests
 
 
-# @pytest.mark.skip
+@pytest.mark.integration
 def test_get_bids_with_api_key():
     auth_response = requests.get("http://localhost:5000/authorise/")
 

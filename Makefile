@@ -66,7 +66,7 @@ swag:
 	open http://localhost:8080/api/docs/#/
 
 test: 
-	-coverage run -m pytest -vv -s
+	-coverage run -m pytest -k "not integration" -vv -s
 	@echo "TEST COVERAGE REPORT"
 	coverage report -m --omit="app.py,tests/*,dbconfig/*,custom_formatter.py"
 
