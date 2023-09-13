@@ -13,10 +13,17 @@ load_dotenv()
 
 
 @pytest.fixture(autouse=True)
-def before_and_after_test():
+def integration_setup_and_teardown():
+    pass
+
+
+@pytest.fixture(autouse=True)
+def pause_logging():
     logging.disable(logging.CRITICAL)
+    print("----------Logging disabled----------")
     yield
     logging.disable(logging.NOTSET)
+    print("----------Logging re-enabled----------")
 
 
 @pytest.fixture(scope="session")
