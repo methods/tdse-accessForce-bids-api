@@ -70,6 +70,17 @@ test:
 	@echo "TEST COVERAGE REPORT"
 	coverage report -m --omit="app.py,tests/*,dbconfig/*,custom_formatter.py"
 
+test-dbclean:
+	@echo "Cleaning up database..."
+	export TEST_ENVIRONMENT=true; \
+	cd ./scripts/; \
+	make dbclean; \
+	export TEST_ENVIRONMENT=
+	@echo "Database cleared."
+
+test-integration:
+	pytest -m integration
+
 test-setup:
 	@echo "Setting up test database..."
 	export TEST_ENVIRONMENT=true; \
