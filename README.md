@@ -70,7 +70,10 @@ To do this, create a `.env` file in your root folder, with the following key/val
       MAX_OFFSET=2000
       MAX_LIMIT=1000
       DEFAULT_SORT_BIDS=bid_date
-      DEFAULT_SORT_QUESTIONS=description    
+      DEFAULT_SORT_QUESTIONS=description
+      APP_NAME=BidsAPI
+      APP_VERSION=0.6.0
+      APP_LANG=Python    
 
 --------------
 

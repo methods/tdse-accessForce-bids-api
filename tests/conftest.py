@@ -2,13 +2,21 @@
 This file contains fixtures that are used by multiple tests.
 """
 
-import os
 import jwt
+import logging
+import os
 import pytest
 from app import app
 from dotenv import load_dotenv
 
 load_dotenv()
+
+
+@pytest.fixture(autouse=True)
+def before_and_after_test():
+    logging.disable(logging.CRITICAL)
+    yield
+    logging.disable(logging.NOTSET)
 
 
 @pytest.fixture(scope="session")

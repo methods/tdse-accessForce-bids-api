@@ -1,10 +1,11 @@
 """
 This module implements the bid controller.
 """
+import logging
 from datetime import datetime
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, g, jsonify, request
 from marshmallow import ValidationError
-from werkzeug.exceptions import UnprocessableEntity
+from werkzeug.exceptions import NotFound, UnprocessableEntity
 from api.models.status_enum import Status
 from dbconfig.mongo_setup import db
 from helpers.helpers import (
@@ -25,12 +26,14 @@ from helpers.helpers import (
 )
 
 bid = Blueprint("bid", __name__)
+logger = logging.getLogger()
 
 
 @bid.route("/bids", methods=["GET"])
 @require_api_key
 def get_bids():
     try:
+        logger.info(f"Handling request {g.request_id}")
         hostname = request.headers.get("host")
         field, order = validate_sort(request.args.get("sort"), "bids")
         limit, offset = validate_pagination(
@@ -56,8 +59,10 @@ def get_bids():
             "items": data,
         }, 200
     except ValueError as error:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return jsonify({"Error": str(error)}), 400
     except Exception:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showInternalServerError(), 500
 
 
@@ -65,6 +70,7 @@ def get_bids():
 @require_jwt
 def post_bid():
     try:
+        logger.info(f"Handling request {g.request_id}")
         # Process input and create data model
         data = validate_and_create_bid_document(request.get_json())
         # Insert document into database collection
@@ -72,9 +78,11 @@ def post_bid():
         return data, 201
     # Return 400 response if input validation fails
     except ValidationError as error:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showValidationError(error), 400
     # Return 500 response in case of connection failure
     except Exception:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showInternalServerError(), 500
 
 
@@ -82,23 +90,29 @@ def post_bid():
 @require_api_key
 def get_bid_by_id(bid_id):
     try:
+        logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         data = db["bids"].find_one(
             {"_id": bid_id, "status": {"$ne": Status.DELETED.value}}
         )
-        # Return 404 response if not found / returns None
         if not data:
-            return showNotFoundError(), 404
+            raise NotFound("Resource not found")
         # Get hostname from request headers
         hostname = request.headers.get("host")
         # print(data, hostname)
         data = prepend_host_to_links(data, hostname)
         return data, 200
+    # Return 404 response if not found / returns None
+    except NotFound:
+        logger.error(f"{g.request_id} failed", exc_info=True)
+        return showNotFoundError(), 404
     # Return 400 if bid_id is invalid
     except ValidationError as error:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showValidationError(error), 400
     # Return 500 response in case of connection failure
     except Exception:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showInternalServerError(), 500
 
 
@@ -106,6 +120,7 @@ def get_bid_by_id(bid_id):
 @require_jwt
 def update_bid_by_id(bid_id):
     try:
+        logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         # Retrieve resource where id is equal to bid_id
         current_bid = db["bids"].find_one(
@@ -113,20 +128,26 @@ def update_bid_by_id(bid_id):
         )
         # Return 404 response if not found / returns None
         if not current_bid:
-            return showNotFoundError(), 404
+            raise NotFound("Resource not found")
         updated_bid = validate_bid_update(request.get_json(), current_bid)
         db["bids"].replace_one(
             {"_id": bid_id},
             updated_bid,
         )
         return updated_bid, 200
+    except NotFound:
+        logger.error(f"{g.request_id} failed", exc_info=True)
+        return showNotFoundError(), 404
     # Return 400 response if input validation fails
     except ValidationError as error:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showValidationError(error), 400
     except UnprocessableEntity as error:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showUnprocessableEntityError(error), 422
     # Return 500 response in case of connection failure
     except Exception:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showInternalServerError(), 500
 
 
@@ -134,6 +155,7 @@ def update_bid_by_id(bid_id):
 @require_admin_access
 def change_status_to_deleted(bid_id):
     try:
+        logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         data = db["bids"].find_one_and_update(
             {"_id": bid_id, "status": {"$ne": Status.DELETED.value}},
@@ -145,13 +167,18 @@ def change_status_to_deleted(bid_id):
             },
         )
         if not data:
-            return showNotFoundError(), 404
+            raise NotFound("Resource not found")
         return data, 204
+    except NotFound:
+        logger.error(f"{g.request_id} failed", exc_info=True)
+        return showNotFoundError(), 404
     # Return 400 response if input validation fails
     except ValidationError as error:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showValidationError(error), 400
     # Return 500 response in case of connection failure
     except Exception:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showInternalServerError(), 500
 
 
@@ -159,23 +186,30 @@ def change_status_to_deleted(bid_id):
 @require_admin_access
 def update_bid_status(bid_id):
     try:
+        logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         # Retrieve resource where id is equal to bid_id
         current_bid = db["bids"].find_one({"_id": bid_id})
         # Return 404 response if not found / returns None
         if current_bid is None:
-            return showNotFoundError(), 404
+            raise NotFound("Resource not found")
         updated_bid = validate_status_update(request.get_json(), current_bid)
         db["bids"].replace_one(
             {"_id": bid_id},
             updated_bid,
         )
         return updated_bid, 200
+    except NotFound:
+        logger.error(f"{g.request_id} failed", exc_info=True)
+        return showNotFoundError(), 404
     # Return 400 response if input validation fails
     except ValidationError as error:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showValidationError(error), 400
     except UnprocessableEntity as error:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showUnprocessableEntityError(error), 422
     # Return 500 response in case of connection failure
     except Exception:
+        logger.error(f"{g.request_id} failed", exc_info=True)
         return showInternalServerError(), 500
