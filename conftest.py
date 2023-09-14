@@ -14,7 +14,11 @@ load_dotenv()
 
 DB_HOST = os.getenv("DB_HOST")
 DB_PORT = 27017
-DB_NAME = os.getenv("TEST_DB_NAME")
+DB_NAME = os.getenv("DB_NAME")
+
+if os.environ.get("TEST_ENVIRONMENT"):
+    DB_NAME = os.getenv("TEST_DB_NAME")
+
 test_data = [
     {
         "_id": "be15c306-c85b-4e67-a9f6-682553c065a1",
@@ -69,6 +73,7 @@ def integration_setup_and_teardown():
     collection.insert_many(test_data)
     yield
     collection.delete_many({})
+    # print("AFTER")
 
 
 @pytest.fixture(autouse=True)

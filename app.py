@@ -3,7 +3,7 @@ This is a simple Python application.
 
 """
 
-import json
+import json, os
 import logging
 import logging.config
 import uuid

@@ -68,7 +68,7 @@ swag:
 test: 
 	-coverage run -m pytest -k "not integration" -vv -s
 	@echo "TEST COVERAGE REPORT"
-	coverage report -m --omit="app.py,tests/*,dbconfig/*,custom_formatter.py"
+	coverage report -m --omit="app.py,tests/*,dbconfig/*,custom_formatter.py,conftest.py"
 
 test-dbclean:
 	@echo "Cleaning up database..."
