@@ -3,11 +3,10 @@ This module implements the bid controller.
 """
 import logging
 from datetime import datetime
-from flask import Blueprint, g, jsonify, request
+from flask import Blueprint, current_app, g, jsonify, request
 from marshmallow import ValidationError
 from werkzeug.exceptions import NotFound, UnprocessableEntity
 from api.models.status_enum import Status
-from dbconfig.mongo_setup import db
 from helpers.helpers import (
     showInternalServerError,
     showNotFoundError,
@@ -33,6 +32,8 @@ logger = logging.getLogger()
 @require_api_key
 def get_bids():
     try:
+        # print(current_app.db)
+        db = current_app.db
         logger.info(f"Handling request {g.request_id}")
         hostname = request.headers.get("host")
         field, order = validate_sort(request.args.get("sort"), "bids")
@@ -70,6 +71,7 @@ def get_bids():
 @require_jwt
 def post_bid():
     try:
+        db = current_app.db
         logger.info(f"Handling request {g.request_id}")
         # Process input and create data model
         data = validate_and_create_bid_document(request.get_json())
@@ -90,6 +92,7 @@ def post_bid():
 @require_api_key
 def get_bid_by_id(bid_id):
     try:
+        db = current_app.db
         logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         data = db["bids"].find_one(
@@ -120,6 +123,7 @@ def get_bid_by_id(bid_id):
 @require_jwt
 def update_bid_by_id(bid_id):
     try:
+        db = current_app.db
         logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         # Retrieve resource where id is equal to bid_id
@@ -155,6 +159,7 @@ def update_bid_by_id(bid_id):
 @require_admin_access
 def change_status_to_deleted(bid_id):
     try:
+        db = current_app.db
         logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         data = db["bids"].find_one_and_update(
@@ -186,6 +191,7 @@ def change_status_to_deleted(bid_id):
 @require_admin_access
 def update_bid_status(bid_id):
     try:
+        db = current_app.db
         logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         # Retrieve resource where id is equal to bid_id

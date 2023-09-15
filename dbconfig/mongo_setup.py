@@ -8,13 +8,15 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DB_HOST = os.getenv("DB_HOST")
-DB_PORT = 27017
-DB_NAME = os.getenv("DB_NAME")
 
-if os.environ.get("TEST_ENVIRONMENT"):
-    DB_NAME = os.getenv("TEST_DB_NAME")
+def get_db(DB_HOST, DB_PORT, DB_NAME):
+    # DB_HOST = os.getenv("DB_HOST")
+    # DB_PORT = 27017
+    # DB_NAME = os.getenv("DB_NAME")
 
-# Create a new client and connect to the server
-client = MongoClient(DB_HOST, DB_PORT, serverSelectionTimeoutMS=10000)
-db = client[DB_NAME]
+    # if os.environ.get("TESTING"):
+    #     DB_NAME = os.getenv("TEST_DB_NAME")
+
+    # Create a new client and connect to the server
+    client = MongoClient(DB_HOST, DB_PORT, serverSelectionTimeoutMS=10000)
+    return client[DB_NAME]

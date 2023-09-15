@@ -2,11 +2,10 @@
 This module implements the Question Controller blueprint.
 """
 import logging
-from flask import Blueprint, g, request, jsonify
+from flask import Blueprint, current_app, g, request, jsonify
 from marshmallow import ValidationError
 from werkzeug.exceptions import NotFound, UnprocessableEntity
 from api.models.status_enum import Status
-from dbconfig.mongo_setup import db
 from helpers.helpers import (
     showInternalServerError,
     showNotFoundError,
@@ -31,6 +30,7 @@ logger = logging.getLogger()
 @require_jwt
 def post_question(bid_id):
     try:
+        db = current_app.db
         logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         # Check if the bid exists in the database
@@ -59,6 +59,7 @@ def post_question(bid_id):
 @require_api_key
 def get_questions(bid_id):
     try:
+        db = current_app.db
         logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         hostname = request.headers.get("host")
@@ -106,6 +107,7 @@ def get_questions(bid_id):
 @require_api_key
 def get_question(bid_id, question_id):
     try:
+        db = current_app.db
         logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         question_id = validate_id_path(question_id)
@@ -136,6 +138,7 @@ def get_question(bid_id, question_id):
 @require_admin_access
 def delete_question(bid_id, question_id):
     try:
+        db = current_app.db
         logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         question_id = validate_id_path(question_id)
@@ -159,6 +162,7 @@ def delete_question(bid_id, question_id):
 @require_jwt
 def update_question(bid_id, question_id):
     try:
+        db = current_app.db
         logger.info(f"Handling request {g.request_id}")
         bid_id = validate_id_path(bid_id)
         question_id = validate_id_path(question_id)

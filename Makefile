@@ -66,29 +66,29 @@ swag:
 	open http://localhost:8080/api/docs/#/
 
 test: 
-	-coverage run -m pytest -k "not integration" -vv -s
+	-coverage run -m pytest tests/unit -vv -s
 	@echo "TEST COVERAGE REPORT"
 	coverage report -m --omit="app.py,tests/*,dbconfig/*,custom_formatter.py,conftest.py"
 
 test-dbclean:
 	@echo "Cleaning up database..."
-	export TEST_ENVIRONMENT=true; \
+	export TESTING=true; \
 	cd ./scripts/; \
 	make dbclean; \
-	export TEST_ENVIRONMENT=
+	export TESTING=
 	@echo "Database cleared."
 
 test-integration:
-	pytest -m integration
+	pytest tests/integration -vv -s
 
 test-setup:
 	@echo "Setting up test database..."
-	export TEST_ENVIRONMENT=true; \
+	export TESTING=true; \
 	cd ./scripts/; \
 	make dbclean; \
 	make bids; \
 	make questions; \
-	export TEST_ENVIRONMENT=
+	export TESTING=
 	@echo "Test database setup complete."
 
 .PHONY: helptools authplay branch check commit format lint

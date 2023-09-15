@@ -6,18 +6,12 @@ import jwt
 import logging
 import os
 import pytest
-from app import app
+from app import create_app
 from dotenv import load_dotenv
-from pymongo import MongoClient
+from dbconfig.mongo_setup import get_db
 
 load_dotenv()
 
-DB_HOST = os.getenv("DB_HOST")
-DB_PORT = 27017
-DB_NAME = os.getenv("DB_NAME")
-
-if os.environ.get("TEST_ENVIRONMENT"):
-    DB_NAME = os.getenv("TEST_DB_NAME")
 
 test_data = [
     {
@@ -66,14 +60,25 @@ test_data = [
 
 
 @pytest.fixture
-def integration_setup_and_teardown():
-    client = MongoClient(DB_HOST, DB_PORT, serverSelectionTimeoutMS=10000)
-    data_base = client[DB_NAME]
-    collection = data_base["bids"]
+def integration_setup_and_teardown(test_app):
+    db = test_app.db
+    collection = db["bids"]
     collection.insert_many(test_data)
     yield
     collection.delete_many({})
     # print("AFTER")
+
+
+@pytest.fixture(scope="session")
+def test_app():
+    os.environ["CONFIG_TYPE"] = "config.TestingConfig"
+    app = create_app()
+    yield app
+
+
+@pytest.fixture(scope="session")
+def test_client(test_app):
+    return test_app.test_client()
 
 
 @pytest.fixture(autouse=True)
@@ -83,14 +88,6 @@ def pause_logging():
     yield
     logging.disable(logging.NOTSET)
     print("----------Logging re-enabled----------")
-
-
-@pytest.fixture(scope="session")
-def test_client():
-    os.environ["TEST_ENVIRONMENT"] = "True"
-    with app.test_client() as client:
-        yield client
-    os.environ.pop("TEST_ENVIRONMENT")
 
 
 @pytest.fixture(scope="session")
