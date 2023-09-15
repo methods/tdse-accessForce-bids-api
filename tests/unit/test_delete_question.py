@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 
 # Case 1: Successful hard delete question
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_delete_question_success(mock_db, test_client, admin_jwt):
     mock_db["bids"].find_one_return_value = {
         "_id": "1ff45b42-b72a-464c-bde9-9bead14a07b9",
@@ -35,7 +35,7 @@ def test_delete_question_success(mock_db, test_client, admin_jwt):
 
 
 # Case 2: Failed to call database
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_delete_question_connection_error(mock_db, test_client, admin_jwt):
     mock_db["questions"].delete_one.side_effect = Exception
     response = test_client.delete(
@@ -47,7 +47,7 @@ def test_delete_question_connection_error(mock_db, test_client, admin_jwt):
 
 
 # Case 3: Validation error
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_delete_question_validation_error(mock_db, test_client, admin_jwt):
     response = test_client.delete(
         "/api/bids/invalid-bid-id/questions/6e7d3f8a-fab3-4ebf-8348-96d0808d325e",
@@ -58,7 +58,7 @@ def test_delete_question_validation_error(mock_db, test_client, admin_jwt):
 
 
 # Case 4: Related bid not found
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_delete_question_bid_not_found(mock_db, test_client, admin_jwt):
     mock_db["bids"].find_one.return_value = None
     response = test_client.delete(
@@ -75,7 +75,7 @@ def test_delete_question_bid_not_found(mock_db, test_client, admin_jwt):
 
 
 # Case 5: Unauthorized - invalid token
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_delete_question_unauthorized(mock_db, test_client):
     response = test_client.delete(
         "/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9/questions/6e7d3f8a-fab3-4ebf-8348-96d0808d325e",
@@ -86,7 +86,7 @@ def test_delete_question_unauthorized(mock_db, test_client):
 
 
 # Case 6: Forbidden - not admin
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_delete_question_forbidden(mock_db, test_client, basic_jwt):
     response = test_client.delete(
         "/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9/questions/6e7d3f8a-fab3-4ebf-8348-96d0808d325e",
@@ -97,7 +97,7 @@ def test_delete_question_forbidden(mock_db, test_client, basic_jwt):
 
 
 # # Case 7: Idempotence - question not found / already deleted
-# @patch("api.controllers.question_controller.db")
+# @patch("api.controllers.question_controller.current_app.db")
 # def test_delete_question_idempotence(mock_db, test_client, admin_jwt):
 #     response = test_client.delete(
 #         "/api/bids/1ff45b42-b72a-464c-bde9-9bead14a07b9/questions/6e7d3f8a-fab3-4ebf-8348-96d0808d325e",

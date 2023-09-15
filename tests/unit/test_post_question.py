@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 
 # Case 1: Successful post
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_post_is_successful(mock_db, test_client, basic_jwt):
     data = {
         "description": "This is a question",
@@ -46,7 +46,7 @@ def test_post_is_successful(mock_db, test_client, basic_jwt):
 
 
 # Case 2: Missing mandatory fields
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_post_question_field_missing(mock_db, test_client, basic_jwt):
     data = {
         "question_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
@@ -68,7 +68,7 @@ def test_post_question_field_missing(mock_db, test_client, basic_jwt):
 
 
 # Case 3: Connection error
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_post_question_connection_error(mock_db, test_client, basic_jwt):
     data = {
         "description": "This is a question",
@@ -91,7 +91,7 @@ def test_post_question_connection_error(mock_db, test_client, basic_jwt):
 
 
 # Case 4: Unauthorized - invalid token
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_post_question_unauthorized(mock_db, test_client):
     data = {
         "description": "This is a question",
@@ -114,7 +114,7 @@ def test_post_question_unauthorized(mock_db, test_client):
 
 
 # Case 5: Related bid not found
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_post_question_bid_not_found(mock_db, test_client, basic_jwt):
     data = {
         "description": "This is a question",

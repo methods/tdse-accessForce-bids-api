@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 
 # Case 1: Successful get
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_get_bids_success(mock_db, test_client, api_key, default_limit, default_offset):
     # Mock the find method of the db object
     sample_data = [
@@ -36,7 +36,7 @@ def test_get_bids_success(mock_db, test_client, api_key, default_limit, default_
 
 
 # Case 2: Links prepended with hostname
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_links_with_host(mock_db, test_client, api_key):
     sample_data = [
         {
@@ -73,7 +73,7 @@ def test_links_with_host(mock_db, test_client, api_key):
 
 
 # Case 3: Connection error
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_get_bids_connection_error(mock_db, test_client, api_key):
     mock_db["bids"].find.side_effect = Exception
     response = test_client.get(
@@ -84,7 +84,7 @@ def test_get_bids_connection_error(mock_db, test_client, api_key):
 
 
 # Case 4: Unauthorized / invalid api key
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_get_bids_unauthorized(mock_db, test_client):
     response = test_client.get(
         "/api/bids", headers={"host": "localhost:8080", "X-API-Key": "INVALID_API_KEY"}
@@ -94,7 +94,7 @@ def test_get_bids_unauthorized(mock_db, test_client):
 
 
 # Case 5: Invalid offset - greater than maximum
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_get_bids_max_offset(mock_db, test_client, api_key, max_offset):
     invalid_offset = int(max_offset) + 1
     sample_data = [
@@ -129,7 +129,7 @@ def test_get_bids_max_offset(mock_db, test_client, api_key, max_offset):
 
 
 # Case 6: Invalid offset - not a number
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_get_bids_nan_offset(mock_db, test_client, api_key, max_offset):
     invalid_offset = "five"
     sample_data = [
@@ -164,7 +164,7 @@ def test_get_bids_nan_offset(mock_db, test_client, api_key, max_offset):
 
 
 # Case 7: Invalid offset - negative number
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_get_bids_negative_offset(mock_db, test_client, api_key, max_offset):
     invalid_offset = -1
     sample_data = [
@@ -199,7 +199,7 @@ def test_get_bids_negative_offset(mock_db, test_client, api_key, max_offset):
 
 
 # Case 8: Invalid limit - greater than maximum
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_get_bids_max_limit(mock_db, test_client, api_key, max_limit):
     invalid_limit = int(max_limit) + 1
     sample_data = [
@@ -234,7 +234,7 @@ def test_get_bids_max_limit(mock_db, test_client, api_key, max_limit):
 
 
 # Case 9: Invalid limit - not a number
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_get_bids_nan_limit(mock_db, test_client, api_key, max_limit):
     invalid_limit = "five"
     sample_data = [
@@ -269,7 +269,7 @@ def test_get_bids_nan_limit(mock_db, test_client, api_key, max_limit):
 
 
 # Case 10: Invalid limit - negative number
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_get_bids_negative_limit(mock_db, test_client, api_key, max_limit):
     invalid_limit = -1
     sample_data = [

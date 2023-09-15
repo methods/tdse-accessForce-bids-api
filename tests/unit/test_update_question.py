@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 
 # Case 1: Successful question update
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_update_question_success(mock_db, test_client, basic_jwt):
     # Set up the sample bid ID and question ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
@@ -54,7 +54,7 @@ def test_update_question_success(mock_db, test_client, basic_jwt):
 
 
 # Case 2: Invalid user input
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_update_question_invalid_input(mock_db, test_client, basic_jwt):
     # Set up the sample bid ID and question ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
@@ -93,7 +93,7 @@ def test_update_question_invalid_input(mock_db, test_client, basic_jwt):
 
 
 # Case 3: Question not found
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_question_not_found(mock_db, test_client, basic_jwt):
     # Set up the sample bid ID and question ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
@@ -114,7 +114,7 @@ def test_question_not_found(mock_db, test_client, basic_jwt):
 
 
 # Case 4: Exception handling - Internal Server Error
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_exception_internal_server_error(mock_db, test_client, basic_jwt):
     # Set up the sample bid ID and question ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
@@ -133,7 +133,7 @@ def test_exception_internal_server_error(mock_db, test_client, basic_jwt):
 
 
 # Case 5: Empty request body
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_update_question_invalid_empty_request_body(mock_db, test_client, basic_jwt):
     # Set up the sample bid ID and question ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"

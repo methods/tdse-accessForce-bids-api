@@ -6,7 +6,7 @@ PYTHON = ./.venv/bin/python3
 PIP = ./.venv/bin/pip
 
 
-.PHONY: help auth clean dbclean mongostart mongostop run setup swag test test-setup
+.PHONY: help auth clean dbclean mongostart mongostop run setup swag test test-dbclean test-integration test-setup
 
 help:
 	@echo "make help - display this help"
@@ -20,6 +20,8 @@ help:
 	@echo "make swag - open swagger documentation"
 	@echo "make setup - setup the application database"
 	@echo "make test - run tests and coverage report"
+	@echo "make test-dbclean - clear the test database"
+	@echo "make test-integration - run integration tests in test environment"
 	@echo "make test-setup - setup the test database"
 	@echo "make helptools - display help for tools"
 
