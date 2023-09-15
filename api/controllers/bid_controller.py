@@ -32,7 +32,6 @@ logger = logging.getLogger()
 @require_api_key
 def get_bids():
     try:
-        # print(current_app.db)
         db = current_app.db
         logger.info(f"Handling request {g.request_id}")
         hostname = request.headers.get("host")

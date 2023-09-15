@@ -16,16 +16,6 @@ with open("./tests/integration/data.json") as data:
     test_data = json.load(data)
 
 
-@pytest.fixture
-def integration_setup_and_teardown(test_app):
-    db = test_app.db
-    collection = db["bids"]
-    collection.insert_many(test_data)
-    yield
-    collection.delete_many({})
-    # print("AFTER")
-
-
 @pytest.fixture(scope="session")
 def test_app():
     os.environ["CONFIG_TYPE"] = "config.TestingConfig"
@@ -40,13 +30,24 @@ def test_client(test_app):
         return test_app.test_client()
 
 
+@pytest.fixture
+def integration_setup_and_teardown(test_app):
+    db = test_app.db
+    collection = db["bids"]
+    collection.insert_many(test_data)
+    print("----------Test database populated----------")
+    yield
+    collection.delete_many({})
+    print("----------Test database cleared----------")
+
+
 @pytest.fixture(autouse=True)
 def pause_logging():
     logging.disable(logging.CRITICAL)
-    print("----------Logging disabled----------")
+    # print("----------Logging disabled----------")
     yield
     logging.disable(logging.NOTSET)
-    print("----------Logging re-enabled----------")
+    # print("----------Logging re-enabled----------")
 
 
 @pytest.fixture(scope="session")

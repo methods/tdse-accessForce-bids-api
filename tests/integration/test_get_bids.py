@@ -1,12 +1,10 @@
-import pytest, os
-import requests
+import pytest
 
 
 pytestmark = pytest.mark.usefixtures("integration_setup_and_teardown")
 
 
-# @pytest.mark.integration
-def test_get_bids_with_api_key(test_client, api_key):
+def test_get_bids(test_client, api_key):
     headers = {
         "host": "localhost:8080",
         "Content-Type": "application/json",
