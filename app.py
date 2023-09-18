@@ -40,6 +40,7 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 )
 
 
+# App factory function
 def create_app():
     # Create the Flask application
     app = Flask(__name__)
@@ -53,7 +54,7 @@ def create_app():
     app.register_blueprint(bid, url_prefix="/api")
     app.register_blueprint(question, url_prefix="/api")
 
-    # Create new client and connect to server in application context
+    # Create db client instance in application context
     with app.app_context():
         db = get_db(app.config["DB_HOST"], app.config["DB_PORT"], app.config["DB_NAME"])
         app.db = db
