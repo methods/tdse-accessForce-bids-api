@@ -21,3 +21,6 @@ def test_post_bid(test_app, test_client, basic_jwt):
 
     assert response.status_code == 201
     assert test_app.db["bids"].count_documents({}) == 3
+    assert response.get_json()["_id"] is not None
+    assert response.get_json()["last_updated"] is not None
+    assert response.get_json()["links"] is not None

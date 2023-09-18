@@ -39,18 +39,21 @@ def bids_db_setup_and_teardown(test_app):
     collection = db["bids"]
     try:
         collection.insert_many(bids_data)
-        print("----------Bids collection populated----------")
+        # print("----------Bids collection populated----------")
     except Exception as e:
-        print(f"Error while populating the Bids collection: {str(e)}")
-        return
+        raise ConnectionRefusedError(
+            f"Error while populating the Bids collection: {str(e)}"
+        )
 
     yield
 
     try:
         collection.delete_many({})
-        print("----------Bids collection cleared----------")
+        # print("----------Bids collection cleared----------")
     except Exception as e:
-        print(f"Error while clearing the Bids collection: {str(e)}")
+        raise ConnectionRefusedError(
+            f"Error while clearing the Bids collection: {str(e)}"
+        )
 
 
 @pytest.fixture
@@ -59,18 +62,21 @@ def questions_db_setup_and_teardown(test_app):
     collection = db["questions"]
     try:
         collection.insert_many(questions_data)
-        print("----------Questions collection populated----------")
+        # print("----------Questions collection populated----------")
     except Exception as e:
-        print(f"Error while populating the Questions collection: {str(e)}")
-        return
+        raise ConnectionRefusedError(
+            f"Error while populating the Questions collection: {str(e)}"
+        )
 
     yield
 
     try:
         collection.delete_many({})
-        print("----------Questions collection cleared----------")
+        # print("----------Questions collection cleared----------")
     except Exception as e:
-        print(f"Error while clearing the Questions collection: {str(e)}")
+        raise ConnectionRefusedError(
+            f"Error while clearing the Questions collection: {str(e)}"
+        )
 
 
 @pytest.fixture(autouse=True)
