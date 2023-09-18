@@ -34,11 +34,20 @@ def test_client(test_app):
 def integration_setup_and_teardown(test_app):
     db = test_app.db
     collection = db["bids"]
-    collection.insert_many(bids_data)
-    print("----------Test database populated----------")
+    try:
+        collection.insert_many(bids_data)
+        print("----------Test database populated----------")
+    except Exception as e:
+        print(f"Error while populating the test database: {str(e)}")
+        return
+
     yield
-    collection.delete_many({})
-    print("----------Test database cleared----------")
+
+    try:
+        collection.delete_many({})
+        print("----------Test database cleared----------")
+    except Exception as e:
+        print(f"Error while clearing the test database: {str(e)}")
 
 
 @pytest.fixture(autouse=True)
