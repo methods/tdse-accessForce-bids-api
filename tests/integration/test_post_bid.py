@@ -4,7 +4,7 @@ import pytest
 pytestmark = pytest.mark.usefixtures("integration_setup_and_teardown")
 
 
-def test_get_bid_by_id(test_app, test_client, basic_jwt):
+def test_post_bid(test_app, test_client, basic_jwt):
     headers = {
         "host": "localhost:8080",
         "Content-Type": "application/json",

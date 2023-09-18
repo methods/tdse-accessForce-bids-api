@@ -12,8 +12,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-with open("./tests/integration/data.json") as data:
-    test_data = json.load(data)
+with open("./tests/integration/bids.json") as bids:
+    bids_data = json.load(bids)
 
 
 @pytest.fixture(scope="session")
@@ -34,7 +34,7 @@ def test_client(test_app):
 def integration_setup_and_teardown(test_app):
     db = test_app.db
     collection = db["bids"]
-    collection.insert_many(test_data)
+    collection.insert_many(bids_data)
     print("----------Test database populated----------")
     yield
     collection.delete_many({})
