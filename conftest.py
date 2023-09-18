@@ -15,6 +15,9 @@ load_dotenv()
 with open("./tests/integration/bids.json") as bids:
     bids_data = json.load(bids)
 
+with open("./tests/integration/questions.json") as questions:
+    questions_data = json.load(questions)
+
 
 @pytest.fixture(scope="session")
 def test_app():
@@ -31,23 +34,43 @@ def test_client(test_app):
 
 
 @pytest.fixture
-def integration_setup_and_teardown(test_app):
+def bids_db_setup_and_teardown(test_app):
     db = test_app.db
     collection = db["bids"]
     try:
         collection.insert_many(bids_data)
-        print("----------Test database populated----------")
+        print("----------Bids collection populated----------")
     except Exception as e:
-        print(f"Error while populating the test database: {str(e)}")
+        print(f"Error while populating the Bids collection: {str(e)}")
         return
 
     yield
 
     try:
         collection.delete_many({})
-        print("----------Test database cleared----------")
+        print("----------Bids collection cleared----------")
     except Exception as e:
-        print(f"Error while clearing the test database: {str(e)}")
+        print(f"Error while clearing the Bids collection: {str(e)}")
+
+
+@pytest.fixture
+def questions_db_setup_and_teardown(test_app):
+    db = test_app.db
+    collection = db["questions"]
+    try:
+        collection.insert_many(questions_data)
+        print("----------Questions collection populated----------")
+    except Exception as e:
+        print(f"Error while populating the Questions collection: {str(e)}")
+        return
+
+    yield
+
+    try:
+        collection.delete_many({})
+        print("----------Questions collection cleared----------")
+    except Exception as e:
+        print(f"Error while clearing the Questions collection: {str(e)}")
 
 
 @pytest.fixture(autouse=True)

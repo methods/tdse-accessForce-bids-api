@@ -1,7 +1,7 @@
 import pytest
 
 
-pytestmark = pytest.mark.usefixtures("integration_setup_and_teardown")
+pytestmark = pytest.mark.usefixtures("bids_db_setup_and_teardown")
 
 
 def test_get_bid_by_id(test_client, api_key):

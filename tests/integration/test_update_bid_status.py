@@ -1,7 +1,7 @@
 import pytest
 
 
-pytestmark = pytest.mark.usefixtures("integration_setup_and_teardown")
+pytestmark = pytest.mark.usefixtures("bids_db_setup_and_teardown")
 
 
 def test_update_bid_status(test_app, test_client, admin_jwt):
