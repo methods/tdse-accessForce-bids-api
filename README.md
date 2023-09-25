@@ -8,44 +8,25 @@ This API stores and serves information about Methods bids for client tenders.
 - Python 3.x
 - Flask
 - Homebrew
+- Makefile
 
 ## Running the API
 
-1. Clone the repository to your local machine:
-
-      ```bash
-      git clone <REMOTE_URL>
-      ```
-2. Navigate to the root directory of the project:
-
-      ```bash
-      cd tdse-accessForce-bids-api
-      ```
-3. Install Makefile if not already installed. You can check if it is installed by running the following command:
-
-      ```bash
-      make --version
-      ```
-4. Version 3.81 or higher is required. If you do not have Make installed, you can install it with Homebrew:
-
-      ```bash
-      brew install make
-      ```
-5. Run the following command to start the API:
+1. Run the following command to start the API:
 
       ```bash
       make run
       ```
  * The API will be available at http://localhost:8080/api/bids
 
-6. To see all available Make targets, run the following command in a new terminal:
+2. To see all available Make targets, run the following command in a new terminal:
 
       ```bash
       make help
       ```
-7. Follow this link to go to the authorization documentation: [Authorization Documentation](https://github.com/methods/tdse-accessForce-auth-stub/blob/main/README.md)
+3. Follow this link to go to the authorization documentation: [Authorization Documentation](https://github.com/methods/tdse-accessForce-auth-stub/blob/main/README.md)
 
-8. In a new terminal enter the following command to run authorization server if not already running. This will be needed to generate a token:
+4. In a new terminal enter the following command to run authorization server if not already running. This will be needed to generate a token:
 
       ```bash
       make auth
@@ -72,7 +53,7 @@ To do this, create a `.env` file in your root folder, with the following key/val
       DEFAULT_SORT_BIDS=bid_date
       DEFAULT_SORT_QUESTIONS=description
       APP_NAME=BidsAPI
-      APP_VERSION=0.6.0
+      APP_VERSION=0.8.0
       APP_LANG=Python    
 
 --------------
@@ -170,6 +151,11 @@ This will perform the following steps:
       
       ```bash
       make test
+      ```
+4. Enter the following command to run the integration tests:
+      
+      ```bash
+      make test-integration
       ```
 --------------
 
