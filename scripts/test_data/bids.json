@@ -195,7 +195,7 @@
       }
     ],
     "tender": "Data Governance and Compliance",
-    "was_successful": false
+    "was_successful": true
   },
   {
     "_id": "d9e8f7c6-b5a4-1d3c-7e6f-9b8a0c2d4e5f",
@@ -228,7 +228,7 @@
       }
     ],
     "tender": "Data Infrastructure Modernization",
-    "was_successful": false
+    "was_successful": true
   },
   {
     "_id": "f2e4d6c8-a0b1-42c3-d4e5-f6a7b8c9d0e1",
@@ -261,7 +261,7 @@
       }
     ],
     "tender": "Data Science and Analytics",
-    "was_successful": false
+    "was_successful": true
   },
   {
     "_id": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6f",
@@ -294,7 +294,7 @@
       }
     ],
     "tender": "Innovative Solutions Development",
-    "was_successful": false
+    "was_successful": true
   },
   {
     "_id": "9a8b7c6d-5e4f-3a2b-1c0d-9e8f7a6b5c4e",
@@ -327,6 +327,6 @@
       }
     ],
     "tender": "Technology Consulting Services",
-    "was_successful": false
+    "was_successful": true
   }
 ]

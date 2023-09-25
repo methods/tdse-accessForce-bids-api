@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 
 # Case 1: Successful update
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_update_bid_status_success(mock_db, test_client, admin_jwt):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",
@@ -40,7 +40,7 @@ def test_update_bid_status_success(mock_db, test_client, admin_jwt):
 
 
 # Case 2: Invalid status
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_invalid_status(mock_db, test_client, admin_jwt):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",
@@ -75,7 +75,7 @@ def test_invalid_status(mock_db, test_client, admin_jwt):
 
 
 # Case 3: Empty request body
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_empty_request(mock_db, test_client, admin_jwt):
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {}
@@ -89,7 +89,7 @@ def test_empty_request(mock_db, test_client, admin_jwt):
 
 
 # Case 4: Bid not found
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_bid_not_found(mock_db, test_client, admin_jwt):
     mock_db["bids"].find_one.return_value = None
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
@@ -104,7 +104,7 @@ def test_bid_not_found(mock_db, test_client, admin_jwt):
 
 
 # Case 5: Failed to call database
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_update_status_find_error(mock_db, test_client, admin_jwt):
     mock_db["bids"].find_one.side_effect = Exception
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
@@ -119,7 +119,7 @@ def test_update_status_find_error(mock_db, test_client, admin_jwt):
 
 
 # Case 6: Unauthorized - invalid token
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_update_bid_status_unauthorized(mock_db, test_client):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",
@@ -152,7 +152,7 @@ def test_update_bid_status_unauthorized(mock_db, test_client):
 
 
 # Case 7: Forbidden - not admin
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_update_bid_status_forbidden(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",

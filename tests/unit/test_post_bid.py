@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 
 # Case 1: Successful post
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_post_is_successful(mock_db, test_client, basic_jwt):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
@@ -49,7 +49,7 @@ def test_post_is_successful(mock_db, test_client, basic_jwt):
 
 
 # Case 2: Missing mandatory fields
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_field_missing(mock_db, test_client, basic_jwt):
     data = {"client": "Sample Client", "bid_date": "2023-06-20"}
 
@@ -63,7 +63,7 @@ def test_field_missing(mock_db, test_client, basic_jwt):
 
 
 # Case 3: Connection error
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_post_bid_connection_error(mock_db, test_client, basic_jwt):
     data = {
         "tender": "Business Intelligence and Data Warehousing",
@@ -89,7 +89,7 @@ def test_post_bid_connection_error(mock_db, test_client, basic_jwt):
 
 
 # Case 4: Unauthorized - invalid token
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_post_bid_unauthorized(mock_db, test_client):
     data = {
         "tender": "Business Intelligence and Data Warehousing",

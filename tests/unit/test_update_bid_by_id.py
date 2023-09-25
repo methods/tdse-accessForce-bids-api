@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 
 # Case 1: Successful update
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_update_bid_by_id_success(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one.return_value = {
         "_id": "9f688442-b535-4683-ae1a-a64c1a3b8616",
@@ -33,7 +33,7 @@ def test_update_bid_by_id_success(mock_db, test_client, basic_jwt):
 
 
 # Case 2: Invalid user input
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_input_validation(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",
@@ -65,7 +65,7 @@ def test_input_validation(mock_db, test_client, basic_jwt):
 
 
 # Case 3: Bid not found
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_bid_not_found(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one.return_value = None
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
@@ -80,7 +80,7 @@ def test_bid_not_found(mock_db, test_client, basic_jwt):
 
 
 # Case 4: Cannot update status
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_cannot_update_status(mock_db, test_client, basic_jwt):
     bid_id = "9f688442-b535-4683-ae1a-a64c1a3b8616"
     update = {"status": "deleted"}
@@ -94,7 +94,7 @@ def test_cannot_update_status(mock_db, test_client, basic_jwt):
 
 
 # Case 5: Failed to call database
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_update_by_id_find_error(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one.return_value = {
         "_id": "9f688442-b535-4683-ae1a-a64c1a3b8616",
@@ -118,7 +118,7 @@ def test_update_by_id_find_error(mock_db, test_client, basic_jwt):
 
 
 # Case 6: Update failed field
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_update_failed(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",
@@ -153,7 +153,7 @@ def test_update_failed(mock_db, test_client, basic_jwt):
 
 
 # Case 7: Update success field
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_update_success(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one.return_value = {
         "_id": "4141fac8-8879-4169-a46d-2effb1f515f6",
@@ -193,7 +193,7 @@ def test_update_success(mock_db, test_client, basic_jwt):
 
 
 # Case 8: Unauthorized - invalid token
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_update_bid_by_id_unauthorized(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one.return_value = {
         "_id": "9f688442-b535-4683-ae1a-a64c1a3b8616",

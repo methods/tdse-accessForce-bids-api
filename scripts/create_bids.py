@@ -17,7 +17,7 @@ DB_HOST = os.getenv("DB_HOST")
 DB_PORT = 27017
 DB_NAME = os.getenv("DB_NAME")
 
-if os.environ.get("TEST_ENVIRONMENT"):
+if os.environ.get("TESTING"):
     DB_NAME = os.getenv("TEST_DB_NAME")
 
 

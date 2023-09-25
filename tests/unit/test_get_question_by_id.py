@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 
 # Case 1: Successful get
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_get_single_question_success(mock_db, test_client, api_key):
     # Set up the sample bid ID and question ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
@@ -48,7 +48,7 @@ def test_get_single_question_success(mock_db, test_client, api_key):
 
 
 # Case 2: Links prepended with hostname
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_single_question_links_with_host(mock_db, test_client, api_key):
     # Set up the sample bid ID and question ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
@@ -97,7 +97,7 @@ def test_single_question_links_with_host(mock_db, test_client, api_key):
 
 
 # Case 3: Connection error
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_get_single_question_connection_error(mock_db, test_client, api_key):
     # Set up the sample bid ID and question ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
@@ -119,7 +119,7 @@ def test_get_single_question_connection_error(mock_db, test_client, api_key):
 
 
 # Case 4: Unauthorized / invalid api key
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_get_single_question_unauthorized(mock_db, test_client):
     # Set up the sample bid ID and question ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
@@ -152,7 +152,7 @@ def test_get_single_question_unauthorized(mock_db, test_client):
 
 
 # Case 5: No question found for the given ID
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_no_question_found_by_id(mock_db, test_client, api_key):
     # Set up the sample question ID
     sample_bid_id = "66fb5dba-f129-413a-b12e-5a68b5a647d6"
@@ -174,7 +174,7 @@ def test_no_question_found_by_id(mock_db, test_client, api_key):
 
 
 # Case 6: Validation error
-@patch("api.controllers.question_controller.db")
+@patch("api.controllers.question_controller.current_app.db")
 def test_get_question_by_id_validation_error(mock_db, test_client, api_key):
     # Set up the sample question ID
     sample_bid_id = "Invalid bid Id"

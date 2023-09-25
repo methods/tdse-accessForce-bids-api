@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 
 # Case 1: Successful delete a bid by changing status to deleted
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_delete_bid_success(mock_db, test_client, admin_jwt):
     mock_db["bids"].find_one_and_update.return_value = {
         "_id": "1ff45b42-b72a-464c-bde9-9bead14a07b9",
@@ -19,7 +19,7 @@ def test_delete_bid_success(mock_db, test_client, admin_jwt):
 
 
 # Case 2: Failed to call database
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_delete_bid_connection_error(mock_db, test_client, admin_jwt):
     mock_db["bids"].find_one_and_update.side_effect = Exception
     response = test_client.delete(
@@ -31,7 +31,7 @@ def test_delete_bid_connection_error(mock_db, test_client, admin_jwt):
 
 
 # Case 3: Validation error
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_delete_bid_validation_error(mock_db, test_client, admin_jwt):
     response = test_client.delete(
         "/api/bids/invalid_bid_id", headers={"Authorization": f"Bearer {admin_jwt}"}
@@ -41,7 +41,7 @@ def test_delete_bid_validation_error(mock_db, test_client, admin_jwt):
 
 
 # Case 4: Bid not found
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_delete_bid_not_found(mock_db, test_client, admin_jwt):
     mock_db["bids"].find_one_and_update.return_value = None
 
@@ -56,7 +56,7 @@ def test_delete_bid_not_found(mock_db, test_client, admin_jwt):
 
 
 # Case 5: Unauthorized - invalid token
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_delete_bid_unauthorized(mock_db, test_client):
     mock_db["bids"].find_one_and_update.return_value = {
         "_id": "1ff45b42-b72a-464c-bde9-9bead14a07b9",
@@ -71,7 +71,7 @@ def test_delete_bid_unauthorized(mock_db, test_client):
 
 
 # Case 6: Forbidden - not admin
-@patch("api.controllers.bid_controller.db")
+@patch("api.controllers.bid_controller.current_app.db")
 def test_delete_bid_forbidden(mock_db, test_client, basic_jwt):
     mock_db["bids"].find_one_and_update.return_value = {
         "_id": "1ff45b42-b72a-464c-bde9-9bead14a07b9",
