@@ -1,0 +1,10 @@
+POST http://localhost:8080/api/bids/be15c306-c85b-4e67-a9f6-682553c065a1/questions HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBpcmEiLCJhZG1pbiI6dHJ1ZSwiZXhwIjoxNjk1NjM5NzU5fQ.btdgSJbIC0rxeRI0CE5_mx-VvYbJKqey2ud0_mjoKoQ
+
+{
+  "description": "This is a question",
+  "question_url": "https://organisation.sharepoint.com/Docs/dummyfolder",
+  "feedback": {"description": "Good YeI!",
+  "url": "https://organisation.sharepoint.com/Docs/dummyfolder"}
+}

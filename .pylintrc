@@ -1,0 +1,41 @@
+[FORMAT]
+
+# Set the maximum line length to 100 characters
+max-line-length=120
+
+[MESSAGES CONTROL]
+disable=
+    C0103,
+    C0116,
+    ; C0114,
+    C0115,
+    ; C0411,
+    R0801,
+    R0902,
+    R0903,
+    R0913,
+    R0914,
+    R1710,
+    W0102,
+    W0613,
+    W0621,
+    W0622,
+    W0718,
+    W3101
+# C0103: doesn't conform to snake_case naming style (invalid-name)<- missing just helper functions
+# C0116: Missing function or method docstring
+# C0114: Missing module docstring (missing-module-docstring)
+# C0115: Missing class docstring
+# C0411: Wrong import order %s
+# R0801: Similar lines in %s files
+# R0902: Too many instance attributes
+# R0903: Too few public methods
+# R0913: Too many arguments
+# R0914: Too many local variables
+# R1710: Either all return statements in a function should return an expression, or none of them should.
+# W0102: Dangerous default value %s as argument
+# W0613: Unused argument
+# W0621: Redefining name %r from outer scope (line %s)
+# W0622: Redefining built-in 'foo' (redefined-builtin)
+# W0718: Catching too general exception Exception
+# W3101: Missing timmeout can expose you to a DOS attack
